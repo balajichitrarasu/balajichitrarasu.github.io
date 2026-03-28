@@ -1,1 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balaji | Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="particles-js"></div>
+<div id="cursor-glow"></div>
+
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a class="nav-brand" href="#">Balaji</a>
+        <ul id="navMenu">
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#certifications">Certifications</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="blog.html" class="nav-blog">Blog</a></li>
+        </ul>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+    <div class="hero-content">
+        <div class="avatar-wrap">
+            <img src="profile.jpg" class="profile" alt="Balaji">
+            <div class="avatar-ring"></div>
+            <div class="avatar-ring avatar-ring2"></div>
+        </div>
+        <div class="hero-text">
+            <h1 id="typing"></h1>
+            <p class="hero-sub">IT Technical <span>Support</span> Engineer</p>
+            <p class="hero-location">📍 Chennai, India</p>
+            <div class="buttons">
+                <a href="resume.pdf" class="btn-primary" target="_blank">↓ Resume</a>
+                <a href="https://www.linkedin.com/in/balajichitrarasu" class="btn-outline" target="_blank">LinkedIn</a>
+                <a href="https://github.com" class="btn-outline" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll-hint">
+        <span></span>
+        <p>Scroll</p>
+    </div>
+</header>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+    <div class="section-label"><span></span>About</div>
+    <h2 class="section-title">About Me</h2>
+    <div class="glass-card tilt-card fade-in">
+        <p>I am an IT Technical Support Engineer with experience in desktop support, hardware troubleshooting, Windows installation, printer configuration, and networking. Passionate about solving technical problems and delivering reliable IT solutions.</p>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+    <div class="section-label"><span></span>Projects</div>
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-grid">
+
+        <div class="project-card tilt-card fade-in"
+            onclick="openPopup('Custom PC Build','Built and assembled a custom PC from scratch. Selected compatible components, installed the operating system, configured BIOS settings, installed all necessary drivers, and performed comprehensive hardware testing to ensure full stability and performance.')">
+            <div class="project-img-wrap">
+                <img src="project1.jpg" alt="Custom PC Build">
+                <div class="project-overlay"><span>&#8599;</span><p>View Details</p></div>
+            </div>
+            <div class="project-info">
+                <span class="project-tag">Hardware</span>
+                <h3>Custom PC Build</h3>
+            </div>
+        </div>
+
+        <div class="project-card tilt-card fade-in"
+            onclick="openPopup('Office Network','Designed and configured a complete office LAN network. Set up router, switches, and wireless access points. Enabled printer sharing across all workstations and ensured stable, high-speed internet connectivity for the entire office.')">
+            <div class="project-img-wrap">
+                <img src="project2.jpg" alt="Office Network">
+                <div class="project-overlay"><span>&#8599;</span><p>View Details</p></div>
+            </div>
+            <div class="project-info">
+                <span class="project-tag">Networking</span>
+                <h3>Office Network</h3>
+            </div>
+        </div>
+
+        <div class="project-card tilt-card fade-in"
+            onclick="openPopup('Printer Setup','Installed and configured a Canon network printer for office-wide use. Set up wireless printing, configured driver settings on multiple workstations, and enabled shared printing access for all users on the network.')">
+            <div class="project-img-wrap">
+                <img src="project3.jpg" alt="Printer Setup">
+                <div class="project-overlay"><span>&#8599;</span><p>View Details</p></div>
+            </div>
+            <div class="project-info">
+                <span class="project-tag">Support</span>
+                <h3>Printer Setup</h3>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+    <div class="section-label"><span></span>Skills</div>
+    <h2 class="section-title">Skills</h2>
+    <div class="skills-wrap">
+
+        <div class="skill-row tilt-card fade-in">
+            <div class="skill-meta">
+                <span class="skill-icon">🖥️</span>
+                <span class="skill-name">Desktop Support</span>
+                <span class="skill-pct">90%</span>
+            </div>
+            <div class="bar"><div class="fill" data-width="90"></div></div>
+        </div>
+
+        <div class="skill-row tilt-card fade-in">
+            <div class="skill-meta">
+                <span class="skill-icon">🌐</span>
+                <span class="skill-name">Networking</span>
+                <span class="skill-pct">75%</span>
+            </div>
+            <div class="bar"><div class="fill" data-width="75"></div></div>
+        </div>
+
+        <div class="skill-row tilt-card fade-in">
+            <div class="skill-meta">
+                <span class="skill-icon">🔧</span>
+                <span class="skill-name">Hardware Troubleshooting</span>
+                <span class="skill-pct">85%</span>
+            </div>
+            <div class="bar"><div class="fill" data-width="85"></div></div>
+        </div>
+
+        <div class="skill-row tilt-card fade-in">
+            <div class="skill-meta">
+                <span class="skill-icon">🪟</span>
+                <span class="skill-name">Windows Installation</span>
+                <span class="skill-pct">95%</span>
+            </div>
+            <div class="bar"><div class="fill" data-width="95"></div></div>
+        </div>
+
+        <div class="skill-row tilt-card fade-in">
+            <div class="skill-meta">
+                <span class="skill-icon">🖨️</span>
+                <span class="skill-name">Printer Configuration</span>
+                <span class="skill-pct">88%</span>
+            </div>
+            <div class="bar"><div class="fill" data-width="88"></div></div>
+        </div>
+
+    </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications" class="section">
+    <div class="section-label"><span></span>Certifications</div>
+    <h2 class="section-title">Certifications</h2>
+    <div class="certs-grid">
+
+        <div class="cert-card tilt-card fade-in"
+            onclick="openCert(
+                'Introduction to Industry 4.0 and Industrial Internet of Things',
+                'NPTEL — IIT Kharagpur',
+                'Elite Status',
+                'Successfully completed the NPTEL course on Introduction to Industry 4.0 and Industrial Internet of Things with Elite status. This certification covers smart manufacturing, cyber-physical systems, IIoT protocols, cloud integration, and Industry 4.0 technologies.',
+                'nptel-cert.jpg'
+            )">
+            <div class="cert-icon">🏅</div>
+            <div class="cert-info">
+                <h3>Industry 4.0 & IIoT</h3>
+                <p class="cert-issuer">NPTEL — IIT Kharagpur</p>
+                <p class="cert-badge elite">⭐ Elite</p>
+            </div>
+            <span class="cert-arrow">&#8599;</span>
+        </div>
+
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+    <div class="section-label"><span></span>Contact</div>
+    <h2 class="section-title">Contact</h2>
+
+    <!-- Contact Info Cards -->
+    <div class="contact-info-grid fade-in">
+        <a href="tel:+917639683223" class="contact-info-card tilt-card">
+            <div class="ci-icon">📱</div>
+            <div class="ci-text">
+                <p class="ci-label">Mobile</p>
+                <p class="ci-value">+91 76396 83223</p>
+            </div>
+        </a>
+        <a href="mailto:balajihck20@gmail.com" class="contact-info-card tilt-card">
+            <div class="ci-icon">✉️</div>
+            <div class="ci-text">
+                <p class="ci-label">Email</p>
+                <p class="ci-value">balajihck20@gmail.com</p>
+            </div>
+        </a>
+        <a href="https://www.linkedin.com/in/balajichitrarasu" target="_blank" class="contact-info-card tilt-card">
+            <div class="ci-icon">💼</div>
+            <div class="ci-text">
+                <p class="ci-label">LinkedIn</p>
+                <p class="ci-value">balajichitrarasu</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Send Message Form -->
+    <div class="glass-card contact-card fade-in" style="margin-top:1.8rem;">
+        <p class="contact-form-title">Send a Message</p>
+        <div id="formMsg" class="form-msg" style="display:none;"></div>
+        <div class="form-row">
+            <div class="form-field">
+                <label>Name</label>
+                <input type="text" id="cName" placeholder="Your name">
+            </div>
+            <div class="form-field">
+                <label>Email</label>
+                <input type="email" id="cEmail" placeholder="your@email.com">
+            </div>
+        </div>
+        <div class="form-field" style="margin-top:1rem;">
+            <label>Message</label>
+            <textarea id="cMsg" placeholder="What would you like to say?"></textarea>
+        </div>
+        <button class="btn-send" id="sendBtn">Send Message</button>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Balaji Chitrarasu | Chennai</p>
+    <p class="footer-sub">Built with passion ✦ IT Support Engineer</p>
+</footer>
+
+<!-- PROJECT POPUP -->
+<div id="popup" class="popup">
+    <div class="popup-content glass-popup">
+        <button class="popup-close" onclick="closePopup()">✕</button>
+        <h3 id="popup-title"></h3>
+        <p id="popup-text"></p>
+    </div>
+</div>
+
+<!-- CERT POPUP -->
+<div id="certPopup" class="popup">
+    <div class="popup-content glass-popup cert-popup-inner">
+        <button class="popup-close" onclick="closeCertPopup()">✕</button>
+        <div class="cert-popup-body">
+            <div class="cert-popup-badge">
+                <div class="nptel-badge">
+                    <span>🏅</span>
+                    <p>NPTEL</p>
+                    <p class="nptel-elite">Elite</p>
+                </div>
+            </div>
+            <div class="cert-popup-text">
+                <h3 id="certTitle"></h3>
+                <p class="cert-popup-issuer" id="certIssuer"></p>
+                <span class="cert-status-badge" id="certStatus"></span>
+                <p id="certDesc" style="margin-top:0.8rem;"></p>
+                <img id="certImg" src="" alt="Certificate" onerror="this.style.display='none'" style="margin-top:1rem;width:100%;border-radius:10px;border:1px solid rgba(0,255,204,0.15);display:none;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<!-- EmailJS for real email sending -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
 
