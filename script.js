@@ -3,9 +3,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // ════════════════════════════════════
     // 1. TYPING EFFECT
     // ════════════════════════════════════
-    const typingEl = document.getElementById("typing");
-    const fullText = "Balaji Chitrarasu";
-    let charIdx = 0;
+    var typingEl = document.getElementById("typing");
+    var fullText = "Balaji Chitrarasu";
+    var charIdx  = 0;
 
     function typeChar() {
         if (charIdx < fullText.length) {
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
             typingEl.classList.add("done");
         }
     }
-    typeChar();
+    if (typingEl) typeChar();
 
     // ════════════════════════════════════
     // 2. PARTICLES
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ════════════════════════════════════
     // 3. CURSOR GLOW — desktop only
     // ════════════════════════════════════
-    const glowEl = document.getElementById("cursor-glow");
+    var glowEl = document.getElementById("cursor-glow");
     if (glowEl && window.innerWidth > 700) {
         glowEl.style.display = "block";
         document.addEventListener("mousemove", function (e) {
@@ -68,49 +68,47 @@ document.addEventListener("DOMContentLoaded", function () {
     // ════════════════════════════════════
     // 4. NAV — scroll hide/show
     // ════════════════════════════════════
-    const navbar  = document.getElementById("navbar");
-    let lastScroll = 0;
+    var navbar    = document.getElementById("navbar");
+    var lastScroll = 0;
 
-    window.addEventListener("scroll", function () {
-        const curr = window.scrollY;
-
-        if (curr > lastScroll && curr > 80) {
-            navbar.classList.add("hidden");
-        } else {
-            navbar.classList.remove("hidden");
-        }
-
-        navbar.classList.toggle("scrolled", curr > 20);
-        lastScroll = curr <= 0 ? 0 : curr;
-    }, { passive: true });
+    if (navbar) {
+        window.addEventListener("scroll", function () {
+            var curr = window.scrollY;
+            if (curr > lastScroll && curr > 80) {
+                navbar.classList.add("hidden");
+            } else {
+                navbar.classList.remove("hidden");
+            }
+            navbar.classList.toggle("scrolled", curr > 20);
+            lastScroll = curr <= 0 ? 0 : curr;
+        }, { passive: true });
+    }
 
     // ════════════════════════════════════
     // 5. ACTIVE NAV LINK
     // ════════════════════════════════════
-    const allSections = document.querySelectorAll("section[id], header[id]");
-    const allNavLinks = document.querySelectorAll(".navbar ul li a");
+    var allSections = document.querySelectorAll("section[id], header[id]");
+    var allNavLinks = document.querySelectorAll(".navbar ul li a");
 
-    const activeSectionObs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-                allNavLinks.forEach(function (a) { a.classList.remove("active"); });
-                var link = document.querySelector('.navbar ul li a[href="#' + entry.target.id + '"]');
-                if (link) link.classList.add("active");
-            }
-        });
-    }, { threshold: 0.35 });
+    if (allSections.length && "IntersectionObserver" in window) {
+        var activeSectionObs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    allNavLinks.forEach(function (a) { a.classList.remove("active"); });
+                    var link = document.querySelector('.navbar ul li a[href="#' + entry.target.id + '"]');
+                    if (link) link.classList.add("active");
+                }
+            });
+        }, { threshold: 0.35 });
 
-    allSections.forEach(function (s) { activeSectionObs.observe(s); });
+        allSections.forEach(function (s) { activeSectionObs.observe(s); });
+    }
 
     // ════════════════════════════════════
     // 6. SCROLL FADE-IN + SKILL BARS
-    //    — with 1.5s fallback timer so
-    //      content ALWAYS becomes visible
     // ════════════════════════════════════
     var fadeEls = document.querySelectorAll(".fade-in");
 
-    // Fallback: if IntersectionObserver never fires (can happen on some
-    // mobile WebViews), force all visible after 1.5s
     var fallbackTimer = setTimeout(function () {
         fadeEls.forEach(function (el) {
             el.classList.add("visible");
@@ -124,23 +122,15 @@ document.addEventListener("DOMContentLoaded", function () {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
                     entry.target.classList.add("visible");
-
                     var fill = entry.target.querySelector(".fill");
                     if (fill) {
                         var w = fill.getAttribute("data-width");
-                        setTimeout(function () {
-                            fill.style.width = w + "%";
-                        }, 120);
+                        setTimeout(function () { fill.style.width = w + "%"; }, 120);
                     }
-
                     fadeObs.unobserve(entry.target);
                 }
             });
-
-            // If all observed elements are now visible, clear fallback
-            var remaining = document.querySelectorAll(".fade-in:not(.visible)");
-            if (remaining.length === 0) clearTimeout(fallbackTimer);
-
+            if (!document.querySelector(".fade-in:not(.visible)")) clearTimeout(fallbackTimer);
         }, { threshold: 0.08, rootMargin: "0px 0px -30px 0px" });
 
         fadeEls.forEach(function (el) { fadeObs.observe(el); });
@@ -156,7 +146,6 @@ document.addEventListener("DOMContentLoaded", function () {
         navToggle.addEventListener("click", function () {
             navMenu.classList.toggle("open");
         });
-
         navMenu.querySelectorAll("a").forEach(function (a) {
             a.addEventListener("click", function () {
                 navMenu.classList.remove("open");
@@ -167,16 +156,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // ════════════════════════════════════
     // 8. CONTACT FORM
     // ════════════════════════════════════
-    /*
-     * To enable REAL email sending with EmailJS:
-     * 1. Sign up at emailjs.com (free)
-     * 2. Add Gmail service  → copy SERVICE_ID
-     * 3. Create template with vars: {{from_name}} {{from_email}} {{message}}
-     *    → copy TEMPLATE_ID
-     * 4. Account > API Keys → copy PUBLIC_KEY
-     * 5. Replace the three values below
-     * 6. Set "To Email" in the template to: balajihck20@gmail.com
-     */
     var EJS_PUBLIC_KEY   = "YOUR_PUBLIC_KEY";
     var EJS_SERVICE_ID   = "YOUR_SERVICE_ID";
     var EJS_TEMPLATE_ID  = "YOUR_TEMPLATE_ID";
@@ -189,6 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var formMsg = document.getElementById("formMsg");
 
     function showFormMsg(type, text) {
+        if (!formMsg) return;
         formMsg.className = "form-msg " + type;
         formMsg.textContent = text;
         formMsg.style.display = "block";
@@ -212,11 +192,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // If EmailJS is configured — real send
             if (typeof emailjs !== "undefined" && EJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
                 sendBtn.textContent = "Sending…";
                 sendBtn.disabled = true;
-
                 emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE_ID, {
                     from_name:  name,
                     from_email: email,
@@ -229,19 +207,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("cEmail").value = "";
                     document.getElementById("cMsg").value   = "";
                 }).catch(function () {
-                    showFormMsg("error", "❌ Failed to send. Email me directly: balajihck20@gmail.com");
+                    showFormMsg("error", "❌ Failed. Email directly: balajihck20@gmail.com");
                     sendBtn.textContent = "Send Message";
                     sendBtn.disabled = false;
                 });
-
             } else {
-                // Fallback: open mail client
-                var body = encodeURIComponent(
-                    "Name: " + name + "\nEmail: " + email + "\n\nMessage:\n" + msg
-                );
-                var sub = encodeURIComponent("Portfolio Message from " + name);
+                var body = encodeURIComponent("Name: " + name + "\nEmail: " + email + "\n\nMessage:\n" + msg);
+                var sub  = encodeURIComponent("Portfolio Message from " + name);
                 window.location.href = "mailto:balajihck20@gmail.com?subject=" + sub + "&body=" + body;
-                showFormMsg("success", "✓ Your mail app opened! Or email: balajihck20@gmail.com");
+                showFormMsg("success", "✓ Mail app opened! Or email: balajihck20@gmail.com");
             }
         });
     }
@@ -288,7 +262,6 @@ document.getElementById("certPopup").addEventListener("click", function (e) {
     if (e.target === this) closeCertPopup();
 });
 
-// Escape closes any popup
 document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") { closePopup(); closeCertPopup(); }
 });
