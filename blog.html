@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Balaji Chitrarasu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:      #07090d;
+            --card:    rgba(255,255,255,0.04);
+            --border:  rgba(255,255,255,0.08);
+            --accent:  #00ffcc;
+            --accent2: #5b8dee;
+            --accent3: #ff6b35;
+            --text:    #dde4ed;
+            --muted:   #5a6e82;
+            --radius:  14px;
+            --nav-h:   60px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0,255,204,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,204,0.02) 1px, transparent 1px);
+            background-size: 44px 44px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── NAV ── */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 200;
+            height: var(--nav-h);
+            background: rgba(7,9,13,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,255,204,0.08);
+        }
+
+        .nav-inner {
+            max-width: 1020px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.2rem;
+        }
+
+        .nav-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-style: italic;
+        }
+
+        .nav-back {
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .nav-back:hover { color: var(--accent); }
+
+        /* ── BLOG HERO ── */
+        .blog-hero {
+            position: relative;
+            z-index: 1;
+            padding: calc(var(--nav-h) + 4rem) 1.5rem 3rem;
+            max-width: 920px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .blog-hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .blog-hero-label em {
+            display: inline-block;
+            width: 22px; height: 1.5px;
+            background: var(--accent);
+            font-style: normal;
+        }
+
+        .blog-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: clamp(2.4rem, 7vw, 4rem);
+            line-height: 1.1;
+            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .blog-hero p {
+            font-size: 0.9rem;
+            color: var(--muted);
+            max-width: 480px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* ── FILTER TABS ── */
+        .filter-wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 0 1.5rem 2.5rem;
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.45rem 1.1rem;
+            border-radius: 30px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.22s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(0,255,204,0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── BLOG GRID ── */
+        .blog-grid {
+            position: relative;
+            z-index: 1;
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* ── BLOG CARD ── */
+        .blog-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.28s, box-shadow 0.28s, border-color 0.28s;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: transform 0.28s ease, box-shadow 0.28s ease,
+                        border-color 0.28s ease, opacity 0.6s ease;
+        }
+
+        .blog-card.visible { opacity: 1; transform: translateY(0); }
+
+        .blog-card:hover {
+            transform: translateY(-7px);
+            border-color: rgba(0,255,204,0.3);
+            box-shadow: 0 16px 44px rgba(0,255,204,0.09);
+        }
+
+        .blog-card.hidden-card { display: none; }
+
+        .card-top {
+            padding: 1.6rem 1.6rem 0;
+        }
+
+        .card-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            padding: 0.22rem 0.7rem;
+            border-radius: 20px;
+            margin-bottom: 0.9rem;
+            font-weight: 500;
+        }
+
+        .cat-pc       { background: rgba(0,255,204,0.08); color: var(--accent);  border: 1px solid rgba(0,255,204,0.2); }
+        .cat-hardware { background: rgba(255,107,53,0.08); color: #ff8a65;       border: 1px solid rgba(255,107,53,0.2); }
+        .cat-software { background: rgba(91,141,238,0.08); color: var(--accent2);border: 1px solid rgba(91,141,238,0.2); }
+        .cat-support  { background: rgba(255,200,0,0.08);  color: #ffd055;       border: 1px solid rgba(255,200,0,0.2); }
+        .cat-network  { background: rgba(180,80,255,0.08); color: #c47fff;       border: 1px solid rgba(180,80,255,0.2); }
+
+        .card-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 0.6rem;
+            line-height: 1.35;
+        }
+
+        .card-excerpt {
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 1.2rem;
+        }
+
+        .card-footer {
+            padding: 1rem 1.6rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-read {
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: gap 0.2s;
+        }
+
+        .blog-card:hover .card-read { gap: 0.7rem; }
+
+        .card-time {
+            font-size: 0.7rem;
+            color: var(--muted);
+        }
+
+        /* ── ARTICLE OVERLAY ── */
+        .article-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.82);
+            z-index: 500;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            overflow-y: auto;
+        }
+
+        .article-overlay.open { display: flex; }
+
+        .article-box {
+            background: rgba(10,15,22,0.98);
+            border: 1px solid rgba(0,255,204,0.18);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            max-width: 680px;
+            width: 100%;
+            position: relative;
+            margin: auto;
+            animation: popIn 0.3s cubic-bezier(.34,1.56,.64,1) both;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .article-close {
+            position: absolute;
+            top: 1.2rem; right: 1.2rem;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text);
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .article-close:hover { background: rgba(0,255,204,0.15); color: var(--accent); }
+
+        .article-cat { margin-bottom: 1rem; }
+
+        .article-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 0.6rem;
+            padding-right: 2.5rem;
+        }
+
+        .article-meta {
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-bottom: 1.8rem;
+            letter-spacing: 0.06em;
+        }
+
+        .article-divider {
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            margin-bottom: 1.8rem;
+            opacity: 0.3;
+        }
+
+        .article-body { font-size: 0.9rem; line-height: 1.95; color: var(--text); }
+
+        .article-body h3 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--accent);
+            margin: 1.8rem 0 0.6rem;
+        }
+
+        .article-body p { margin-bottom: 1rem; }
+
+        .article-body ul {
+            padding-left: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-body ul li {
+            margin-bottom: 0.4rem;
+            font-size: 0.88rem;
+            color: var(--text);
+        }
+
+        .article-body ul li::marker { color: var(--accent); }
+
+        .article-tip {
+            background: rgba(0,255,204,0.05);
+            border: 1px solid rgba(0,255,204,0.15);
+            border-left: 3px solid var(--accent);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            font-size: 0.84rem;
+            margin: 1.2rem 0;
+            color: var(--text);
+        }
+
+        /* ── FOOTER ── */
+        .blog-footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 3rem 1.5rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-copy {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text);
+            letter-spacing: 0.04em;
+        }
+
+        .footer-sub {
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-top: 0.4rem;
+            letter-spacing: 0.06em;
+        }
+
+        @media (max-width: 600px) {
+            .blog-grid { grid-template-columns: 1fr; }
+            .article-box { padding: 1.8rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+    <div class="nav-inner">
+        <a class="nav-brand" href="index.html">Portfolio</a>
+        <a class="nav-back" href="index.html">← Back to Portfolio</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="blog-hero">
+    <div class="blog-hero-label"><em></em>Knowledge Base</div>
+    <h1>Tech Blog</h1>
+    <p>Practical guides, tips and real-world experience from the field of IT Support, Hardware and Networking.</p>
+</div>
+
+<!-- FILTER TABS -->
+<div class="filter-wrap">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="pc">PC Building</button>
+    <button class="filter-btn" data-filter="hardware">Hardware</button>
+    <button class="filter-btn" data-filter="software">Software</button>
+    <button class="filter-btn" data-filter="support">Tech Support</button>
+    <button class="filter-btn" data-filter="network">Networking</button>
+</div>
+
+<!-- BLOG GRID -->
+<div class="blog-grid" id="blogGrid">
+
+    <!-- ── PC BUILDING ── -->
+    <div class="blog-card" data-cat="pc" data-article="pc1">
+        <div class="card-top">
+            <span class="card-category cat-pc">🖥️ PC Building</span>
+            <h2 class="card-title">How to Build a Custom PC from Scratch</h2>
+            <p class="card-excerpt">Step-by-step guide to selecting components, assembling, and booting your first custom PC build successfully.</p>
+        </div>
+        <div class="card-footer">
+            <span class="card-read">Read More →</span>
+            <span class="card-time">6 min read</span>
+        </div>
+    </div>
+
+    <div class="blog-card" data-cat="pc" data-article="pc2">
+        <div class="card-top">
+            <span class="card-category cat-pc">🖥️ PC Building</span>
+            <h2 class="card-title">Choosing the Right Components for Your Budget Build</h2>
+            <p class="card-excerpt">How to pick CPU, GPU, RAM and storage without overspending — real advice from hands-on experience.</p>
+        </div>
+        <div class="card-footer">
+            <span class="card-read">Read More →</span>
+            <span class="card-time">5 min read</span>
+        </div>
+    </div>
+
+    <!-- ── HARDWARE ── -->
+    <div class="blog-card" data-cat="hardware" data-article="hw1">
+        <div class="card-top">
+            <span class="card-category cat-hardware">🔧 Hardware</span>
+            <h2 class="card-title">PC Won't Turn On? Hardware Troubleshooting Guide</h2>
+            <p class="card-excerpt">Common reasons why a PC fails to boot and how to diagnose and fix them step by step.</p>
+        </div>
+        <div class="card-footer">
+            <span class="card-read">Read More →</span>
+            <span class="card-time">7 min read</span>
+        </div>
+    </div>
+
+    <div class="blog-card" data-cat="hardware" data-article="hw2">
+        <div class="card-top">
+            <span class="card-category cat-hardware">🔧 Hardware</span>
+            <h2 class="card-title">How to Handle and Replace RAM, SSD & HDD Safely</h2>
+            <p class="card-excerpt">Best practices for safely upgrading or replacing internal components without causing damage.</p>
+        </div>
+        <div class="card-footer">
+            <span class="card-read">Read More →</span>
+            <span class="card-time">4 min read</span>
+        </div>
+    </div>
+
+    <!-- ── SOFTWARE ── -->
+    <div class="blog-card" data-cat="software" data-article="sw1">
+        <div class="card-top">
+            <span class="card-category cat-software">💻 Software</span>
+            <h2 class="card-title">Clean Windows Installation: The Right Way</h2>
+            <p class="card-excerpt">How to do a proper fresh Windows install, configure BIOS boot order, and set up drivers correctly.</p>
+        </div>
+        <div class="card-footer">
+            <span class="card-read">Read More →</span>
+            <span class="card-time">8 min read</span>
+        </div>
+    </div>
+
+    <div class="blog-card" data-cat="software" data-article="sw2">
+        <div class="card-top">
+            <span class="card-category cat-software">💻 Software</span>
+            <h2 class="card-title">Top Free Tools Every IT Support Engineer Should Know</h2>
+            <p class="card-excerpt">A curated list of must-have free software tools for diagnostics, remote support, and system management.</p>
+        </div>
+        <div class="card-footer">
+            <span class="card-read">Read More →</span>
+            <span class="card-time">5 min read</span>
+        </div>
+    </div>
+
+    <!-- ── TECH SUPPORT ── -->
+    <div class="blog-card" data-cat="support" data-article="ts1">
+        <div class="card-top">
+            <span class="card-category cat-support">🛠️ Tech Support</span>
+            <h2 class="card-title">How to Fix the Most Common User Complaints in an Office</h2>
+            <p class="card-excerpt">Slow PC, WiFi issues, printer not working — here's how I handle the most frequent support tickets.</p>
+        </div>
+        <div class="card-footer">
+            <span class="card-read">Read More →</span>
+            <span class="card-time">6 min read</span>
+        </div>
+    </div>
+
+    <div class="blog-card" data-cat="support" data-article="ts2">
+        <div class="card-top">
+            <span class="card-category cat-support">🛠️ Tech Support</span>
+            <h2 class="card-title">Printer Not Printing? Complete Fix Guide</h2>
+            <p class="card-excerpt">Covers driver issues, network printer setup, spooler errors and offline printer problems with real solutions.</p>
+        </div>
+        <div class="card-footer">
+            <span class="card-read">Read More →</span>
+            <span class="card-time">5 min read</span>
+        </div>
+    </div>
+
+    <!-- ── NETWORKING ── -->
+    <div class="blog-card" data-cat="network" data-article="net1">
+        <div class="card-top">
+            <span class="card-category cat-network">🌐 Networking</span>
+            <h2 class="card-title">Setting Up a Home Network from Scratch</h2>
+            <p class="card-excerpt">How to configure a router, set up WiFi, connect devices, and secure your home network properly.</p>
+        </div>
+        <div class="card-footer">
+            <span class="card-read">Read More →</span>
+            <span class="card-time">7 min read</span>
+        </div>
+    </div>
+
+    <div class="blog-card" data-cat="network" data-article="net2">
+        <div class="card-top">
+            <span class="card-category cat-network">🌐 Networking</span>
+            <h2 class="card-title">Office LAN Setup: Router, Switch & Printer Sharing</h2>
+            <p class="card-excerpt">How I set up a complete wired and wireless office network with shared printers and stable internet access.</p>
+        </div>
+        <div class="card-footer">
+            <span class="card-read">Read More →</span>
+            <span class="card-time">8 min read</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="blog-footer">
+    <p class="footer-copy">© 2026 Balaji Chitrarasu. All Rights Reserved.</p>
+    <p class="footer-sub">Designed &amp; Developed by Balaji Chitrarasu &nbsp;✦&nbsp; Chennai</p>
+</footer>
+
+<!-- ARTICLE OVERLAY -->
+<div class="article-overlay" id="articleOverlay">
+    <div class="article-box" id="articleBox">
+        <button class="article-close" onclick="closeArticle()">✕</button>
+        <div class="article-cat" id="articleCat"></div>
+        <h1 class="article-title" id="articleTitle"></h1>
+        <p class="article-meta" id="articleMeta"></p>
+        <div class="article-divider"></div>
+        <div class="article-body" id="articleBody"></div>
+    </div>
+</div>
+
+<script>
+// ── ARTICLE CONTENT DATABASE ──
+var articles = {
+
+    pc1: {
+        cat: '<span class="card-category cat-pc">🖥️ PC Building</span>',
+        title: 'How to Build a Custom PC from Scratch',
+        meta: '6 min read · PC Building',
+        body: `
+            <p>Building your own PC is one of the most rewarding things you can do as an IT professional. Here is the complete process I follow for every build.</p>
+            <h3>Step 1: Plan Your Components</h3>
+            <p>Before buying anything, decide your use case — office work, gaming, or general purpose. This determines your CPU, GPU and RAM requirements.</p>
+            <ul>
+                <li><strong>CPU:</strong> Intel Core i3/i5 for office, i7/i9 or Ryzen 5/7 for performance</li>
+                <li><strong>Motherboard:</strong> Must match CPU socket (LGA 1700 for 12th/13th Gen Intel)</li>
+                <li><strong>RAM:</strong> Minimum 8GB DDR4 for office, 16GB for performance</li>
+                <li><strong>Storage:</strong> SSD (NVMe M.2) for OS, HDD for storage</li>
+                <li><strong>PSU:</strong> Always buy 80+ rated power supply with enough wattage</li>
+                <li><strong>Cabinet:</strong> Choose based on motherboard form factor (ATX/Micro-ATX)</li>
+            </ul>
+            <h3>Step 2: Assemble</h3>
+            <ul>
+                <li>Install CPU on motherboard first — align the triangle marker</li>
+                <li>Insert RAM in dual-channel slots (slots 2 and 4 usually)</li>
+                <li>Mount motherboard in cabinet, connect front panel pins</li>
+                <li>Install PSU, connect 24-pin ATX and CPU 8-pin connectors</li>
+                <li>Connect SATA or M.2 SSD</li>
+            </ul>
+            <h3>Step 3: First Boot & BIOS</h3>
+            <p>Power on and press DEL or F2 to enter BIOS. Set boot order to USB (for OS installation). Enable XMP for RAM speed.</p>
+            <div class="article-tip">💡 Tip: Always ground yourself before touching components — static electricity can damage parts. Touch the metal cabinet frame first.</div>
+            <h3>Step 4: OS Installation</h3>
+            <p>Use a bootable USB with Windows 11 or Windows 10. Follow the installation wizard, select the SSD as the install drive, and complete setup.</p>
+            <h3>Step 5: Drivers</h3>
+            <p>After OS install, download drivers for: Chipset, LAN, Audio, GPU (from manufacturer websites). Restart after each major driver install.</p>
+        `
+    },
+
+    pc2: {
+        cat: '<span class="card-category cat-pc">🖥️ PC Building</span>',
+        title: 'Choosing the Right Components for Your Budget Build',
+        meta: '5 min read · PC Building',
+        body: `
+            <p>Budget builds are all about balance. Here is how to get the best performance without overspending.</p>
+            <h3>Under ₹30,000 Office PC</h3>
+            <ul>
+                <li>Intel Core i3-12100 or Ryzen 5 5600G (has integrated graphics)</li>
+                <li>8GB DDR4 RAM (single stick, upgrade later)</li>
+                <li>256GB NVMe SSD</li>
+                <li>B660M or A520M motherboard</li>
+                <li>450W 80+ PSU</li>
+            </ul>
+            <h3>Under ₹60,000 All-Round Build</h3>
+            <ul>
+                <li>Intel Core i5-13400 or Ryzen 5 7600</li>
+                <li>16GB DDR4/DDR5 RAM</li>
+                <li>512GB NVMe SSD + 1TB HDD</li>
+                <li>B760 or B650 motherboard</li>
+                <li>550W 80+ Gold PSU</li>
+            </ul>
+            <div class="article-tip">💡 Tip: Never cheap out on the PSU. A bad power supply can damage all other components.</div>
+            <h3>Where to Save Money</h3>
+            <p>Skip the GPU if you have integrated graphics. Buy second-hand RAM if budget is tight. Cabinet is purely cosmetic — any decent cabinet works.</p>
+            <h3>Where NOT to Save Money</h3>
+            <p>PSU quality, SSD brand (stick to Samsung, Kingston, WD), and RAM slots matching (always use 2 sticks for dual channel).</p>
+        `
+    },
+
+    hw1: {
+        cat: '<span class="card-category cat-hardware">🔧 Hardware</span>',
+        title: 'PC Won\'t Turn On? Hardware Troubleshooting Guide',
+        meta: '7 min read · Hardware Handling',
+        body: `
+            <p>A PC that won't power on is one of the most common hardware issues. Here is a systematic approach to diagnose it.</p>
+            <h3>Check 1: Power Supply</h3>
+            <ul>
+                <li>Is the power cable connected at both ends?</li>
+                <li>Is the wall socket working? (Test with another device)</li>
+                <li>Is the PSU switch at the back turned ON?</li>
+                <li>Try a different power cable</li>
+            </ul>
+            <h3>Check 2: Power Button Connection</h3>
+            <p>Open the cabinet and check the front panel pins. The power button connector must be seated correctly on the motherboard headers (look for PWR SW label).</p>
+            <h3>Check 3: RAM Issues</h3>
+            <p>Remove RAM sticks and re-seat them firmly. If you have 2 sticks, try booting with just one. Clean the gold contacts with an eraser gently.</p>
+            <div class="article-tip">💡 Tip: Listen for beep codes on boot. 1 long + 2 short beeps usually indicates a RAM issue on most motherboards.</div>
+            <h3>Check 4: Loose Connections</h3>
+            <ul>
+                <li>24-pin ATX power connector to motherboard</li>
+                <li>8-pin CPU power connector</li>
+                <li>GPU power connectors (if applicable)</li>
+            </ul>
+            <h3>Check 5: Hardware Failure</h3>
+            <p>If all above checks pass and still no power, the issue could be a failed PSU, dead motherboard, or short circuit. Use a PSU tester to confirm PSU health before replacing parts.</p>
+        `
+    },
+
+    hw2: {
+        cat: '<span class="card-category cat-hardware">🔧 Hardware</span>',
+        title: 'How to Handle and Replace RAM, SSD & HDD Safely',
+        meta: '4 min read · Hardware Handling',
+        body: `
+            <p>Replacing internal components is simple if you follow safety procedures. Here is how I do it correctly every time.</p>
+            <h3>Before You Start</h3>
+            <ul>
+                <li>Power off the PC completely — not just sleep mode</li>
+                <li>Unplug the power cable from the wall</li>
+                <li>Press the power button once after unplugging (discharges capacitors)</li>
+                <li>Touch the metal chassis to ground yourself</li>
+            </ul>
+            <h3>Replacing RAM</h3>
+            <ul>
+                <li>Press down the clips at both ends of the slot</li>
+                <li>Remove old stick carefully</li>
+                <li>Align notch on new RAM with slot key</li>
+                <li>Press firmly until both clips click</li>
+            </ul>
+            <h3>Replacing SSD (M.2)</h3>
+            <ul>
+                <li>Remove the single screw holding the M.2 slot</li>
+                <li>Slide out old SSD at an angle</li>
+                <li>Insert new SSD at 30 degrees, press down and screw in</li>
+            </ul>
+            <div class="article-tip">💡 Tip: Always check your motherboard manual to confirm which M.2 slot supports NVMe vs SATA. They look the same but have different protocols.</div>
+            <h3>Replacing HDD</h3>
+            <p>Disconnect SATA data cable and SATA power cable. Remove the 4 mounting screws from the HDD tray. Install new HDD and reconnect both cables.</p>
+        `
+    },
+
+    sw1: {
+        cat: '<span class="card-category cat-software">💻 Software</span>',
+        title: 'Clean Windows Installation: The Right Way',
+        meta: '8 min read · Software Handling',
+        body: `
+            <p>A fresh Windows install fixes most software issues. Here is the complete correct method I use every time.</p>
+            <h3>Step 1: Create Bootable USB</h3>
+            <ul>
+                <li>Download the official Windows ISO from microsoft.com</li>
+                <li>Use Rufus (free tool) to write ISO to USB (8GB minimum)</li>
+                <li>Select GPT partition for UEFI systems (most modern PCs)</li>
+            </ul>
+            <h3>Step 2: BIOS Configuration</h3>
+            <ul>
+                <li>Press DEL or F2 during startup to enter BIOS</li>
+                <li>Enable UEFI boot mode (not Legacy/CSM)</li>
+                <li>Set USB as first boot priority</li>
+                <li>Disable Secure Boot temporarily if needed</li>
+                <li>Save and exit</li>
+            </ul>
+            <h3>Step 3: Windows Setup</h3>
+            <ul>
+                <li>Boot from USB — press any key when prompted</li>
+                <li>Select language, time, keyboard layout</li>
+                <li>Click Install Now → Custom installation</li>
+                <li>Select the correct drive — delete old partitions and create new</li>
+                <li>Let Windows install (15–25 minutes)</li>
+            </ul>
+            <div class="article-tip">💡 Tip: Always install Windows on an SSD, never on HDD. Boot times will be 5–10x faster.</div>
+            <h3>Step 4: Post-Install Setup</h3>
+            <ul>
+                <li>Connect to internet</li>
+                <li>Run Windows Update — install ALL updates</li>
+                <li>Install chipset drivers from motherboard manufacturer website</li>
+                <li>Install GPU drivers from NVIDIA/AMD website</li>
+                <li>Install LAN and audio drivers</li>
+            </ul>
+            <h3>Common Mistakes to Avoid</h3>
+            <p>Never install Windows in Legacy mode on a new system. Never skip drivers. Never use third-party Windows ISOs — always download from Microsoft official site.</p>
+        `
+    },
+
+    sw2: {
+        cat: '<span class="card-category cat-software">💻 Software</span>',
+        title: 'Top Free Tools Every IT Support Engineer Should Know',
+        meta: '5 min read · Software Handling',
+        body: `
+            <p>These are the tools I use daily for diagnostics, remote support and system management.</p>
+            <h3>Diagnostics</h3>
+            <ul>
+                <li><strong>CPU-Z</strong> — Shows detailed CPU, RAM and motherboard information</li>
+                <li><strong>HWMonitor</strong> — Real-time temperature, fan speed and voltage monitoring</li>
+                <li><strong>CrystalDiskInfo</strong> — Checks SSD/HDD health (SMART data)</li>
+                <li><strong>MemTest86</strong> — Bootable RAM diagnostic tool</li>
+            </ul>
+            <h3>System Maintenance</h3>
+            <ul>
+                <li><strong>CCleaner</strong> — Cleans temp files and registry (use carefully)</li>
+                <li><strong>Revo Uninstaller</strong> — Removes software and leftover files completely</li>
+                <li><strong>TreeSize Free</strong> — Shows which folders are using most disk space</li>
+            </ul>
+            <div class="article-tip">💡 Tip: Always create a system restore point before running any cleanup tool or registry cleaner.</div>
+            <h3>Remote Support</h3>
+            <ul>
+                <li><strong>AnyDesk</strong> — Fast remote desktop for supporting users remotely</li>
+                <li><strong>TeamViewer</strong> — Industry standard remote support tool</li>
+            </ul>
+            <h3>Network Tools</h3>
+            <ul>
+                <li><strong>Advanced IP Scanner</strong> — Scans network and shows all connected devices</li>
+                <li><strong>Wireshark</strong> — Deep network packet analysis</li>
+                <li><strong>Angry IP Scanner</strong> — Fast ping sweep for network discovery</li>
+            </ul>
+        `
+    },
+
+    ts1: {
+        cat: '<span class="card-category cat-support">🛠️ Tech Support</span>',
+        title: 'How to Fix the Most Common Office IT Complaints',
+        meta: '6 min read · Technical Support',
+        body: `
+            <p>After handling hundreds of support tickets, these are the most common issues and exactly how I solve them.</p>
+            <h3>Issue 1: PC is Very Slow</h3>
+            <ul>
+                <li>Check Task Manager (Ctrl+Shift+Esc) — look for high CPU or RAM usage</li>
+                <li>Disable startup programs: Task Manager → Startup tab</li>
+                <li>Run Disk Cleanup — delete temp files</li>
+                <li>Check if SSD is full (keep 10–15% free)</li>
+                <li>Scan for malware using Windows Defender</li>
+            </ul>
+            <h3>Issue 2: No Internet / WiFi Not Connecting</h3>
+            <ul>
+                <li>Right-click network icon → Troubleshoot</li>
+                <li>Run: netsh winsock reset in Command Prompt as Admin</li>
+                <li>Update network adapter driver</li>
+                <li>Restart router and modem</li>
+            </ul>
+            <div class="article-tip">💡 Tip: 80% of network issues are solved by restarting the router. Always try this first before spending time on software fixes.</div>
+            <h3>Issue 3: PC Keeps Crashing / Blue Screen</h3>
+            <ul>
+                <li>Note the error code on the blue screen</li>
+                <li>Check Event Viewer for recent errors</li>
+                <li>Run Memory Diagnostic: Windows key → search "Memory Diagnostic"</li>
+                <li>Check temperatures using HWMonitor — overheating causes crashes</li>
+                <li>Update or rollback recent drivers</li>
+            </ul>
+            <h3>Issue 4: Monitor No Signal</h3>
+            <p>Check cable connections first. Try a different cable. If PC has dedicated GPU, make sure monitor is connected to GPU ports, not motherboard ports.</p>
+        `
+    },
+
+    ts2: {
+        cat: '<span class="card-category cat-support">🛠️ Tech Support</span>',
+        title: 'Printer Not Printing? Complete Fix Guide',
+        meta: '5 min read · Technical Support',
+        body: `
+            <p>Printer issues are among the most frustrating support calls. Here is my systematic fix approach.</p>
+            <h3>Step 1: Basic Checks</h3>
+            <ul>
+                <li>Is the printer powered on?</li>
+                <li>Is it connected to the same network as the computer?</li>
+                <li>Are there any error lights or messages on the printer display?</li>
+                <li>Does it have paper and ink/toner?</li>
+            </ul>
+            <h3>Step 2: Clear Print Queue</h3>
+            <ul>
+                <li>Open Services (Win+R → services.msc)</li>
+                <li>Find Print Spooler → Right-click → Stop</li>
+                <li>Go to C:\Windows\System32\spool\PRINTERS — delete all files</li>
+                <li>Start Print Spooler service again</li>
+            </ul>
+            <div class="article-tip">💡 Tip: A stuck print job in the queue is the #1 cause of printers not responding. Clearing the spooler fixes it 90% of the time.</div>
+            <h3>Step 3: Reinstall Printer Driver</h3>
+            <ul>
+                <li>Remove printer from Settings → Devices → Printers</li>
+                <li>Download latest driver from printer manufacturer website</li>
+                <li>Install fresh driver and add printer again</li>
+            </ul>
+            <h3>Step 4: Network Printer Setup</h3>
+            <ul>
+                <li>Print a configuration page from the printer to get its IP address</li>
+                <li>Add printer manually: Settings → Add Printer → Add by IP address</li>
+                <li>Make sure printer and PC are on the same WiFi/LAN network</li>
+            </ul>
+        `
+    },
+
+    net1: {
+        cat: '<span class="card-category cat-network">🌐 Networking</span>',
+        title: 'Setting Up a Home Network from Scratch',
+        meta: '7 min read · Networking',
+        body: `
+            <p>Setting up a reliable home network is simpler than most people think. Here is the complete process.</p>
+            <h3>What You Need</h3>
+            <ul>
+                <li>Internet service from ISP (Broadband/Fiber)</li>
+                <li>A wireless router (TP-Link, D-Link, or any brand)</li>
+                <li>Ethernet cable to connect modem to router</li>
+            </ul>
+            <h3>Step 1: Connect the Hardware</h3>
+            <ul>
+                <li>Connect ISP modem/ONT to router WAN port using ethernet cable</li>
+                <li>Power on modem first, then router</li>
+                <li>Wait 2–3 minutes for the router to initialize</li>
+            </ul>
+            <h3>Step 2: Configure the Router</h3>
+            <ul>
+                <li>Connect to router WiFi (default SSID on sticker) or via ethernet</li>
+                <li>Open browser → go to 192.168.1.1 or 192.168.0.1</li>
+                <li>Login with admin/admin or credentials on sticker</li>
+                <li>Run the setup wizard — enter ISP details if required</li>
+            </ul>
+            <div class="article-tip">💡 Tip: Change the default router admin password immediately after setup. Default passwords are a major security risk.</div>
+            <h3>Step 3: WiFi Configuration</h3>
+            <ul>
+                <li>Set a strong WiFi name (SSID) — avoid using your name or address</li>
+                <li>Use WPA2 or WPA3 security — never use WEP or open network</li>
+                <li>Set a strong WiFi password (minimum 12 characters)</li>
+                <li>If router has 2.4GHz and 5GHz bands, use 5GHz for faster devices</li>
+            </ul>
+            <h3>Step 4: Testing</h3>
+            <p>Connect all devices and run a speed test at fast.com or speedtest.net. If speed is significantly lower than ISP promise, try moving router to a central location.</p>
+        `
+    },
+
+    net2: {
+        cat: '<span class="card-category cat-network">🌐 Networking</span>',
+        title: 'Office LAN Setup: Router, Switch & Printer Sharing',
+        meta: '8 min read · Networking',
+        body: `
+            <p>Setting up an office network requires planning multiple devices to work together reliably. Here is exactly how I approach it.</p>
+            <h3>Planning the Network</h3>
+            <ul>
+                <li>Count total wired devices (PCs, printers, servers)</li>
+                <li>Count wireless devices (laptops, phones, tablets)</li>
+                <li>Choose a router with enough LAN ports or add a switch</li>
+                <li>Run ethernet cables to fixed workstations for reliability</li>
+            </ul>
+            <h3>Hardware Required</h3>
+            <ul>
+                <li>1 main router (connected to ISP)</li>
+                <li>1 or more network switches (8-port or 16-port for office)</li>
+                <li>CAT6 ethernet cables for all wired connections</li>
+                <li>Network printer with LAN port or WiFi</li>
+            </ul>
+            <h3>Step 1: Main Router Setup</h3>
+            <p>Configure the router as described in the home network guide. Assign it a static IP like 192.168.1.1. Enable DHCP to automatically assign IPs to all devices.</p>
+            <h3>Step 2: Switch Connection</h3>
+            <p>Connect a cable from any router LAN port to the switch uplink port. All devices connected to the switch will be on the same network as the router.</p>
+            <div class="article-tip">💡 Tip: Label all ethernet cables at both ends during installation. This saves hours of troubleshooting later when something goes wrong.</div>
+            <h3>Step 3: Network Printer Setup</h3>
+            <ul>
+                <li>Connect printer to switch via ethernet cable</li>
+                <li>Print a configuration page to find printer IP address</li>
+                <li>Set a static IP for the printer in router DHCP settings (IP reservation)</li>
+                <li>Install printer driver on each PC — add printer by IP address</li>
+            </ul>
+            <h3>Step 4: Testing & Documentation</h3>
+            <p>Ping each device from the router admin page. Test printing from all workstations. Document the network map including IP addresses of all devices for future reference.</p>
+        `
+    }
+};
+
+// ── FILTER LOGIC ──
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+
+        var filter = btn.getAttribute('data-filter');
+        document.querySelectorAll('.blog-card').forEach(function(card) {
+            if (filter === 'all' || card.getAttribute('data-cat') === filter) {
+                card.classList.remove('hidden-card');
+            } else {
+                card.classList.add('hidden-card');
+            }
+        });
+    });
+});
+
+// ── CARD CLICK — OPEN ARTICLE ──
+document.querySelectorAll('.blog-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+        var id = card.getAttribute('data-article');
+        var a  = articles[id];
+        if (!a) return;
+
+        document.getElementById('articleCat').innerHTML   = a.cat;
+        document.getElementById('articleTitle').innerText = a.title;
+        document.getElementById('articleMeta').innerText  = a.meta;
+        document.getElementById('articleBody').innerHTML  = a.body;
+
+        document.getElementById('articleOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    });
+});
+
+// ── CLOSE ARTICLE ──
+function closeArticle() {
+    document.getElementById('articleOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('articleOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeArticle();
+});
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeArticle();
+});
+
+// ── SCROLL FADE-IN ──
+var cards = document.querySelectorAll('.blog-card');
+
+var fallback = setTimeout(function() {
+    cards.forEach(function(c) { c.classList.add('visible'); });
+}, 1200);
+
+if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                obs.unobserve(e.target);
+            }
+        });
+        if (!document.querySelector('.blog-card:not(.visible)')) clearTimeout(fallback);
+    }, { threshold: 0.08 });
+
+    cards.forEach(function(c) { obs.observe(c); });
+}
+</script>
+</body>
+</html>
