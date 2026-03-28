@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balaji | Portfolio</title>
+    <title>Balaji Chitrarasu | IT Support Engineer</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -15,7 +15,7 @@
 <!-- NAV -->
 <nav class="navbar" id="navbar">
     <div class="nav-inner">
-        <a class="nav-brand" href="#">Balaji</a>
+        <a class="nav-brand" href="#">Portfolio</a>
         <button class="nav-toggle" id="navToggle" aria-label="Menu">
             <span></span><span></span><span></span>
         </button>
@@ -39,7 +39,7 @@
             <div class="avatar-ring avatar-ring2"></div>
         </div>
         <div class="hero-text">
-            <h1 id="typing"></h1>
+            <h1 class="hero-name" id="typing"></h1>
             <p class="hero-sub">IT Technical <span>Support</span> Engineer</p>
             <p class="hero-location">📍 Chennai, India</p>
             <div class="buttons">
@@ -141,17 +141,17 @@
 
         <div class="skill-row fade-in">
             <div class="skill-meta">
-                <span class="skill-icon">🪟</span>
-                <span class="skill-name">Windows Installation</span>
-                <span class="skill-pct">95%</span>
+                <span class="skill-icon">🤖</span>
+                <span class="skill-name">AI Prompt Engineering</span>
+                <span class="skill-pct">80%</span>
             </div>
-            <div class="bar"><div class="fill" data-width="95"></div></div>
+            <div class="bar"><div class="fill" data-width="80"></div></div>
         </div>
 
         <div class="skill-row fade-in">
             <div class="skill-meta">
-                <span class="skill-icon">🖨️</span>
-                <span class="skill-name">Printer Configuration</span>
+                <span class="skill-icon">⌨️</span>
+                <span class="skill-name">Typing Speed</span>
                 <span class="skill-pct">88%</span>
             </div>
             <div class="bar"><div class="fill" data-width="88"></div></div>
@@ -229,13 +229,16 @@
     </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
-    <p>© 2026 Balaji Chitrarasu | Chennai</p>
-    <p class="footer-sub">IT Support Engineer ✦ Chennai, India</p>
+    <div class="footer-inner">
+        <p class="footer-copy">© 2026 Balaji Chitrarasu. All Rights Reserved.</p>
+        <p class="footer-sub">Designed &amp; Developed by Balaji Chitrarasu &nbsp;✦&nbsp; Chennai</p>
+    </div>
 </footer>
 
 <!-- PROJECT POPUP -->
-<div id="popup" class="popup" role="dialog" aria-modal="true">
+<div id="popup" class="popup">
     <div class="popup-content glass-popup">
         <button class="popup-close" onclick="closePopup()">✕</button>
         <h3 id="popup-title"></h3>
@@ -244,7 +247,7 @@
 </div>
 
 <!-- CERT POPUP -->
-<div id="certPopup" class="popup" role="dialog" aria-modal="true">
+<div id="certPopup" class="popup">
     <div class="popup-content glass-popup">
         <button class="popup-close" onclick="closeCertPopup()">✕</button>
         <div class="nptel-badge-row">
