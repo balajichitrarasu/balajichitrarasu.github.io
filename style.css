@@ -100,14 +100,13 @@ body::after {
 .nav-brand {
     font-family: 'Syne', sans-serif;
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 0.85rem;
     color: var(--accent);
     text-decoration: none;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     font-style: normal;
     flex-shrink: 0;
-    position: relative;
 }
 
 .navbar ul {
@@ -246,11 +245,13 @@ body::after {
     animation: fadeUp 0.7s 0.1s ease both;
 }
 
-.hero-name::after {
+/* cursor only shows when typing is active */
+.hero-name.typing-active::after {
     content: '|';
     -webkit-text-fill-color: var(--accent);
     animation: blink 0.8s step-end infinite;
 }
+
 .hero-name.done::after { display: none; }
 
 @keyframes blink { 50% { opacity: 0; } }
@@ -859,5 +860,4 @@ footer {
 }
 .popup-close:hover { background: rgba(0,255,204,0.14); color: var(--accent); }
 
-#popup-title, #certTitle {
-    font-family: 'Playfair Display
+#popup-title, #certTitl
