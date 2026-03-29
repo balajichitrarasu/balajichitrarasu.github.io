@@ -68,10 +68,10 @@
         .nav-brand {
             font-family: 'Syne', sans-serif;
             font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 0.85rem;
             color: var(--accent);
             text-decoration: none;
-            letter-spacing: 0.18em;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
         }
 
@@ -189,16 +189,12 @@
             border-radius: var(--radius);
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.28s, box-shadow 0.28s, border-color 0.28s;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: transform 0.28s ease, box-shadow 0.28s ease,
-                        border-color 0.28s ease, opacity 0.6s ease;
+            opacity: 1;
+            transform: translateY(0);
+            transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
         }
-
-        .blog-card.visible { opacity: 1; transform: translateY(0); }
 
         .blog-card:hover {
             transform: translateY(-7px);
@@ -592,4 +588,10 @@
         </div>
         <div class="card-footer">
             <span class="card-read">Read More →</span>
-            <span class="c
+            <span class="card-time">7 min read</span>
+        </div>
+    </div>
+
+    <div class="blog-card" data-cat="network" data-article="net2">
+        <div class="card-top">
+            <span class="card-category ca
