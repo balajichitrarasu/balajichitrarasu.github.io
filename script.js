@@ -13,10 +13,17 @@ document.addEventListener("DOMContentLoaded", function () {
             charIdx++;
             setTimeout(typeChar, 80);
         } else {
+            typingEl.classList.remove("typing-active");
             typingEl.classList.add("done");
         }
     }
-    if (typingEl) typeChar();
+    if (typingEl) {
+        // small delay before starting so cursor doesn't flash alone
+        setTimeout(function() {
+            typingEl.classList.add("typing-active");
+            typeChar();
+        }, 400);
+    }
 
     // ════════════════════════════════════
     // 2. PARTICLES
