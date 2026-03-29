@@ -96,16 +96,18 @@ body::after {
     gap: 1rem;
 }
 
-/* ── "Portfolio" brand — Playfair Display ── */
+/* ── "Portfolio" brand — Syne bold, pro style ── */
 .nav-brand {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 1.25rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
     color: var(--accent);
     text-decoration: none;
-    letter-spacing: 0.02em;
-    font-style: italic;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-style: normal;
     flex-shrink: 0;
+    position: relative;
 }
 
 .navbar ul {
@@ -310,6 +312,18 @@ body::after {
     border-color: var(--accent2);
     color: var(--accent2);
     box-shadow: 0 0 20px rgba(91,141,238,0.2);
+}
+
+/* Blog button — accent teal glow like Resume but outlined */
+.btn-blog-hero {
+    border-color: rgba(0,255,204,0.35);
+    color: var(--accent);
+}
+.btn-blog-hero:hover {
+    border-color: var(--accent);
+    color: #07090d;
+    background: var(--accent);
+    box-shadow: 0 0 26px rgba(0,255,204,0.3);
 }
 
 .hero-scroll-hint {
@@ -727,34 +741,68 @@ body::after {
 .form-msg.error   { background: rgba(255,107,53,0.07); border: 1px solid rgba(255,107,53,0.2); color: #ff8a65; }
 
 /* ══════════════════════════════════════════
-   FOOTER — updated professional version
+   FOOTER — professional version
 ══════════════════════════════════════════ */
 footer {
     position: relative;
     z-index: 1;
     text-align: center;
-    padding: 2.8rem 1.5rem;
+    padding: 3.5rem 1.5rem 2.5rem;
     border-top: 1px solid rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.2);
 }
 
 .footer-inner {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* monogram logo */
+.footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid rgba(0,255,204,0.25);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.4rem;
 }
 
 .footer-copy {
     font-family: 'Syne', sans-serif;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     color: var(--text);
     letter-spacing: 0.04em;
+    font-weight: 600;
 }
 
 .footer-sub {
-    font-size: 0.72rem;
+    font-size: 0.73rem;
     color: var(--muted);
     letter-spacing: 0.06em;
+}
+
+.footer-sub span {
+    color: var(--accent);
+}
+
+.footer-legal {
+    margin-top: 0.4rem;
+    font-size: 0.66rem;
+    color: rgba(90,110,130,0.5);
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+    max-width: 480px;
 }
 
 /* ══════════════════════════════════════════
@@ -812,87 +860,4 @@ footer {
 .popup-close:hover { background: rgba(0,255,204,0.14); color: var(--accent); }
 
 #popup-title, #certTitle {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #fff;
-    margin-bottom: 0.9rem;
-    padding-right: 2rem;
-    line-height: 1.3;
-}
-
-#popup-text, #certDesc { font-size: 0.88rem; color: var(--text); line-height: 1.85; }
-
-.nptel-badge-row { display: flex; justify-content: center; margin-bottom: 1.4rem; }
-
-.nptel-badge-box {
-    background: linear-gradient(135deg, rgba(255,180,0,0.1), rgba(0,255,204,0.07));
-    border: 1px solid rgba(255,180,0,0.2);
-    border-radius: 14px;
-    padding: 1.2rem 2rem;
-    text-align: center;
-    min-width: 110px;
-}
-
-.nptel-badge-box span { font-size: 2.2rem; display: block; margin-bottom: 0.3rem; }
-.nptel-badge-box p { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: #fff; }
-.nptel-elite-label { font-size: 0.7rem !important; color: #ffd055 !important; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 0.2rem; }
-.cert-popup-issuer { font-size: 0.78rem; color: var(--accent2); margin-bottom: 0.4rem; }
-.cert-status-badge {
-    display: inline-block;
-    font-size: 0.67rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.2rem 0.7rem;
-    border-radius: 20px;
-    background: rgba(255,180,0,0.1);
-    color: #ffd055;
-    border: 1px solid rgba(255,180,0,0.22);
-}
-
-/* ══════════════════════════════════════════
-   FADE-IN
-══════════════════════════════════════════ */
-.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.fade-in.visible { opacity: 1; transform: translateY(0); }
-
-@media (prefers-reduced-motion: reduce) {
-    .fade-in { opacity: 1 !important; transform: none !important; transition: none !important; }
-}
-
-/* ══════════════════════════════════════════
-   KEYFRAMES
-══════════════════════════════════════════ */
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ══════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════ */
-@media (max-width: 700px) {
-    .nav-toggle { display: flex; }
-
-    .navbar ul {
-        display: none;
-        position: absolute;
-        top: var(--nav-h);
-        left: 0; right: 0;
-        flex-direction: column;
-        background: rgba(7,9,13,0.98);
-        padding: 1.2rem 1.5rem;
-        gap: 1rem;
-        border-bottom: 1px solid rgba(0,255,204,0.1);
-        z-index: 300;
-    }
-
-    .navbar ul.open { display: flex; }
-    .form-row { grid-template-columns: 1fr; }
-    .contact-info-grid { grid-template-columns: 1fr; }
-    #cursor-glow { display: none !important; }
-}
+    font-family: 'Playfair Display
