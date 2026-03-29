@@ -116,12 +116,23 @@ document.addEventListener("DOMContentLoaded", function () {
     // ════════════════════════════════════
     var fadeEls = document.querySelectorAll(".fade-in");
 
+    // Animate all skill bars after short delay — no observer dependency
+    function animateAllBars() {
+        document.querySelectorAll(".fill").forEach(function(fill) {
+            var w = fill.getAttribute("data-width");
+            if (w) fill.style.width = w + "%";
+        });
+    }
+
+    // Always fire bars after 800ms regardless of scroll/observer
+    setTimeout(animateAllBars, 800);
+
+    // Fallback: show all fade-in elements after 1.5s
     var fallbackTimer = setTimeout(function () {
         fadeEls.forEach(function (el) {
             el.classList.add("visible");
-            var fill = el.querySelector(".fill");
-            if (fill) fill.style.width = fill.getAttribute("data-width") + "%";
         });
+        animateAllBars();
     }, 1500);
 
     if ("IntersectionObserver" in window) {
@@ -129,11 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
                     entry.target.classList.add("visible");
-                    var fill = entry.target.querySelector(".fill");
-                    if (fill) {
-                        var w = fill.getAttribute("data-width");
-                        setTimeout(function () { fill.style.width = w + "%"; }, 120);
-                    }
                     fadeObs.unobserve(entry.target);
                 }
             });
