@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Balaji Chitrarasu | Hardware &amp; Software Engineer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="particles-js"></div>
+<div id="cursor-glow"></div>
+
+<!-- NAV -->
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a class="nav-brand" href="#">Portfolio</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul id="navMenu">
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#certifications">Certs</a></li>
+            <li><a href="#achievements">Awards</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="blog.html" class="nav-blog">Blog</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+    <div class="hero-content">
+        <div class="avatar-wrap">
+            <img src="profile.jpg" class="profile" alt="Balaji Chitrarasu">
+            <div class="avatar-ring"></div>
+            <div class="avatar-ring avatar-ring2"></div>
+        </div>
+        <div class="hero-text">
+            <div class="hero-badge">&#128205; India &nbsp;&#9642;&nbsp; Available for Work</div>
+            <h1 class="hero-name" id="typing"></h1>
+            <p class="hero-sub">Hardware &amp; Software <span>Technical Engineer</span></p>
+            <p class="hero-tagline">IT Support &#9642; Electronics &#9642; Stock Market Trader &#9642; IIC Ambassador</p>
+            <div class="buttons">
+                <a href="resume.pdf" class="btn-primary" target="_blank">&#8595; Resume</a>
+                <a href="https://www.linkedin.com/in/balajichitrarasu" class="btn-outline" target="_blank">LinkedIn</a>
+                <a href="https://github.com/balajichitrarasu" class="btn-outline" target="_blank">GitHub</a>
+                <a href="blog.html" class="btn-outline btn-blog-hero">&#10022; Blog</a>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll-hint">
+        <span class="scroll-line"></span>
+        <p>Scroll</p>
+    </div>
+</header>
+
+<!-- STATS -->
+<div class="stats-strip" id="stats">
+    <div class="stat-item fade-in">
+        <span class="stat-num" data-target="3">0</span><span class="stat-plus">+</span>
+        <p class="stat-label">Years Exp</p>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item fade-in">
+        <span class="stat-num" data-target="100">0</span><span class="stat-plus">+</span>
+        <p class="stat-label">Devices Fixed</p>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item fade-in">
+        <span class="stat-num" data-target="15">0</span><span class="stat-plus">+</span>
+        <p class="stat-label">Certificates</p>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item fade-in">
+        <span class="stat-num" data-target="10">0</span><span class="stat-plus">+</span>
+        <p class="stat-label">Awards</p>
+    </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+    <div class="section-label"><em></em>About</div>
+    <h2 class="section-title">About Me</h2>
+    <div class="about-wrap fade-in">
+        <!-- Short preview card -->
+        <div class="glass-card about-preview">
+            <p class="about-short">Hardware &amp; Software Engineer from India — ECE graduate from United Institute of Technology. Expert in laptop/PC repair, OS &amp; BIOS, networking, and electronics. SEBI-certified trader &amp; IIC Innovation Ambassador.</p>
+            <button class="read-more-btn" id="readMoreBtn" onclick="openAbout()">Read More &#8594;</button>
+        </div>
+        <!-- Skill tags -->
+        <div class="about-tags">
+            <div class="tag-card"><span class="tag-icon">&#128295;</span><span>Hardware Repair</span></div>
+            <div class="tag-card"><span class="tag-icon">&#127760;</span><span>Networking</span></div>
+            <div class="tag-card"><span class="tag-icon">&#9889;</span><span>Electronics</span></div>
+            <div class="tag-card"><span class="tag-icon">&#128200;</span><span>Stock Trading</span></div>
+            <div class="tag-card"><span class="tag-icon">&#9729;</span><span>AWS Cloud</span></div>
+            <div class="tag-card"><span class="tag-icon">&#129302;</span><span>AI &amp; Data Science</span></div>
+            <div class="tag-card"><span class="tag-icon">&#128187;</span><span>Software Eng.</span></div>
+            <div class="tag-card"><span class="tag-icon">&#128161;</span><span>IIC Ambassador</span></div>
+            <div class="tag-card"><span class="tag-icon">&#128421;</span><span>IT Support</span></div>
+            <div class="tag-card"><span class="tag-icon">&#128274;</span><span>Cybersecurity</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+    <div class="section-label"><em></em>Projects</div>
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-grid">
+
+        <div class="project-card fade-in" onclick="openPopup('Custom PC Build','Built and assembled a custom PC from scratch. Selected compatible components, installed the operating system, configured BIOS settings, installed all drivers, performed full hardware testing, and optimized thermal management for peak performance.')">
+            <div class="project-img-wrap">
+                <img src="project1.jpg" alt="Custom PC Build">
+                <div class="project-overlay"><span>&#8599;</span><p>View Details</p></div>
+            </div>
+            <div class="project-info">
+                <span class="project-tag">Hardware</span>
+                <h3>Custom PC Build</h3>
+                <p class="project-desc">Component selection, BIOS config, OS install &amp; full testing.</p>
+            </div>
+        </div>
+
+        <div class="project-card fade-in" onclick="openPopup('Office Network Setup','Designed and configured a complete office LAN network. Set up router, switches, and wireless access points. Enabled printer sharing across all workstations, handled IP allocation, and ensured stable high-speed internet connectivity.')">
+            <div class="project-img-wrap">
+                <img src="project2.jpg" alt="Office Network">
+                <div class="project-overlay"><span>&#8599;</span><p>View Details</p></div>
+            </div>
+            <div class="project-info">
+                <span class="project-tag">Networking</span>
+                <h3>Office Network Setup</h3>
+                <p class="project-desc">Full LAN, router, switches, WiFi, IP allocation &amp; printing.</p>
+            </div>
+        </div>
+
+        <div class="project-card fade-in" onclick="openPopup('TradingBoy — Automated Trading System','Built a personal automated trading system called TradingBoy. Designed to analyse stock market patterns, execute trades based on technical indicators, and manage risk automatically. Built using SEBI-certified knowledge and hands-on trading experience in the Indian stock market.')">
+            <div class="project-img-wrap">
+                <div class="project-img-placeholder"><span>&#128200;</span></div>
+                <div class="project-overlay"><span>&#8599;</span><p>View Details</p></div>
+            </div>
+            <div class="project-info">
+                <span class="project-tag tag-trading">Trading</span>
+                <h3>TradingBoy</h3>
+                <p class="project-desc">Automated stock market analysis &amp; trade execution system.</p>
+            </div>
+        </div>
+
+        <div class="project-card fade-in" onclick="openPopup('Laptop &amp; PC Repair Services','Extensive hands-on experience repairing laptops and desktops of all major brands. Services: complete OS reinstallation, BIOS flashing &amp; recovery, battery replacement, SSD/HDD upgrades, RAM upgrades, screen replacement, motherboard-level diagnostics, thermal repasting, charge port repair, and full system diagnostics.')">
+            <div class="project-img-wrap">
+                <div class="project-img-placeholder"><span>&#128295;</span></div>
+                <div class="project-overlay"><span>&#8599;</span><p>View Details</p></div>
+            </div>
+            <div class="project-info">
+                <span class="project-tag">Repair</span>
+                <h3>Laptop &amp; PC Repair</h3>
+                <p class="project-desc">OS, BIOS, battery, SSD, HDD, RAM, screen &amp; full diagnostics.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+    <div class="section-label"><em></em>Skills</div>
+    <h2 class="section-title">Skills</h2>
+    <div class="skills-wrap">
+        <div class="skill-row fade-in">
+            <div class="skill-meta"><span class="skill-icon">&#128295;</span><span class="skill-name">Hardware Repair &amp; Diagnostics</span><span class="skill-pct">92%</span></div>
+            <div class="bar"><div class="fill" data-width="92"></div></div>
+        </div>
+        <div class="skill-row fade-in">
+            <div class="skill-meta"><span class="skill-icon">&#128421;</span><span class="skill-name">Desktop &amp; Laptop Support</span><span class="skill-pct">90%</span></div>
+            <div class="bar"><div class="fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-row fade-in">
+            <div class="skill-meta"><span class="skill-icon">&#127760;</span><span class="skill-name">Networking &amp; LAN Setup</span><span class="skill-pct">78%</span></div>
+            <div class="bar"><div class="fill" data-width="78"></div></div>
+        </div>
+        <div class="skill-row fade-in">
+            <div class="skill-meta"><span class="skill-icon">&#128200;</span><span class="skill-name">Stock Market &amp; Trading</span><span class="skill-pct">82%</span></div>
+            <div class="bar"><div class="fill" data-width="82"></div></div>
+        </div>
+        <div class="skill-row fade-in">
+            <div class="skill-meta"><span class="skill-icon">&#128274;</span><span class="skill-name">Cybersecurity Awareness</span><span class="skill-pct">72%</span></div>
+            <div class="bar"><div class="fill" data-width="72"></div></div>
+        </div>
+        <div class="skill-row fade-in">
+            <div class="skill-meta"><span class="skill-icon">&#9729;</span><span class="skill-name">AWS Cloud (In Progress)</span><span class="skill-pct">55%</span></div>
+            <div class="bar"><div class="fill" data-width="55"></div></div>
+        </div>
+        <div class="skill-row fade-in">
+            <div class="skill-meta"><span class="skill-icon">&#129302;</span><span class="skill-name">AI Prompt Engineering</span><span class="skill-pct">82%</span></div>
+            <div class="bar"><div class="fill" data-width="82"></div></div>
+        </div>
+        <div class="skill-row fade-in">
+            <div class="skill-meta"><span class="skill-icon">&#9000;</span><span class="skill-name">Typing Speed</span><span class="skill-pct">88%</span></div>
+            <div class="bar"><div class="fill" data-width="88"></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications" class="section">
+    <div class="section-label"><em></em>Certifications</div>
+    <h2 class="section-title">Certifications</h2>
+
+    <p class="cert-group-label">&#127891; Academic &amp; Technical</p>
+    <div class="certs-grid" style="margin-bottom:2rem;">
+        <div class="cert-card fade-in" onclick="openCert('Introduction to Industry 4.0 and Industrial Internet of Things','NPTEL — IIT Kharagpur (Swayam)','&#11088; Elite Status | Score: 77% | Jul–Oct 2025','12-week course funded by MoE, Govt. of India. Online Assignments: 24.16/25 | Proctored Exam: 52.5/75. Covers smart manufacturing, cyber-physical systems, IIoT protocols, cloud integration, and Industry 4.0 technologies. Certificate No: NPTEL25CS146S954300733. Total certified: 19100 candidates.','NPTEL','&#11088; Elite','&#127885;')">
+            <div class="cert-left">
+                <div class="cert-icon-wrap">&#127885;</div>
+                <div class="cert-info"><h3>Industry 4.0 &amp; IIoT</h3><p class="cert-issuer">NPTEL — IIT Kharagpur</p><span class="cert-badge elite">&#11088; Elite · 77%</span></div>
+            </div>
+            <span class="cert-arrow">&#8599;</span>
+        </div>
+        <div class="cert-card fade-in" onclick="openCert('Software Engineer — Role Certification','HackerRank','&#9989; Certified | 25 Oct 2025','Passed the HackerRank Software Engineer role certification test. Demonstrates proficiency in software engineering fundamentals, data structures, algorithms, and problem solving. Certificate ID: F33C9A8F9A4B.','HackerRank','&#9989; Certified','&#128187;')">
+            <div class="cert-left">
+                <div class="cert-icon-wrap" style="background:linear-gradient(135deg,rgba(0,200,100,0.12),rgba(0,255,204,0.08));border-color:rgba(0,200,100,0.2);">&#128187;</div>
+                <div class="cert-info"><h3>Software Engineer</h3><p class="cert-issuer">HackerRank · Oct 2025</p><span class="cert-badge certified">&#9989; Certified</span></div>
+            </div>
+            <span class="cert-arrow">&#8599;</span>
+        </div>
+        <div class="cert-card fade-in" onclick="openCert('SEBI Stock Market Certification','SEBI — Securities &amp; Exchange Board of India','&#9989; Certified','Certified in stock market operations, trading regulations, financial instruments, risk management, technical analysis, and market operations. Applied knowledge in building the personal TradingBoy automated trading system.','SEBI','&#9989; Certified','&#128200;')">
+            <div class="cert-left">
+                <div class="cert-icon-wrap cert-icon-sebi">&#128200;</div>
+                <div class="cert-info"><h3>SEBI Stock Market</h3><p class="cert-issuer">Securities &amp; Exchange Board of India</p><span class="cert-badge certified">&#9989; Certified</span></div>
+            </div>
+            <span class="cert-arrow">&#8599;</span>
+        </div>
+        <div class="cert-card fade-in" onclick="openCert('AWS Cloud Certification — In Progress','Amazon Web Services (AWS)','&#9203; Currently Pursuing','Currently pursuing AWS Cloud certification covering core services including EC2, S3, Lambda, IAM, VPC, RDS, and cloud architecture best practices. Expected completion soon.','AWS','&#9203; In Progress','&#9729;')">
+            <div class="cert-left">
+                <div class="cert-icon-wrap cert-icon-aws">&#9729;</div>
+                <div class="cert-info"><h3>AWS Cloud Certification</h3><p class="cert-issuer">Amazon Web Services</p><span class="cert-badge inprogress">&#9203; In Progress</span></div>
+            </div>
+            <span class="cert-arrow">&#8599;</span>
+        </div>
+    </div>
+
+    <p class="cert-group-label">&#128161; MoE IIC — Innovation Ambassador</p>
+    <div class="certs-grid" style="margin-bottom:2rem;">
+        <div class="cert-card fade-in" onclick="openCert('Innovation Ambassador — Foundation Level','MoE Innovation Cell &amp; AICTE (IIC)','&#9989; Completed | 02 May 2025','16 sessions of 30 contact hours in Foundation Level Innovation Ambassador training conducted online by Ministry of Education Innovation Cell &amp; AICTE. IIC Calendar Year 2024-25. Certificate No: IA/Foundation/1057175. IIC ID: IC202115749.','MoE IIC','&#9989; Completed','&#128161;')">
+            <div class="cert-left">
+                <div class="cert-icon-wrap cert-icon-iic">&#128161;</div>
+                <div class="cert-info"><h3>IA — Foundation Level</h3><p class="cert-issuer">MoE Innovation Cell &amp; AICTE</p><span class="cert-badge certified">&#9989; May 2025</span></div>
+            </div>
+            <span class="cert-arrow">&#8599;</span>
+        </div>
+        <div class="cert-card fade-in" onclick="openCert('Innovation Ambassador — Advanced Level','MoE Innovation Cell &amp; AICTE (IIC)','&#9989; Completed | 03 May 2025','16 sessions of 30 contact hours in Advanced Level Innovation Ambassador training conducted online by MoE Innovation Cell &amp; AICTE. IIC Calendar Year 2024-25. Certificate No: IA/Foundation/1057175.','MoE IIC','&#9989; Completed','&#128161;')">
+            <div class="cert-left">
+                <div class="cert-icon-wrap cert-icon-iic2">&#128161;</div>
+                <div class="cert-info"><h3>IA — Advanced Level</h3><p class="cert-issuer">MoE Innovation Cell &amp; AICTE</p><span class="cert-badge certified">&#9989; May 2025</span></div>
+            </div>
+            <span class="cert-arrow">&#8599;</span>
+        </div>
+        <div class="cert-card fade-in" onclick="openCert('Innovation Ambassador — Re-skilling Level','MoE Innovation Cell &amp; AICTE (IIC)','&#9989; Completed | 31 Aug 2024','21 sessions of 21 contact hours in Re-skilling Level training conducted online by MoE Innovation Cell &amp; AICTE. IIC Calendar Year 2024-25. Certificate No: IA/Re-skilling/1057175. IIC ID: IC202115749.','MoE IIC','&#9989; Completed','&#128161;')">
+            <div class="cert-left">
+                <div class="cert-icon-wrap cert-icon-iic3">&#128161;</div>
+                <div class="cert-info"><h3>IA — Re-skilling Level</h3><p class="cert-issuer">MoE Innovation Cell &amp; AICTE</p><span class="cert-badge certified">&#9989; Aug 2024</span></div>
+            </div>
+            <span class="cert-arrow">&#8599;</span>
+        </div>
+    </div>
+
+    <p class="cert-group-label">&#128188; HP LIFE — Professional Skills</p>
+    <div class="certs-grid">
+        <div class="cert-card cert-card-sm fade-in" onclick="openCert('AI for Beginners','HP LIFE — HP Foundation','&#9989; Completed | 5 Aug 2025','Gained understanding of AI impact on the technological landscape. Learned key AI concepts, data importance in AI, business applications, and ethical implications. Serial: f1155612-44f9-413c-8fcd-bafae43f8cd6.','HP LIFE','&#9989; Completed','&#128187;')">
+            <div class="cert-left"><div class="cert-icon-wrap cert-icon-hp">HP</div><div class="cert-info"><h3>AI for Beginners</h3><p class="cert-issuer">HP LIFE · Aug 2025</p><span class="cert-badge hp-badge">&#9989; Done</span></div></div>
+            <span class="cert-arrow">&#8599;</span>
+        </div>
+        <div class="cert-card cert-card-sm fade-in" onclick="openCert('Data Science &amp; Analytics','HP LIFE — HP Foundation','&#9989; Completed | 5 Aug 2025','Learned leading data science and analytics practices, methodologies, and tools. Examined benefits of data-driven business approaches. Serial: 1ae2ee55-9a0a-4fdc-9f17-dac34cdd4dde.','HP LIFE','&#9989; Completed','&#128202;')">
+            <div class="cert-left"><div class="cert-icon-wrap cert-icon-hp">HP</div><div class="cert-info"><h3>Data Science &amp; Analytics</h3><p class="cert-issuer">HP LIFE · Aug 2025</p><span class="cert-badge hp-badge">&#9989; Done</span></div></div>
+            <span class="cert-arrow">&#8599;</span>
+        </div>
+        <div class="cert-card cert-card-sm fade-in" onclick="openCert('Introduction to Cybersecurity Awareness','HP LIFE — HP Foundation','&#9989; Completed | 5 Aug 2025','Learned about common cybersecurity threats and basic ways to keep online data and information secure. Serial: 82f775fe-7c9c-4d96-b3d8-d952dd441c88.','HP LIFE','&#9989; Completed','&#128274;')">
+            <div class="cert-left"><div class="cert-icon-wrap cert-icon-hp">HP</div><div class="cert-info"><h3>Cybersecurity Awareness</h3><p class="cert-issuer">HP LIFE · Aug 2025</p><span
