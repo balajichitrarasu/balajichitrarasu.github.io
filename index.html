@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Balaji Chitrarasu | Hardware &amp; Software Technical Engineer</title>
+<meta name="description" content="Portfolio of Balaji Chitrarasu — Hardware and Software Technical Engineer, IT Support Specialist, SEBI-certified Stock Market Trader and IIC Innovation Ambassador from India.">
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="particles-js"></div>
+<div id="cursor-glow"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#">Portfolio</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navMenu">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#certifications">Certs</a></li>
+      <li><a href="#achievements">Achievements</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="blog.html" class="nav-blog">Blog</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+  <div class="hero-content">
+    <div class="avatar-wrap">
+      <img src="profile.jpg" class="profile" alt="Balaji Chitrarasu">
+      <div class="avatar-ring"></div>
+      <div class="avatar-ring r2"></div>
+    </div>
+    <div class="hero-text">
+      <div class="hero-badge">&#128205;&nbsp;India &nbsp;&bull;&nbsp; Available for Work</div>
+      <h1 class="hero-name" id="typing"></h1>
+      <p class="hero-sub">Hardware &amp; Software <span>Technical Engineer</span></p>
+      <p class="hero-tagline">IT Support &bull; Electronics &bull; Stock Market Trader &bull; IIC Innovation Ambassador</p>
+      <div class="hero-btns">
+        <a href="resume.pdf" class="btn btn-primary" target="_blank">&#8595;&nbsp;Resume</a>
+        <a href="https://www.linkedin.com/in/balajichitrarasu" class="btn btn-outline" target="_blank">LinkedIn</a>
+        <a href="https://github.com/balajichitrarasu" class="btn btn-outline" target="_blank">GitHub</a>
+        <a href="blog.html" class="btn btn-blog">&#10022;&nbsp;Blog</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span class="scroll-line"></span>
+    <p>Scroll</p>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats-strip" id="stats">
+  <div class="stat-item fade-in">
+    <div class="stat-val"><span class="stat-num" data-target="3">0</span><span class="stat-plus">+</span></div>
+    <p class="stat-label">Years Experience</p>
+  </div>
+  <div class="stat-div"></div>
+  <div class="stat-item fade-in">
+    <div class="stat-val"><span class="stat-num" data-target="100">0</span><span class="stat-plus">+</span></div>
+    <p class="stat-label">Devices Serviced</p>
+  </div>
+  <div class="stat-div"></div>
+  <div class="stat-item fade-in">
+    <div class="stat-val"><span class="stat-num" data-target="15">0</span><span class="stat-plus">+</span></div>
+    <p class="stat-label">Certifications</p>
+  </div>
+  <div class="stat-div"></div>
+  <div class="stat-item fade-in">
+    <div class="stat-val"><span class="stat-num" data-target="10">0</span><span class="stat-plus">+</span></div>
+    <p class="stat-label">Achievements</p>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="sec-label"><em></em>About</div>
+  <h2 class="sec-title">About Me</h2>
+  <div class="about-wrap fade-in">
+    <div class="glass-card about-card">
+      <p class="about-short">Hardware &amp; Software Engineer from India — ECE graduate of United Institute of Technology. Expert in laptop and PC repair, OS &amp; BIOS operations, networking, and electronics. SEBI-certified stock market trader and MoE IIC Innovation Ambassador.</p>
+      <button class="read-btn" onclick="openAbout()">Read Full Bio &rarr;</button>
+    </div>
+    <div class="tag-grid">
+      <div class="tag"><span>&#128295;</span><span>Hardware Repair</span></div>
+      <div class="tag"><span>&#127760;</span><span>Networking</span></div>
+      <div class="tag"><span>&#9889;</span><span>Electronics</span></div>
+      <div class="tag"><span>&#128200;</span><span>Stock Trading</span></div>
+      <div class="tag"><span>&#9729;</span><span>AWS Cloud</span></div>
+      <div class="tag"><span>&#129302;</span><span>AI &amp; Data Science</span></div>
+      <div class="tag"><span>&#128187;</span><span>Software Engineer</span></div>
+      <div class="tag"><span>&#128161;</span><span>IIC Ambassador</span></div>
+      <div class="tag"><span>&#128421;</span><span>IT Support</span></div>
+      <div class="tag"><span>&#128274;</span><span>Cybersecurity</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+  <div class="sec-label"><em></em>Projects</div>
+  <h2 class="sec-title">Projects</h2>
+  <div class="proj-grid">
+
+    <div class="proj-card fade-in" onclick="openPopup('Custom PC Build','Built and assembled a custom PC from scratch. Selected fully compatible components, installed the operating system, configured BIOS settings, installed all required drivers, performed comprehensive hardware testing and optimised thermal management for peak stable performance.')">
+      <div class="proj-img-wrap">
+        <img src="project1.jpg" alt="Custom PC Build">
+        <div class="proj-overlay"><span>&#8599;</span><p>View Details</p></div>
+      </div>
+      <div class="proj-info">
+        <span class="proj-tag">Hardware</span>
+        <h3>Custom PC Build</h3>
+        <p>Component selection, BIOS configuration, OS installation &amp; full hardware testing.</p>
+      </div>
+    </div>
+
+    <div class="proj-card fade-in" onclick="openPopup('Office Network Setup','Designed and configured a complete office LAN network. Set up router, switches and wireless access points. Enabled shared printer access across all workstations, handled IP address allocation and ensured stable high-speed internet connectivity for all users.')">
+      <div class="proj-img-wrap">
+        <img src="project2.jpg" alt="Office Network Setup">
+        <div class="proj-overlay"><span>&#8599;</span><p>View Details</p></div>
+      </div>
+      <div class="proj-info">
+        <span class="proj-tag">Networking</span>
+        <h3>Office Network Setup</h3>
+        <p>Full LAN with router, switches, WiFi, IP allocation &amp; shared printing.</p>
+      </div>
+    </div>
+
+    <div class="proj-card fade-in" onclick="openPopup('TradingBoy — Automated Trading System','Built a personal automated trading system called TradingBoy. Designed to analyse Indian stock market patterns, execute trades based on technical indicators and manage risk automatically. Built using knowledge from SEBI certification and hands-on live trading experience.')">
+      <div class="proj-img-wrap">
+        <div class="proj-placeholder"><span>&#128200;</span></div>
+        <div class="proj-overlay"><span>&#8599;</span><p>View Details</p></div>
+      </div>
+      <div class="proj-info">
+        <span class="proj-tag tag-trade">Trading</span>
+        <h3>TradingBoy</h3>
+        <p>Automated stock market analysis and trade execution system.</p>
+      </div>
+    </div>
+
+    <div class="proj-card fade-in" onclick="openPopup('Laptop &amp; PC Repair Services','Hands-on experience repairing laptops and desktops of all major brands. Services include: complete OS reinstallation, BIOS flashing and recovery, battery replacement, SSD and HDD upgrades, RAM upgrades, screen replacement, motherboard-level diagnostics, thermal paste replacement, charge port repair and full system diagnostics.')">
+      <div class="proj-img-wrap">
+        <div class="proj-placeholder"><span>&#128295;</span></div>
+        <div class="proj-overlay"><span>&#8599;</span><p>View Details</p></div>
+      </div>
+      <div class="proj-info">
+        <span class="proj-tag">Repair</span>
+        <h3>Laptop &amp; PC Repair</h3>
+        <p>OS, BIOS, battery, SSD, HDD, RAM, screen replacement &amp; full diagnostics.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+  <div class="sec-label"><em></em>Skills</div>
+  <h2 class="sec-title">Skills</h2>
+  <div class="skills-list">
+    <div class="skill-row fade-in">
+      <div class="skill-top"><span>&#128295;</span><span class="sname">Hardware Repair &amp; Diagnostics</span><span class="spct">92%</span></div>
+      <div class="sbar"><div class="sfill" data-w="92"></div></div>
+    </div>
+    <div class="skill-row fade-in">
+      <div class="skill-top"><span>&#128421;</span><span class="sname">Desktop &amp; Laptop Support</span><span class="spct">90%</span></div>
+      <div class="sbar"><div class="sfill" data-w="90"></div></div>
+    </div>
+    <div class="skill-row fade-in">
+      <div class="skill-top"><span>&#127760;</span><span class="sname">Networking &amp; LAN Setup</span><span class="spct">78%</span></div>
+      <div class="sbar"><div class="sfill" data-w="78"></div></div>
+    </div>
+    <div class="skill-row fade-in">
+      <div class="skill-top"><span>&#128200;</span><span class="sname">Stock Market &amp; Trading</span><span class="spct">82%</span></div>
+      <div class="sbar"><div class="sfill" data-w="82"></div></div>
+    </div>
+    <div class="skill-row fade-in">
+      <div class="skill-top"><span>&#128274;</span><span class="sname">Cybersecurity Awareness</span><span class="spct">72%</span></div>
+      <div class="sbar"><div class="sfill" data-w="72"></div></div>
+    </div>
+    <div class="skill-row fade-in">
+      <div class="skill-top"><span>&#9729;</span><span class="sname">AWS Cloud (In Progress)</span><span class="spct">55%</span></div>
+      <div class="sbar"><div class="sfill" data-w="55"></div></div>
+    </div>
+    <div class="skill-row fade-in">
+      <div class="skill-top"><span>&#129302;</span><span class="sname">AI Prompt Engineering</span><span class="spct">82%</span></div>
+      <div class="sbar"><div class="sfill" data-w="82"></div></div>
+    </div>
+    <div class="skill-row fade-in">
+      <div class="skill-top"><span>&#9000;</span><span class="sname">Typing Speed</span><span class="spct">88%</span></div>
+      <div class="sbar"><div class="sfill" data-w="88"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications" class="section">
+  <div class="sec-label"><em></em>Certifications</div>
+  <h2 class="sec-title">Certifications</h2>
+
+  <p class="cert-group">&#127891; Academic &amp; Technical</p>
+  <div class="cert-list" style="margin-bottom:2rem">
+    <div class="cert-row fade-in" onclick="openCert('Introduction to Industry 4.0 and Industrial Internet of Things','NPTEL — IIT Kharagpur (Swayam)','&#11088; Elite Status | Score: 77% | Jul–Oct 2025','12-week course funded by MoE, Government of India. Online Assignments: 24.16/25 | Proctored Exam: 52.5/75. Covers smart manufacturing, cyber-physical systems, IIoT protocols, cloud integration and Industry 4.0 technologies. Certificate No: NPTEL25CS146S954300733. Total certified candidates: 19,100.','NPTEL','&#11088; Elite','&#127885;')">
+      <div class="cert-left"><div class="cert-ico">&#127885;</div><div class="cert-info"><h4>Industry 4.0 &amp; IIoT</h4><p>NPTEL — IIT Kharagpur</p><span class="cbadge elite">&#11088; Elite &bull; 77%</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row fade-in" onclick="openCert('Software Engineer — Role Certification','HackerRank','&#9989; Certified | 25 Oct 2025','Passed the HackerRank Software Engineer role certification test. Demonstrates proficiency in software engineering fundamentals, data structures, algorithms and problem solving. Certificate ID: F33C9A8F9A4B.','HackerRank','&#9989; Certified','&#128187;')">
+      <div class="cert-left"><div class="cert-ico ico-hr">&#128187;</div><div class="cert-info"><h4>Software Engineer</h4><p>HackerRank &bull; Oct 2025</p><span class="cbadge green">&#9989; Certified</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row fade-in" onclick="openCert('SEBI Stock Market Certification','SEBI — Securities &amp; Exchange Board of India','&#9989; Certified','Certified in stock market operations, trading regulations, financial instruments, risk management, technical analysis and market operations. Knowledge applied in building the personal TradingBoy automated trading system.','SEBI','&#9989; Certified','&#128200;')">
+      <div class="cert-left"><div class="cert-ico ico-sebi">&#128200;</div><div class="cert-info"><h4>SEBI Stock Market</h4><p>Securities &amp; Exchange Board of India</p><span class="cbadge green">&#9989; Certified</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row fade-in" onclick="openCert('AWS Cloud Certification — In Progress','Amazon Web Services (AWS)','&#9203; Currently Pursuing','Currently pursuing AWS Cloud certification covering core services including EC2, S3, Lambda, IAM, VPC and RDS. Focuses on cloud architecture best practices and AWS service integration. Expected completion soon.','AWS','&#9203; In Progress','&#9729;')">
+      <div class="cert-left"><div class="cert-ico ico-aws">&#9729;</div><div class="cert-info"><h4>AWS Cloud Certification</h4><p>Amazon Web Services</p><span class="cbadge orange">&#9203; In Progress</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+  </div>
+
+  <p class="cert-group">&#128161; MoE IIC — Innovation Ambassador</p>
+  <div class="cert-list" style="margin-bottom:2rem">
+    <div class="cert-row fade-in" onclick="openCert('Innovation Ambassador — Foundation Level','MoE Innovation Cell &amp; AICTE (IIC)','&#9989; Completed | 02 May 2025','Completed 16 sessions of 30 contact hours in Foundation Level Innovation Ambassador training, conducted online by the Ministry of Education Innovation Cell and AICTE. IIC Calendar Year 2024–25. Certificate No: IA/Foundation/1057175. IIC ID: IC202115749.','MoE IIC','&#9989; Completed','&#128161;')">
+      <div class="cert-left"><div class="cert-ico ico-iic1">&#128161;</div><div class="cert-info"><h4>IA — Foundation Level</h4><p>MoE Innovation Cell &amp; AICTE</p><span class="cbadge green">&#9989; May 2025</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row fade-in" onclick="openCert('Innovation Ambassador — Advanced Level','MoE Innovation Cell &amp; AICTE (IIC)','&#9989; Completed | 03 May 2025','Completed 16 sessions of 30 contact hours in Advanced Level Innovation Ambassador training, conducted online by MoE Innovation Cell and AICTE. IIC Calendar Year 2024–25. Certificate No: IA/Foundation/1057175.','MoE IIC','&#9989; Completed','&#128161;')">
+      <div class="cert-left"><div class="cert-ico ico-iic2">&#128161;</div><div class="cert-info"><h4>IA — Advanced Level</h4><p>MoE Innovation Cell &amp; AICTE</p><span class="cbadge green">&#9989; May 2025</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row fade-in" onclick="openCert('Innovation Ambassador — Re-skilling Level','MoE Innovation Cell &amp; AICTE (IIC)','&#9989; Completed | 31 Aug 2024','Completed 21 sessions of 21 contact hours in Re-skilling Level Innovation Ambassador training, conducted online by MoE Innovation Cell and AICTE. IIC Calendar Year 2024–25. Certificate No: IA/Re-skilling/1057175. IIC ID: IC202115749.','MoE IIC','&#9989; Completed','&#128161;')">
+      <div class="cert-left"><div class="cert-ico ico-iic3">&#128161;</div><div class="cert-info"><h4>IA — Re-skilling Level</h4><p>MoE Innovation Cell &amp; AICTE</p><span class="cbadge green">&#9989; Aug 2024</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+  </div>
+
+  <p class="cert-group">&#128188; HP LIFE — Professional Skills (All completed 5 Aug 2025)</p>
+  <div class="cert-list">
+    <div class="cert-row cert-sm fade-in" onclick="openCert('AI for Beginners','HP LIFE — HP Foundation','&#9989; Completed | 5 Aug 2025','Gained understanding of AI impact on the technological landscape. Learned key AI concepts and applications, the importance of data in AI, business applications and ethical implications. Serial: f1155612-44f9-413c-8fcd-bafae43f8cd6.','HP LIFE','&#9989; Completed','&#128187;')">
+      <div class="cert-left"><div class="cert-ico ico-hp">HP</div><div class="cert-info"><h4>AI for Beginners</h4><p>HP LIFE</p><span class="cbadge blue">&#9989; Done</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row cert-sm fade-in" onclick="openCert('Data Science &amp; Analytics','HP LIFE — HP Foundation','&#9989; Completed | 5 Aug 2025','Learned leading data science and analytics practices, methodologies and tools. Examined the benefits and challenges of data-driven approaches for businesses. Serial: 1ae2ee55-9a0a-4fdc-9f17-dac34cdd4dde.','HP LIFE','&#9989; Completed','&#128202;')">
+      <div class="cert-left"><div class="cert-ico ico-hp">HP</div><div class="cert-info"><h4>Data Science &amp; Analytics</h4><p>HP LIFE</p><span class="cbadge blue">&#9989; Done</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row cert-sm fade-in" onclick="openCert('Introduction to Cybersecurity Awareness','HP LIFE — HP Foundation','&#9989; Completed | 5 Aug 2025','Learned about common cybersecurity threats and discovered basic ways to keep online data and information more secure. Serial: 82f775fe-7c9c-4d96-b3d8-d952dd441c88.','HP LIFE','&#9989; Completed','&#128274;')">
+      <div class="cert-left"><div class="cert-ico ico-hp">HP</div><div class="cert-info"><h4>Cybersecurity Awareness</h4><p>HP LIFE</p><span class="cbadge blue">&#9989; Done</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row cert-sm fade-in" onclick="openCert('Effective Leadership','HP LIFE — HP Foundation','&#9989; Completed | 5 Aug 2025','Learned about effective leadership, how to leverage different leadership strategies, and why ethics plays a critical role in effective leadership. Serial: 152c17b6-4036-4c6f-870d-383317597bf6.','HP LIFE','&#9989; Completed','&#128081;')">
+      <div class="cert-left"><div class="cert-ico ico-hp">HP</div><div class="cert-info"><h4>Effective Leadership</h4><p>HP LIFE</p><span class="cbadge blue">&#9989; Done</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row cert-sm fade-in" onclick="openCert('Resume Writing and Job Interviewing','HP LIFE — HP Foundation','&#9989; Completed | 5 Aug 2025','Learned how to create a tailored resume and cover letter, how to prepare for a job interview, and why self-assessment is a powerful tool for professional growth. Serial: 17b69151-19ea-4e1b-b8bd-bcef56b5dd0e.','HP LIFE','&#9989; Completed','&#128196;')">
+      <div class="cert-left"><div class="cert-ico ico-hp">HP</div><div class="cert-info"><h4>Resume Writing &amp; Interviewing</h4><p>HP LIFE</p><span class="cbadge blue">&#9989; Done</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row cert-sm fade-in" onclick="openCert('Business Email','HP LIFE — HP Foundation','&#9989; Completed | 5 Aug 2025','Learned how to define the structural elements of a business email, develop and write an effective business email, and use email appropriately across different professional scenarios. Serial: ecf6e166-3677-45be-b939-32b8b23c0a03.','HP LIFE','&#9989; Completed','&#9993;')">
+      <div class="cert-left"><div class="cert-ico ico-hp">HP</div><div class="cert-info"><h4>Business Email</h4><p>HP LIFE</p><span class="cbadge blue">&#9989; Done</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+    <div class="cert-row cert-sm fade-in" onclick="openCert('Customer Experience (CX) for Business Success','HP LIFE — HP Foundation','&#9989; Completed | 5 Aug 2025','Learned about customer centricity and its role in business strategy, net promoter score and its relationship with business outcomes, and the importance of listening to customers with compassion. Serial: a17e3849-09c4-4d68-85ee-a549848d48a9.','HP LIFE','&#9989; Completed','&#11088;')">
+      <div class="cert-left"><div class="cert-ico ico-hp">HP</div><div class="cert-info"><h4>Customer Experience (CX)</h4><p>HP LIFE</p><span class="cbadge blue">&#9989; Done</span></div></div>
+      <span class="cert-arr">&#8599;</span>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS & AWARDS -->
+<section id="achievements" class="section">
+  <div class="sec-label"><em></em>Achievements</div>
+  <h2 class="sec-title">Achievements &amp; Awards</h2>
+  <div class="ach-list">
+
+    <div class="ach-row fade-in" onclick="openAch('Exemplary Achiever Award','Academic Excellence Award — Department of ECE','United Institute of Technology','Recognised for outstanding performance and exemplary contributions in the Department of Electronics and Communication Engineering. This prestigious award is presented to students who demonstrate exceptional dedication, academic excellence and a positive impact within the department throughout the academic year.','&#127941;','gold')">
+      <div class="ach-icon gold-bg">&#127941;</div>
+      <div class="ach-info">
+        <span class="ach-type">Academic Award</span>
+        <h4>Exemplary Achiever Award</h4>
+        <p>United Institute of Technology — Dept. of ECE</p>
+      </div>
+      <span class="ach-arr">&#8599;</span>
+    </div>
+
+    <div class="ach-row fade-in" onclick="openAch('2nd Prize — Paper Presentation','UTHRA-2k25 Intra-College Techno-Cultural Odyssey','United Institute of Technology &bull; 16 October 2025','Secured 2nd place in Paper Presentation at the Engineers Day Celebration — Intra College Techno-Cultural Odyssey UTHRA-2k25, held on 16th October 2025. Department: Electronics and Communication Engineering. This achievement recognises excellence in technical research, communication skills and the ability to present complex ideas clearly.','&#129352;','silver')">
+      <div class="ach-icon silver-bg">&#129352;</div>
+      <div class="ach-info">
+        <span class="ach-type">2nd Prize &bull; 16 Oct 2025</span>
+        <h4>Paper Presentation</h4>
+        <p>UIT — UTHRA-2k25 &bull; Engineers Day</p>
+      </div>
+      <span class="ach-arr">&#8599;</span>
+    </div>
+
+    <div class="ach-row fade-in" onclick="openAch('ABR World Record Certification','IGEN Energathon 2024 — Asia Book of Records','Institution of Green Engineers &bull; May 2024','Received ABR World Record Certification as a Star Participant in IGEN ENERGATHON 2024 — ABR, WRCA and IBR World Record Certified 54th Earth Day event. Executed for 25 hours 25 minutes online to deliberate six global themes linked to ENERGY4SUSTAINABILITY through 17 partners across 17 countries, dated 18–19 May 2024. Certificate No: IGEN/WRC/SDG7/JUN24/C07. Approved and digitally signed by Dr. L. Ramesh, President of IGEN.','&#127942;','gold')">
+      <div class="ach-icon gold-bg">&#127942;</div>
+      <div class="ach-info">
+        <span class="ach-type">World Record &bull; May 2024</span>
+        <h4>ABR World Record — IGEN Energathon</h4>
+        <p>Asia Book of Records / IGEN</p>
+      </div>
+      <span class="ach-arr">&#8599;</span>
+    </div>
+
+    <div class="ach-row fade-in" onclick="openAch('IGEN Energathon 2024 — Star Participant','12-Hour World Recorded Marathon','Institution of Green Engineers &bull; May 2024','Acknowledged for commitment and participation in the World Recorded Marathon IGEN ENERGATHON 2024 for 12 hours. Dedicated to learning about SDG7: Affordable and Clean Energy. Active involvement and contribution recognised as an IGEN ENERGATHON Star Participant. Certificate No: IGEN/SPA/SDG7/JUN24/C27. Issued through United Institute of Technology.','&#11088;','teal')">
+      <div class="ach-icon teal-bg">&#11088;</div>
+      <div class="ach-info">
+        <span class="ach-type">Star Participant &bull; May 2024</span>
+        <h4>IGEN Energathon Star Participant</h4>
+        <p>Institution of Green Engineers / UIT</p>
+      </div>
+      <span class="ach-arr">&#8599;</span>
+    </div>
+
+    <div class="ach-row fade-in" onclick="openAch('IIC Student Innovation Ambassador — All 3 Levels Certified','MoE Innovation Cell &amp; AICTE','United Institute of Technology &bull; 2024–2025','Certified as a Student Innovation Ambassador at all three levels — Foundation (02 May 2025), Advanced (03 May 2025) and Re-skilling (31 Aug 2024) — by the Ministry of Education Innovation Cell and AICTE. Total 67+ contact hours of Innovation Ambassador training under the Government of India. Part of the Institution Innovation Council (IIC) ecosystem. IIC ID: IC202115749.','&#128161;','blue')">
+      <div class="ach-icon blue-bg">&#128161;</div>
+      <div class="ach-info">
+        <span class="ach-type">IIC &bull; All 3 Levels &bull; 2024–2025</span>
+        <h4>Student Innovation Ambassador</h4>
+        <p>MoE Innovation Cell &amp; AICTE</p>
+      </div>
+      <span class="ach-arr">&#8599;</span>
+    </div>
+
+    <div class="ach-row fade-in" onclick="openAch('Inter-College Event Participant','Multiple Colleges and Technical Events','Various Institutions','Actively participated in technical and cultural events across multiple colleges including poster design competitions, paper presentations and tech symposiums. Events attended include Christ the King College (Poster Design) and United Institute of Technology (UTHRA — Paper Presentation 2nd Prize), along with several other inter-college and national-level events.','&#127891;','purple')">
+      <div class="ach-icon purple-bg">&#127891;</div>
+      <div class="ach-info">
+        <span class="ach-type">Multi-College Events</span>
+        <h4>Inter-College Event Participant</h4>
+        <p>Christ the King College, UIT &amp; Others</p>
+      </div>
+      <span class="ach-arr">&#8599;</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="sec-label"><em></em>Contact</div>
+  <h2 class="sec-title">Get In Touch</h2>
+  <div class="contact-cards">
+    <a href="tel:+917639683223" class="ccard fade-in">
+      <div class="ccard-icon">&#128241;</div>
+      <div><p class="ccard-label">Mobile</p><p class="ccard-val">+91 76396 83223</p></div>
+    </a>
+    <a href="/cdn-cgi/l/email-protection#d0b2b1bcb1bab9b8b3bbe2e0f6f3e6e4ebb7bdb1b9bcfeb3bfbd" class="ccard fade-in">
+      <div class="ccard-icon">&#9993;</div>
+      <div><p class="ccard-label">Email</p><p class="ccard-val">balajihck20&#64;gmail.com</p></div>
+    </a>
+    <a href="https://www.linkedin.com/in/balajichitrarasu" target="_blank" class="ccard fade-in">
+      <div class="ccard-icon">&#128188;</div>
+      <div><p class="ccard-label">LinkedIn</p><p class="ccard-val">balajichitrarasu</p></div>
+    </a>
+  </div>
+  <div class="glass-card msg-card fade-in">
+    <p class="msg-title">Send a Message</p>
+    <div id="formMsg" class="form-msg" style="display:none"></div>
+    <div class="form-row">
+      <div class="form-field">
+        <label for="cName">Name</label>
+        <input type="text" id="cName" placeholder="Your name" autocomplete="name">
+      </div>
+      <div class="form-field">
+        <label for="cEmail">Email</label>
+        <input type="email" id="cEmail" placeholder="your@email.com" autocomplete="email">
+      </div>
+    </div>
+    <div class="form-field" style="margin-top:1rem">
+      <label for="cMsg">Message</label>
+      <textarea id="cMsg" placeholder="What would you like to say?" rows="4"></textarea>
+    </div>
+    <button class="btn-send" id="sendBtn">Send Message &rarr;</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-wrap">
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#certifications">Certs</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#contact">Contact</a>
+      <a href="blog.html">Blog</a>
+    </div>
+    <p class="footer-name">&copy; 2026 Balaji Chitrarasu. All Rights Reserved.</p>
+    <p class="footer-credit">Designed &amp; Developed by <span>Balaji Chitrarasu</span> &bull; India</p>
+    <p class="footer-legal">Unauthorised reproduction or redistribution of any content on this site is strictly prohibited.</p>
+  </div>
+</footer>
+
+<!-- ABOUT POPUP -->
+<div id="aboutPopup" class="popup">
+  <div class="pbox">
+    <button class="pclose" id="aboutClose">&#10005;</button>
+    <div class="picon">&#128100;</div>
+    <h3 class="ptitle">About Balaji Chitrarasu</h3>
+    <div class="about-full">
+      <p>I am a Hardware &amp; Software Technical Engineer from India — an ECE graduate of United Institute of Technology. I have deep hands-on experience in desktop and laptop repair, OS installation, BIOS flashing, SSD/HDD servicing, battery replacement and full system diagnostics.</p>
+      <p>I have a strong passion for electronics — I love dismantling any device to understand how every single component works at part level. Give me any electronic device and I will figure out exactly how it works from the inside.</p>
+      <p>I am a <strong class="acc">SEBI-certified Stock Market Trader</strong> and have built my own automated trading system called <strong class="acc">TradingBoy</strong> — designed to analyse Indian market patterns and execute trades automatically based on technical indicators.</p>
+      <p>I serve as a <strong class="acc2">MoE Institution Innovation Council (IIC) Student Innovation Ambassador</strong> — certified at Foundation, Advanced and Re-skilling levels with over 67 hours of innovation training under the Government of India.</p>
+      <p>Currently pursuing <strong class="acc">AWS Cloud Certification</strong>. I am also a <strong class="acc">HackerRank-certified Software Engineer</strong> and hold seven HP LIFE certificates covering AI, Data Science, Cybersecurity, Leadership, Business Communication and more.</p>
+      <p>I believe in learning by doing — whether it is building a PC from scratch, setting up an office network, or writing a trading algorithm. Always learning. Always building.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT POPUP -->
+<div id="popup" class="popup">
+  <div class="pbox">
+    <button class="pclose" id="popupClose">&#10005;</button>
+    <div class="picon">&#128187;</div>
+    <h3 class="ptitle" id="ptitle"></h3>
+    <p class="pbody" id="pbody"></p>
+  </div>
+</div>
+
+<!-- CERTIFICATE POPUP -->
+<div id="certPopup" class="popup">
+  <div class="pbox">
+    <button class="pclose" id="certClose">&#10005;</button>
+    <div class="cert-header">
+      <div class="cert-medal" id="cMedal"></div>
+      <div>
+        <p class="cert-org" id="cOrg"></p>
+        <p class="cert-status" id="cStatus"></p>
+      </div>
+    </div>
+    <h3 class="ptitle" id="cTitle"></h3>
+    <p class="pissuer" id="cIssuer"></p>
+    <p class="pbody" id="cBody"></p>
+  </div>
+</div>
+
+<!-- ACHIEVEMENT POPUP -->
+<div id="achPopup" class="popup">
+  <div class="pbox">
+    <button class="pclose" id="achClose">&#10005;</button>
+    <div class="picon" id="achIcon"></div>
+    <h3 class="ptitle" id="achTitle"></h3>
+    <p class="pissuer" id="achSub"></p>
+    <p class="pissuer" style="color:var(--mut);margin-bottom:1rem" id="achWhere"></p>
+    <p class="pbody" id="achBody"></p>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-dec
