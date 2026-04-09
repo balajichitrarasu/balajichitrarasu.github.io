@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://balajichitrarasu.github.io/sitemap.xml
