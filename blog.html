@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tech Blog | Balaji Chitrarasu — Hardware &amp; Software Engineer</title>
+<meta name="description" content="Tech blog by Balaji Chitrarasu — Hardware and Software Technical Engineer. Practical guides on PC Building, Laptop Repair, Networking, IT Support and Software.">
+<meta name="author" content="Balaji Chitrarasu">
+<link rel="canonical" href="https://balajichitrarasu.github.io/blog.html">
+<meta property="og:title" content="Tech Blog | Balaji Chitrarasu">
+<meta property="og:description" content="Practical guides on PC Building, Laptop Repair, Networking and IT Support by Balaji Chitrarasu.">
+<meta property="og:url" content="https://balajichitrarasu.github.io/blog.html">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2306080c'/%3E%3Ctext x='16' y='22' font-size='18' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%2300ffcc'%3EB%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────
+   BASE
+───────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06080c;--card:rgba(255,255,255,.038);--bdr:rgba(255,255,255,.08);
+  --acc:#00ffcc;--acc2:#5b8dee;--txt:#dde4ed;--mut:#55697c;
+  --rad:14px;--nav:58px;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--txt);line-height:1.7;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+
+/* dot grid */
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(0,255,204,.05) 1px,transparent 1px);background-size:36px 36px;pointer-events:none;z-index:0;opacity:.38}
+
+/* ─────────────────────────────────────
+   PAGE TRANSITION
+───────────────────────────────────── */
+#page-transition{position:fixed;inset:0;z-index:9998;background:var(--bg);transform-origin:bottom;transform:scaleY(0);pointer-events:none}
+body.page-loading #page-transition{animation:pgIn .5s var(--ease) forwards}
+body.page-exit    #page-transition{animation:pgOut .45s var(--ease) forwards}
+@keyframes pgIn{0%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(0);transform-origin:top}}
+@keyframes pgOut{0%{transform:scaleY(0);transform-origin:bottom}100%{transform:scaleY(1);transform-origin:bottom}}
+
+/* ─────────────────────────────────────
+   PARTICLES + CURSOR
+───────────────────────────────────── */
+#particles-js{position:fixed;inset:0;z-index:0;pointer-events:none}
+#cursor-glow{position:fixed;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,204,.05) 0%,transparent 68%);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;display:none}
+
+/* ─────────────────────────────────────
+   SKIP LINK
+───────────────────────────────────── */
+.skip-link{position:absolute;top:-100%;left:1rem;background:var(--acc);color:#06080c;padding:.5rem 1rem;border-radius:0 0 8px 8px;font-family:'DM Mono',monospace;font-size:.8rem;font-weight:700;text-decoration:none;z-index:9999;transition:top .2s}
+.skip-link:focus{top:0}
+
+/* ─────────────────────────────────────
+   NAVBAR
+───────────────────────────────────── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav);background:rgba(6,8,12,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,204,.07);transition:transform .35s var(--ease),background .3s}
+.navbar.scrolled{background:rgba(6,8,12,.97)}
+.nav-inner{max-width:960px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 1rem}
+.nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:.74rem;color:var(--acc);text-decoration:none;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 0 18px rgba(0,255,204,.35)}
+.nav-back{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);text-decoration:none;border:1px solid rgba(255,255,255,.1);padding:.3rem .9rem;border-radius:8px;transition:color .2s,border-color .2s,transform .22s;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:.4rem}
+.nav-back:hover{color:var(--acc);border-color:rgba(0,255,204,.3);transform:translateX(-3px)}
+
+/* ─────────────────────────────────────
+   HERO
+───────────────────────────────────── */
+.blog-hero{
+  position:relative;z-index:1;
+  padding:calc(var(--nav) + 4rem) 1rem 2.5rem;
+  max-width:960px;margin:0 auto;text-align:center;
+}
+.blog-hero::before{
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(500px,90vw);height:min(300px,60vw);
+  background:radial-gradient(circle,rgba(0,255,204,.04) 0%,transparent 65%);
+  pointer-events:none;
+}
+.blog-label{display:inline-flex;align-items:center;gap:.55rem;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:.9rem;animation:fadeUp .7s ease both}
+.blog-label em{display:inline-block;width:18px;height:1.5px;background:var(--acc);font-style:normal}
+.blog-hero h1{font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(2rem,7vw,3.4rem);line-height:1.1;background:linear-gradient(135deg,#fff 30%,var(--acc) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.85rem;animation:fadeUp .7s .08s ease both}
+.blog-hero p{font-size:.84rem;color:var(--mut);max-width:440px;margin:0 auto;line-height:1.85;animation:fadeUp .7s .15s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─────────────────────────────────────
+   SEARCH + FILTER
+───────────────────────────────────── */
+.blog-controls{
+  position:relative;z-index:1;
+  max-width:960px;margin:0 auto;
+  padding:.8rem 1rem 2rem;
+  display:flex;flex-direction:column;align-items:center;gap:1rem;
+  animation:fadeUp .7s .2s ease both;
+}
+.search-wrap{
+  position:relative;width:100%;max-width:420px;
+}
+.search-wrap input{
+  width:100%;background:var(--card);
+  border:1px solid var(--bdr);border-radius:10px;
+  padding:.7rem 1rem .7rem 2.6rem;
+  color:var(--txt);font-family:'DM Mono',monospace;font-size:.82rem;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;
+}
+.search-wrap input::placeholder{color:var(--mut)}
+.search-wrap input:focus{border-color:rgba(0,255,204,.4);box-shadow:0 0 0 3px rgba(0,255,204,.07)}
+.search-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--mut);font-size:.9rem;pointer-events:none}
+.filter-wrap{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.filter-btn{
+  padding:.34rem .88rem;border-radius:30px;
+  font-family:'DM Mono',monospace;font-size:.68rem;
+  letter-spacing:.06em;text-transform:uppercase;
+  background:var(--card);border:1px solid var(--bdr);
+  color:var(--mut);cursor:pointer;
+  transition:all .22s var(--ease);
+  -webkit-tap-highlight-color:transparent;
+}
+.filter-btn:hover{border-color:rgba(0,255,204,.3);color:var(--acc);transform:translateY(-2px)}
+.filter-btn.active{background:rgba(0,255,204,.09);border-color:var(--acc);color:var(--acc);box-shadow:0 0 14px rgba(0,255,204,.12)}
+
+/* ─────────────────────────────────────
+   BLOG GRID
+───────────────────────────────────── */
+.blog-grid{
+  position:relative;z-index:1;
+  max-width:960px;margin:0 auto;
+  padding:0 1rem 4rem;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(268px,1fr));
+  gap:1.2rem;
+}
+.no-results{
+  grid-column:1/-1;text-align:center;
+  padding:3rem 1rem;color:var(--mut);font-size:.85rem;
+  display:none;
+}
+.no-results.show{display:block}
+
+/* ─────────────────────────────────────
+   BLOG CARD
+───────────────────────────────────── */
+.blog-card{
+  background:var(--card);
+  border:1px solid var(--bdr);
+  border-radius:var(--rad);
+  overflow:hidden;cursor:pointer;
+  transition:transform .32s var(--ease),box-shadow .32s,border-color .32s;
+  -webkit-tap-highlight-color:transparent;
+  position:relative;
+  opacity:0;transform:translateY(22px);
+  animation:cardIn .6s var(--ease) forwards;
+}
+.blog-card:nth-child(1){animation-delay:.05s}
+.blog-card:nth-child(2){animation-delay:.1s}
+.blog-card:nth-child(3){animation-delay:.15s}
+.blog-card:nth-child(4){animation-delay:.2s}
+.blog-card:nth-child(5){animation-delay:.25s}
+.blog-card:nth-child(6){animation-delay:.3s}
+.blog-card:nth-child(7){animation-delay:.35s}
+.blog-card:nth-child(8){animation-delay:.4s}
+.blog-card:nth-child(9){animation-delay:.45s}
+.blog-card:nth-child(10){animation-delay:.5s}
+@keyframes cardIn{to{opacity:1;transform:translateY(0)}}
+
+/* shimmer sweep on hover */
+.blog-card::before{
+  content:'';position:absolute;
+  top:0;left:-80%;width:55%;height:100%;
+  background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.045) 50%,transparent 100%);
+  transform:skewX(-15deg);
+  transition:left .65s var(--ease);
+  pointer-events:none;z-index:3;
+}
+.blog-card:hover::before{left:130%}
+
+/* top accent line */
+.blog-card::after{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--acc),var(--acc2),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.blog-card:hover::after{opacity:1}
+
+.blog-card:hover{
+  transform:translateY(-8px);
+  border-color:rgba(0,255,204,.28);
+  box-shadow:0 20px 50px rgba(0,0,0,.4),0 0 0 1px rgba(0,255,204,.07);
+}
+
+/* card image banner */
+.card-img{
+  width:100%;height:140px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.6rem;
+  position:relative;overflow:hidden;
+}
+.card-img svg{width:100%;height:100%;display:block;transition:transform .5s var(--ease)}
+.blog-card:hover .card-img svg{transform:scale(1.06)}
+
+.card-top{padding:1.1rem 1.2rem 0}
+.card-cat{display:inline-block;font-size:.59rem;letter-spacing:.11em;text-transform:uppercase;padding:.17rem .6rem;border-radius:20px;margin-bottom:.7rem;font-weight:500}
+.cat-pc      {background:rgba(0,255,204,.08);color:var(--acc);border:1px solid rgba(0,255,204,.18)}
+.cat-hardware{background:rgba(255,107,53,.08);color:#ff8a65;border:1px solid rgba(255,107,53,.18)}
+.cat-software{background:rgba(91,141,238,.08);color:var(--acc2);border:1px solid rgba(91,141,238,.18)}
+.cat-support {background:rgba(255,200,0,.08);color:#ffd055;border:1px solid rgba(255,200,0,.18)}
+.cat-network {background:rgba(180,80,255,.08);color:#c47fff;border:1px solid rgba(180,80,255,.18)}
+.card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;color:#fff;margin-bottom:.4rem;line-height:1.35}
+.card-excerpt{font-size:.76rem;color:var(--mut);line-height:1.72;margin-bottom:.9rem}
+.card-footer{
+  padding:.75rem 1.2rem 1.15rem;
+  border-top:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-read{font-size:.67rem;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);transition:gap .2s;display:flex;align-items:center;gap:.3rem}
+.blog-card:hover .card-read{gap:.55rem}
+.card-time{font-size:.64rem;color:var(--mut)}
+
+/* ─────────────────────────────────────
+   ARTICLE OVERLAY
+───────────────────────────────────── */
+#articleOverlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.85);z-index:500;
+  overflow-y:auto;padding:1.5rem 1rem;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  opacity:0;transition:opacity .3s;
+}
+#articleOverlay.open{display:block;animation:ovIn .3s ease forwards}
+@keyframes ovIn{from{opacity:0}to{opacity:1}}
+
+.article-box{
+  background:rgba(8,12,18,.98);
+  border:1px solid rgba(0,255,204,.18);
+  border-radius:var(--rad);
+  padding:2rem 1.6rem;
+  max-width:660px;width:100%;
+  margin:0 auto;position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,.7);
+  animation:popIn .32s cubic-bezier(.34,1.56,.64,1) both;
+}
+.article-box::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--acc),var(--acc2));
+  border-radius:var(--rad) var(--rad) 0 0;
+}
+@keyframes popIn{from{opacity:0;transform:scale(.88) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+.article-close{
+  position:absolute;top:1rem;right:1rem;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  color:var(--txt);width:34px;height:34px;border-radius:50%;
+  font-size:.9rem;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .2s,transform .25s;
+  -webkit-tap-highlight-color:transparent;
+}
+.article-close:hover{background:rgba(0,255,204,.14);color:var(--acc);transform:rotate(90deg)}
+
+.article-cat{margin-bottom:.9rem}
+.article-title{
+  font-family:'Playfair Display',serif;font-weight:800;
+  font-size:clamp(1.15rem,4vw,1.75rem);
+  color:#fff;line-height:1.25;margin-bottom:.35rem;padding-right:2.5rem;
+}
+.article-meta{font-size:.67rem;color:var(--mut);margin-bottom:1.3rem}
+.article-divider{height:1px;background:linear-gradient(90deg,var(--acc),transparent);opacity:.2;margin-bottom:1.3rem}
+.article-body{font-size:.86rem;line-height:1.9;color:var(--txt)}
+.article-body h3{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;color:var(--acc);margin:1.4rem 0 .45rem}
+.article-body p{margin-bottom:.85rem}
+.article-body ul{padding-left:1.3rem;margin-bottom:.9rem}
+.article-body ul li{margin-bottom:.35rem;font-size:.83rem}
+.article-body ul li::marker{color:var(--acc)}
+.article-tip{
+  background:rgba(0,255,204,.05);
+  border-left:3px solid var(--acc);
+  border-radius:0 8px 8px 0;
+  padding:.85rem 1rem;font-size:.81rem;
+  margin:.95rem 0;line-height:1.7;
+  position:relative;
+}
+.article-tip::before{content:'💡 ';font-size:.9rem}
+
+/* ─────────────────────────────────────
+   FOOTER
+───────────────────────────────────── */
+.blog-footer{
+  position:relative;z-index:1;
+  text-align:center;padding:2.5rem 1rem 2rem;
+  border-top:1px solid rgba(255,255,255,.05);
+}
+.footer-copy{font-family:'Syne',sans-serif;font-size:.8rem;color:var(--txt);font-weight:600;margin-bottom:.3rem}
+.footer-sub{font-size:.69rem;color:var(--mut);margin-bottom:.22rem}
+.footer-sub span{color:var(--acc)}
+.footer-legal{font-size:.6rem;color:rgba(85,105,124,.4);max-width:460px;margin:.2rem auto 0;line-height:1.6}
+
+/* ─────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────── */
+@media(max-width:600px){
+  .blog-grid{grid-template-columns:1fr}
+  .article-box{padding:1.5rem 1.1rem}
+  .blog-hero h1{font-size:1.9rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .blog-card,.blog-hero,.blog-label,.filter-wrap{animation:none!important;opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#blogGrid">Skip to articles</a>
+<div id="page-transition" aria-hidden="true"></div>
+<div id="particles-js" aria-hidden="true"></div>
+<div id="cursor-glow"  aria-hidden="true"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar" role="navigation" aria-label="Blog navigation">
+  <div class="nav-inner">
+    <a class="nav-brand" href="blog.html">&#10022; Blog</a>
+    <a class="nav-back" href="index.html" aria-label="Back to portfolio">&#8592; Portfolio</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="blog-hero">
+  <div class="blog-label"><em></em>Knowledge Base</div>
+  <h1>Tech Blog</h1>
+  <p>Real-world guides on PC Building, Hardware Repair, Networking and IT Support — written from hands-on experience.</p>
+</header>
+
+<!-- SEARCH + FILTER -->
+<div class="blog-controls" id="blogControls">
+  <div class="search-wrap">
+    <span class="search-icon">&#128269;</span>
+    <input type="text" id="searchInput" placeholder="Search articles..." autocomplete="off" aria-label="Search articles">
+  </div>
+  <div class="filter-wrap" role="group" aria-label="Filter by category">
+    <button class="filter-btn active" data-cat="all">All (10)</button>
+    <button class="filter-btn" data-cat="pc">PC Building</button>
+    <button class="filter-btn" data-cat="hardware">Hardware</button>
+    <button class="filter-btn" data-cat="software">Software</button>
+    <button class="filter-btn" data-cat="support">Tech Support</button>
+    <button class="filter-btn" data-cat="network">Networking</button>
+  </div>
+</div>
+
+<!-- BLOG GRID -->
+<main id="blogGrid" class="blog-grid" role="main" aria-label="Blog articles"></main>
+<p class="no-results" id="noResults">No articles found. Try a different search.</p>
+
+<!-- FOOTER -->
+<footer class="blog-footer">
+  <p class="footer-copy">&copy; 2026 Balaji Chitrarasu. All Rights Reserved.</p>
+  <p class="footer-sub">Designed &amp; Developed by <span>Balaji Chitrarasu</span> &bull; India</p>
+  <p class="footer-legal">Unauthorised reproduction or redistribution of any content on this site is strictly prohibited.</p>
+</footer>
+
+<!-- ARTICLE OVERLAY -->
+<div id="articleOverlay" role="dialog" aria-modal="true" aria-label="Article">
+  <div class="article-box" id="articleBox">
+    <button class="article-close" id="closeBtn" aria-label="Close article">&#10005;</button>
+    <div id="aCat" class="article-cat"></div>
+    <h2 class="article-title" id="aTitle"></h2>
+    <p class="article-meta" id="aMeta"></p>
+    <div class="article-divider"></div>
+    <div class="article-body" id="aBody"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+/* ─────────────────────────────────────
+   PAGE TRANSITION
+───────────────────────────────────── */
+(function(){
+  document.body.classList.add('page-loading');
+  window.addEventListener('load',function(){
+    setTimeout(function(){document.body.classList.remove('page-loading');},80);
+  });
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a');
+    if(!a)return;
+    var href=a.getAttribute('href');
+    if(!href)return;
+    if(a.target==='_blank'||href.indexOf('://')!==-1||href.startsWith('mailto:')||href.startsWith('tel:')||href.startsWith('#'))return;
+    e.preventDefault();
+    document.body.classList.add('page-exit');
+    setTimeout(function(){window.location.href=href;},450);
+  });
+})();
+
+/* ─────────────────────────────────────
+   ARTICLE DATA
+───────────────────────────────────── */
+var ARTICLES=[
+  {id:'pc1',cat:'pc',title:'How to Build a Custom PC from Scratch',excerpt:'Step-by-step guide to selecting components, assembling and booting your first custom PC.',time:'6 min',
+   body:'<p>Building your own PC is one of the most rewarding things you can do in IT. You get exactly the specs you need at the best price.</p><h3>Step 1 — Plan Your Components</h3><ul><li><strong>CPU:</strong> Intel i3/i5 for office use, i7 or Ryzen 7 for heavy workloads</li><li><strong>Motherboard:</strong> Must match your CPU socket (LGA1700 for Intel 12/13th gen)</li><li><strong>RAM:</strong> 8GB minimum, 16GB recommended for multitasking</li><li><strong>Storage:</strong> NVMe SSD for OS, HDD for bulk storage</li><li><strong>PSU:</strong> 80+ Bronze rated minimum — never go cheap on this</li></ul><h3>Step 2 — Assemble</h3><ul><li>Install CPU — align the triangle marker on the socket carefully</li><li>Insert RAM in dual-channel slots (slots 2 and 4 on most boards)</li><li>Mount SSD in M.2 slot before fitting board into case</li><li>Connect 24-pin ATX power and 8-pin CPU EPS connector</li><li>Connect all front panel pins — use motherboard manual for exact layout</li></ul><h3>Step 3 — BIOS Setup</h3><p>Press DEL or F2 to enter BIOS on first boot. Enable XMP/DOCP for RAM speed. Set the NVMe SSD as primary boot device. Save and exit.</p><div class="article-tip">Always touch the metal case before handling components to discharge static electricity. Static can silently damage components without visible signs.</div><h3>Step 4 — Install Windows and Drivers</h3><p>Create a bootable USB using Rufus with the official Windows ISO from microsoft.com. Install clean. Then install Chipset, LAN, Audio and GPU drivers from the manufacturer websites in that order.</p>'},
+  {id:'pc2',cat:'pc',title:'Choosing the Right Components for a Budget Build',excerpt:'How to pick CPU, GPU, RAM and storage without overspending — practical hands-on advice.',time:'5 min',
+   body:'<p>Budget builds are about finding the best balance of performance per rupee spent. Here are real recommendations based on experience.</p><h3>Under Rs.30,000 — Office PC</h3><ul><li>Intel Core i3-12100 or AMD Ryzen 5 5600G (has integrated GPU — no separate GPU needed)</li><li>8GB DDR4 3200MHz RAM (2x4GB for dual channel)</li><li>256GB NVMe SSD (Samsung 980 or Kingston NV2)</li><li>B660M or A520M motherboard</li><li>450W 80+ Bronze PSU</li></ul><h3>Under Rs.60,000 — All-Round Build</h3><ul><li>Intel Core i5-13400 or Ryzen 5 7600</li><li>16GB DDR4/DDR5 RAM</li><li>512GB NVMe SSD + 1TB HDD</li><li>B760 or B650 motherboard</li><li>550W 80+ Gold PSU</li></ul><div class="article-tip">Never cut corners on the PSU. A cheap power supply can destroy every other component in the system. Always buy from reputable brands like Corsair, Seasonic, or Cooler Master.</div><h3>Where NOT to Save</h3><p>PSU brand and wattage, SSD brand reliability (Samsung, WD, Kingston), and always use two RAM sticks for dual-channel performance — it gives 15-20% better speed at the same cost.</p>'},
+  {id:'hw1',cat:'hardware',title:'PC Won\'t Turn On? Complete Troubleshooting Guide',excerpt:'Common reasons why a PC fails to boot and how to diagnose and fix them step by step.',time:'7 min',
+   body:'<p>A PC that will not turn on is the most common hardware complaint. Follow this checklist in order — most problems are solved in the first three steps.</p><h3>Check 1 — Power Basics</h3><ul><li>Is the power cable connected at both ends and to a working socket?</li><li>Is the PSU power switch (back of PC) turned ON?</li><li>Is there a power indicator light on the motherboard? If yes, power is reaching the board.</li></ul><h3>Check 2 — Power Button Header</h3><p>Open the case and check that the front panel POWER SW pins are correctly connected to the motherboard header. Refer to the manual for the exact pin layout.</p><h3>Check 3 — RAM Re-seat</h3><p>Remove all RAM sticks and re-insert them firmly until the clips click on both sides. Try booting with just one stick. Clean the gold contacts with a pencil eraser if there is any oxidation.</p><div class="article-tip">Listen for beep codes on POST. One long + two short beeps almost always means a RAM issue. No beeps at all usually indicates a PSU or motherboard problem.</div><h3>Check 4 — Power Cables</h3><ul><li>24-pin ATX connector firmly seated on motherboard</li><li>8-pin CPU EPS power connector connected (top-left of board near CPU)</li><li>GPU 6-pin or 8-pin power cables if you have a dedicated GPU</li></ul><h3>Check 5 — PSU Test</h3><p>Use a PSU tester to verify the power supply is outputting correct voltages on all rails. A multimeter can also be used on a paperclip-shorted PSU for a rough check.</p>'},
+  {id:'hw2',cat:'hardware',title:'How to Safely Replace RAM, SSD and HDD',excerpt:'Best practices for safely upgrading or replacing internal components without causing damage.',time:'4 min',
+   body:'<p>Component replacement is straightforward if you follow the correct procedure every time. These steps prevent physical damage and data loss.</p><h3>Before You Start — Always Do This</h3><ul><li>Fully power off the PC — not sleep or hibernate, completely off</li><li>Unplug the power cable from the wall socket</li><li>Press the power button once to discharge residual capacitor charge</li><li>Touch the metal chassis of the case to earth yourself</li></ul><h3>Replacing RAM</h3><ul><li>Press down the retention clips at both ends of the slot simultaneously</li><li>The stick will pop up at an angle — lift it out</li><li>Align the notch on the new stick with the notch in the slot</li><li>Press firmly and evenly until both clips click into place</li></ul><h3>Replacing M.2 NVMe SSD</h3><ul><li>Remove the single retaining screw at the far end of the slot</li><li>Slide the old drive out at a 30-degree angle</li><li>Insert new SSD at the same angle and press down gently</li><li>Secure with the screw — do not overtighten</li></ul><div class="article-tip">Check your motherboard manual before buying an M.2 SSD. Some M.2 slots support only SATA protocol, not NVMe. Buying the wrong type means the drive will not work at full speed or at all.</div><h3>Replacing HDD or 2.5" SATA SSD</h3><p>Disconnect both the SATA data cable and the SATA power cable. Remove the four mounting screws from the drive bay. Install the new drive, reconnect both cables, and secure the screws.</p>'},
+  {id:'sw1',cat:'software',title:'Clean Windows Installation — The Right Way',excerpt:'How to do a proper fresh Windows install, configure BIOS correctly and set up all drivers.',time:'8 min',
+   body:'<p>A clean Windows install permanently fixes most software problems, viruses and slowdowns. Here is the complete correct procedure.</p><h3>Step 1 — Create a Bootable USB</h3><ul><li>Download the official Windows Media Creation Tool from microsoft.com — never use third-party sites</li><li>Run the tool and choose "Create installation media for another PC"</li><li>Use Rufus as an alternative — select GPT partition scheme for UEFI systems</li><li>USB should be at least 8GB and will be completely erased</li></ul><h3>Step 2 — Configure BIOS Correctly</h3><ul><li>Enter BIOS with DEL or F2 at startup</li><li>Disable Secure Boot temporarily if the USB does not boot</li><li>Set UEFI mode — do NOT use Legacy/CSM mode for modern hardware</li><li>Set USB as first boot device in the boot order</li><li>Save and exit (F10)</li></ul><h3>Step 3 — Install Windows</h3><ul><li>Boot from USB — press any key when prompted</li><li>Select Custom Install (not Upgrade)</li><li>Delete all existing partitions on the target drive — this gives a truly clean install</li><li>Select the unallocated space and click Next — Windows creates its own partitions</li><li>Installation takes 15 to 25 minutes depending on SSD speed</li></ul><div class="article-tip">Always install Windows on an SSD. The difference in boot time is massive — 8-10 seconds on NVMe SSD vs 60-90 seconds on a spinning HDD. If the system still has only an HDD, the single best upgrade is adding an SSD for the OS.</div><h3>Step 4 — Post-Install Driver Order</h3><p>Install in this order for best results: (1) Windows Update — run completely first. (2) Chipset drivers from motherboard manufacturer. (3) LAN/WiFi drivers. (4) GPU drivers from NVIDIA or AMD. (5) Audio drivers. Restart after each group.</p>'},
+  {id:'sw2',cat:'software',title:'Top Free Tools Every IT Support Engineer Must Know',excerpt:'Must-have free software tools for diagnostics, remote support and system management.',time:'5 min',
+   body:'<p>These are the tools I use in every IT support job. All completely free and essential.</p><h3>Hardware Diagnostics</h3><ul><li><strong>CPU-Z</strong> — Shows exact CPU model, RAM speed, motherboard details and BIOS version</li><li><strong>HWMonitor</strong> — Real-time CPU/GPU temperatures, fan speeds and voltages</li><li><strong>CrystalDiskInfo</strong> — SSD and HDD health status via SMART data — warns before drive failure</li><li><strong>MemTest86</strong> — Bootable USB RAM diagnostic, runs independently of Windows</li></ul><h3>System Maintenance</h3><ul><li><strong>CCleaner</strong> — Temp files, registry cleanup and startup manager</li><li><strong>Revo Uninstaller</strong> — Removes software completely including leftover registry entries</li><li><strong>TreeSize Free</strong> — Shows exactly what is consuming disk space folder by folder</li><li><strong>Autoruns</strong> — Microsoft tool showing everything that runs at startup</li></ul><div class="article-tip">Always create a system restore point before running any cleanup or registry tool. It takes 30 seconds and can save hours of recovery work if something goes wrong.</div><h3>Remote Support</h3><ul><li><strong>AnyDesk</strong> — Fast remote desktop, works well on Indian internet speeds</li><li><strong>TeamViewer</strong> — Industry standard, better for corporate environments</li></ul><h3>Network Tools</h3><ul><li><strong>Advanced IP Scanner</strong> — Find every device on the local network with one click</li><li><strong>Wireshark</strong> — Analyse network packets for connection issues</li></ul>'},
+  {id:'ts1',cat:'support',title:'How to Fix the Most Common Office IT Complaints',excerpt:'Slow PC, WiFi drops, printer offline — how I handle the most frequent support tickets.',time:'6 min',
+   body:'<p>After handling hundreds of office support tickets, these are the issues that appear every single week and the fastest ways to fix them.</p><h3>Issue 1 — PC Very Slow</h3><ul><li>Open Task Manager (Ctrl+Shift+Esc) — check for any process using high CPU or RAM</li><li>Startup tab in Task Manager — disable everything that does not need to start with Windows</li><li>Run Disk Cleanup — keeping less than 15% free space on an SSD causes severe slowdowns</li><li>Check for malware using Windows Defender full scan</li><li>If the PC has a spinning HDD and no SSD, that is the root cause — add an SSD</li></ul><h3>Issue 2 — No Internet or WiFi Drops</h3><ul><li>First step always — restart the router. Fixes 80% of cases immediately.</li><li>Run in Admin Command Prompt: <code>netsh winsock reset</code> then restart PC</li><li>Update the network adapter driver from Device Manager</li><li>If WiFi only — forget the network and reconnect with password</li></ul><div class="article-tip">Before doing anything complex, always restart the router first. It sounds too simple but it genuinely fixes the majority of network complaints in office environments.</div><h3>Issue 3 — Blue Screen (BSOD)</h3><ul><li>Note the exact error code shown on the blue screen — Google it specifically</li><li>Run Windows Memory Diagnostic from the Start menu search</li><li>Check CPU and GPU temperatures under load with HWMonitor — overheating causes random BSODs</li><li>Check for failed Windows Update that may have caused instability</li></ul><h3>Issue 4 — Monitor Shows No Signal</h3><p>If the PC has a dedicated graphics card (GPU), the monitor MUST be connected to the ports on the GPU, not the ports on the motherboard. This is the cause in 90% of no-signal complaints on builds with a GPU.</p>'},
+  {id:'ts2',cat:'support',title:'Printer Not Printing? Complete Fix Guide',excerpt:'Covers driver issues, network printer setup, spooler errors and offline printer problems.',time:'5 min',
+   body:'<p>Printer issues are the most frustrating support calls. Here is my systematic approach that fixes them reliably.</p><h3>Step 1 — Basic Checks First</h3><ul><li>Is the printer powered on with no error lights on the display?</li><li>Is there paper loaded and is there ink or toner remaining?</li><li>Is it connected to the same network as the PC (for network printers)?</li><li>Is the printer set as the Default Printer in Windows Settings?</li></ul><h3>Step 2 — Clear the Print Queue / Spooler</h3><ul><li>Press Win+R, type <code>services.msc</code> and press Enter</li><li>Find "Print Spooler" in the list, right-click and select Stop</li><li>Open File Explorer and navigate to: <code>C:\\Windows\\System32\\spool\\PRINTERS</code></li><li>Delete all files inside this folder (not the folder itself)</li><li>Return to services.msc, right-click Print Spooler and select Start</li></ul><div class="article-tip">A stuck or corrupted print job in the spooler is the single most common cause of printers going offline or refusing to print. This fix alone resolves about 90% of printer complaints.</div><h3>Step 3 — Reinstall the Driver</h3><ul><li>Remove the printer from Settings → Bluetooth and Devices → Printers</li><li>Download the latest driver package directly from the printer manufacturer website</li><li>Install fresh and add the printer again through Settings</li></ul><h3>Step 4 — Network Printer Setup</h3><p>Print a configuration page from the printer (hold the information button while powering on on most HP models). Note the IP address. In Windows Settings go to Add a printer → The printer I want is not listed → Add by IP address. Enter the printer IP and select the correct driver.</p>'},
+  {id:'net1',cat:'network',title:'Setting Up a Home Network from Scratch',excerpt:'How to configure a router, set up secure WiFi and build a reliable home network.',time:'7 min',
+   body:'<p>A reliable home network takes 30 minutes to set up correctly and will work for years without issues.</p><h3>What You Need</h3><ul><li>Internet connection from ISP (broadband or fiber ONT box)</li><li>A wireless router — TP-Link Archer series or D-Link DIR series are good value</li><li>Ethernet cable to connect ISP modem to router WAN port</li></ul><h3>Hardware Setup</h3><ul><li>Connect the ISP modem/ONT to the router WAN port using an ethernet cable</li><li>Power on the modem first and wait 60 seconds for it to connect</li><li>Then power on the router and wait 90 seconds</li></ul><h3>Router Configuration</h3><ul><li>Connect your PC or phone to the router WiFi using the default password from the sticker on the router base</li><li>Open a browser and go to 192.168.1.1 (or 192.168.0.1 for some models)</li><li>Log in with admin/admin or admin/password — check the sticker</li><li>Run the Quick Setup wizard — enter your ISP username and password if required</li></ul><div class="article-tip">Immediately change the router admin password and the WiFi password from the defaults. Default credentials are publicly known and any device on your network can access your router settings if you leave them unchanged.</div><h3>WiFi Security Settings</h3><ul><li>Security type: WPA3 if available, WPA2 otherwise — never use WEP or open</li><li>WiFi password: minimum 12 characters, mix of letters numbers and symbols</li><li>Disable WPS (Wi-Fi Protected Setup) — it has known security vulnerabilities</li><li>Change the SSID (network name) from the default to something custom</li></ul>'},
+  {id:'net2',cat:'network',title:'Office LAN Setup: Router, Switch and Printer Sharing',excerpt:'How I set up a complete wired and wireless office network with shared printer access.',time:'8 min',
+   body:'<p>Office networks need proper planning to be reliable and easy to manage. Here is the approach I follow for small office setups of 5 to 30 users.</p><h3>Hardware Required</h3><ul><li>1 main router connected to ISP — this is the DHCP server for the network</li><li>Managed or unmanaged network switch — 8-port for small offices, 16 or 24-port for larger</li><li>CAT6 ethernet cables for all wired connections — do not use CAT5e for new installations</li><li>Network printer with a LAN port or built-in WiFi</li><li>Cable labels and velcro ties for cable management</li></ul><h3>Network Architecture</h3><p>ISP → Router (WAN port) → Switch (uplink port) → All wired workstations and network printer. WiFi devices connect to the router directly. All devices are on the same subnet and can communicate with each other and the printer.</p><h3>Router Setup</h3><p>Access router at 192.168.1.1. Verify DHCP is enabled and set the IP range (e.g., 192.168.1.100 to 192.168.1.200). Reserve static IP addresses for the printer and any servers using DHCP reservation — this ensures they always get the same IP without manual static IP configuration on each device.</p><div class="article-tip">Label both ends of every cable during installation using adhesive cable labels. In three months when something stops working, being able to trace cables instantly saves enormous amounts of troubleshooting time.</div><h3>Printer Sharing Setup</h3><ul><li>Connect the printer to the switch via ethernet cable</li><li>Print a configuration page to find the printer IP address</li><li>Set a DHCP reservation in the router for the printer MAC address so its IP never changes</li><li>On each PC: Settings → Add a printer → Add by IP address → enter the printer IP → select correct driver</li><li>Test printing from all workstations and confirm access</li></ul>'},
+];
+
+/* SVG banner images per category */
+var BANNERS={
+  pc:'<svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#06080c"/><stop offset="100%" stop-color="#0d1a20"/></linearGradient></defs><rect width="400" height="140" fill="url(#bg)"/><rect x="100" y="25" width="200" height="70" rx="6" fill="rgba(0,255,204,.06)" stroke="rgba(0,255,204,.25)" stroke-width="1.2"/><rect x="108" y="32" width="184" height="56" rx="3" fill="rgba(6,8,12,.95)"/><circle cx="116" cy="39" r="3" fill="#ff6b6b" opacity=".8"/><circle cx="126" cy="39" r="3" fill="#ffd055" opacity=".8"/><circle cx="136" cy="39" r="3" fill="#00e676" opacity=".8"/><text x="115" y="54" font-size="7" fill="rgba(0,255,204,.5)" font-family="monospace">$ building pc...</text><text x="115" y="64" font-size="7" fill="#00e676" font-family="monospace">&#10003; CPU: i5-13400</text><text x="115" y="74" font-size="7" fill="#00e676" font-family="monospace">&#10003; RAM: 16GB DDR5</text><text x="115" y="84" font-size="7" fill="#ffd055" font-family="monospace">&#9679; Installing OS...</text><rect x="80" y="93" width="240" height="8" rx="3" fill="rgba(255,255,255,.05)" stroke="rgba(0,255,204,.15)" stroke-width="1"/><text x="200" y="125" font-size="8" fill="rgba(0,255,204,.4)" font-family="monospace" text-anchor="middle">PC Building Guide</text></svg>',
+  hardware:'<svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bh" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#06080c"/><stop offset="100%" stop-color="#150d0a"/></linearGradient></defs><rect width="400" height="140" fill="url(#bh)"/><rect x="130" y="30" width="140" height="80" rx="5" fill="rgba(255,107,53,.06)" stroke="rgba(255,107,53,.25)" stroke-width="1.2"/><rect x="138" y="38" width="124" height="65" rx="3" fill="rgba(6,8,12,.95)"/><circle cx="146" cy="44" r="3" fill="#ff6b6b" opacity=".8"/><circle cx="156" cy="44" r="3" fill="#ffd055" opacity=".8"/><circle cx="166" cy="44" r="3" fill="#00e676" opacity=".8"/><text x="143" y="59" font-size="6.5" fill="#ff8a65" font-family="monospace">$ hw diagnosis</text><text x="143" y="69" font-size="6.5" fill="#00e676" font-family="monospace">&#10003; BIOS: v3.10</text><text x="143" y="79" font-size="6.5" fill="#ffd055" font-family="monospace">&#9888; SSD: 87% health</text><text x="143" y="89" font-size="6.5" fill="#00e676" font-family="monospace">&#10003; RAM: OK</text><rect x="30" y="45" width="80" height="20" rx="3" fill="rgba(91,141,238,.12)" stroke="rgba(91,141,238,.3)" stroke-width="1"/><text x="70" y="59" font-size="7" fill="rgba(91,141,238,.7)" font-family="monospace" text-anchor="middle">DDR4 RAM</text><text x="200" y="128" font-size="8" fill="rgba(255,107,53,.4)" font-family="monospace" text-anchor="middle">Hardware Repair Guide</text></svg>',
+  software:'<svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bs" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#06080c"/><stop offset="100%" stop-color="#0a0d1a"/></linearGradient></defs><rect width="400" height="140" fill="url(#bs)"/><rect x="90" y="20" width="220" height="90" rx="6" fill="rgba(91,141,238,.06)" stroke="rgba(91,141,238,.25)" stroke-width="1.2"/><rect x="98" y="28" width="204" height="75" rx="3" fill="rgba(6,8,12,.95)"/><circle cx="106" cy="35" r="3" fill="#ff6b6b" opacity=".8"/><circle cx="116" cy="35" r="3" fill="#ffd055" opacity=".8"/><circle cx="126" cy="35" r="3" fill="#00e676" opacity=".8"/><text x="103" y="50" font-size="7" fill="rgba(91,141,238,.6)" font-family="monospace">Windows Installation</text><text x="103" y="62" font-size="7" fill="#5b8dee" font-family="monospace">1. Create bootable USB</text><text x="103" y="72" font-size="7" fill="#5b8dee" font-family="monospace">2. Configure BIOS UEFI</text><text x="103" y="82" font-size="7" fill="#00e676" font-family="monospace">3. Clean install &#10003;</text><text x="103" y="92" font-size="7" fill="rgba(91,141,238,.5)" font-family="monospace">4. Install drivers...</text><text x="200" y="127" font-size="8" fill="rgba(91,141,238,.4)" font-family="monospace" text-anchor="middle">Software Guide</text></svg>',
+  support:'<svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bt" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#06080c"/><stop offset="100%" stop-color="#141006"/></linearGradient></defs><rect width="400" height="140" fill="url(#bt)"/><rect x="110" y="25" width="180" height="85" rx="6" fill="rgba(255,200,0,.06)" stroke="rgba(255,200,0,.22)" stroke-width="1.2"/><rect x="118" y="33" width="164" height="70" rx="3" fill="rgba(6,8,12,.95)"/><circle cx="126" cy="40" r="3" fill="#ff6b6b" opacity=".8"/><circle cx="136" cy="40" r="3" fill="#ffd055" opacity=".8"/><circle cx="146" cy="40" r="3" fill="#00e676" opacity=".8"/><text x="123" y="55" font-size="6.5" fill="#ffd055" font-family="monospace">IT Support Ticket</text><text x="123" y="66" font-size="6.5" fill="#00e676" font-family="monospace">&#10003; WiFi — restarted router</text><text x="123" y="76" font-size="6.5" fill="#00e676" font-family="monospace">&#10003; Printer — cleared spooler</text><text x="123" y="86" font-size="6.5" fill="#ffd055" font-family="monospace">&#9679; Slow PC — diagnosing</text><text x="123" y="96" font-size="6.5" fill="rgba(255,200,0,.4)" font-family="monospace">Status: IN PROGRESS</text><text x="200" y="127" font-size="8" fill="rgba(255,200,0,.4)" font-family="monospace" text-anchor="middle">IT Support Guide</text></svg>',
+  network:'<svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bn" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#06080c"/><stop offset="100%" stop-color="#0e0618"/></linearGradient></defs><rect width="400" height="140" fill="url(#bn)"/><circle cx="200" cy="60" r="14" fill="rgba(180,80,255,.12)" stroke="rgba(180,80,255,.4)" stroke-width="1.5"/><text x="200" y="65" font-size="10" text-anchor="middle" fill="#c47fff">&#127760;</text><line x1="200" y1="46" x2="200" y2="25" stroke="rgba(180,80,255,.3)" stroke-width="1.5" stroke-dasharray="3,2"/><circle cx="200" cy="20" r="8" fill="rgba(180,80,255,.1)" stroke="rgba(180,80,255,.3)" stroke-width="1"/><text x="200" y="24" font-size="7" text-anchor="middle" fill="#c47fff">ISP</text><line x1="188" y1="66" x2="130" y2="85" stroke="rgba(180,80,255,.25)" stroke-width="1.5" stroke-dasharray="3,2"/><line x1="200" y1="74" x2="200" y2="95" stroke="rgba(180,80,255,.25)" stroke-width="1.5" stroke-dasharray="3,2"/><line x1="212" y1="66" x2="270" y2="85" stroke="rgba(180,80,255,.25)" stroke-width="1.5" stroke-dasharray="3,2"/><rect x="115" y="85" width="30" height="16" rx="3" fill="rgba(180,80,255,.1)" stroke="rgba(180,80,255,.3)" stroke-width="1"/><text x="130" y="97" font-size="6" text-anchor="middle" fill="#c47fff">PC1</text><rect x="185" y="95" width="30" height="16" rx="3" fill="rgba(180,80,255,.1)" stroke="rgba(180,80,255,.3)" stroke-width="1"/><text x="200" y="107" font-size="6" text-anchor="middle" fill="#c47fff">PC2</text><rect x="255" y="85" width="30" height="16" rx="3" fill="rgba(180,80,255,.1)" stroke="rgba(180,80,255,.3)" stroke-width="1"/><text x="270" y="97" font-size="6" text-anchor="middle" fill="#c47fff">Printer</text><text x="200" y="128" font-size="8" fill="rgba(180,80,255,.4)" font-family="monospace" text-anchor="middle">Networking Guide</text></svg>'
+};
+
+/* ─────────────────────────────────────
+   RENDER ARTICLES
+───────────────────────────────────── */
+function renderCards(list){
+  var grid=document.getElementById('blogGrid');
+  var noRes=document.getElementById('noResults');
+  grid.innerHTML='';
+  if(!list.length){noRes.classList.add('show');return;}
+  noRes.classList.remove('show');
+  list.forEach(function(a,i){
+    var d=document.createElement('div');
+    d.className='blog-card';
+    d.style.animationDelay=(i*0.06)+'s';
+    d.setAttribute('data-cat',a.cat);
+    d.setAttribute('data-id',a.id);
+    d.innerHTML=
+      '<div class="card-img">'+BANNERS[a.cat]+'</div>'+
+      '<div class="card-top">'+
+        '<span class="card-cat cat-'+a.cat+'">'+catLabel(a.cat)+'</span>'+
+        '<h2 class="card-title">'+a.title+'</h2>'+
+        '<p class="card-excerpt">'+a.excerpt+'</p>'+
+      '</div>'+
+      '<div class="card-footer">'+
+        '<span class="card-read">Read More &#8594;</span>'+
+        '<span class="card-time">'+a.time+' read</span>'+
+      '</div>';
+    d.addEventListener('click',function(){openArticle(a.id);});
+    grid.appendChild(d);
+  });
+  /* update filter counts */
+  document.querySelector('[data-cat="all"]').textContent='All ('+ARTICLES.length+')';
+}
+function catLabel(c){return{pc:'PC Building',hardware:'Hardware',software:'Software',support:'Tech Support',network:'Networking'}[c]||c;}
+
+/* ─────────────────────────────────────
+   FILTER + SEARCH
+───────────────────────────────────── */
+var currentCat='all';
+function applyFilters(){
+  var q=(document.getElementById('searchInput').value||'').toLowerCase().trim();
+  var list=ARTICLES.filter(function(a){
+    var matchCat=(currentCat==='all'||a.cat===currentCat);
+    var matchQ=!q||(a.title.toLowerCase().indexOf(q)!==-1||a.excerpt.toLowerCase().indexOf(q)!==-1);
+    return matchCat&&matchQ;
+  });
+  renderCards(list);
+}
+document.querySelectorAll('.filter-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    currentCat=btn.getAttribute('data-cat');
+    applyFilters();
+  });
+});
+document.getElementById('searchInput').addEventListener('input',applyFilters);
+
+/* ─────────────────────────────────────
+   ARTICLE OPEN / CLOSE
+───────────────────────────────────── */
+function openArticle(id){
+  var a=ARTICLES.find(function(x){return x.id===id;});
+  if(!a)return;
+  document.getElementById('aCat').innerHTML='<span class="card-cat cat-'+a.cat+'">'+catLabel(a.cat)+'</span>';
+  document.getElementById('aTitle').textContent=a.title;
+  document.getElementById('aMeta').textContent=a.time+' read';
+  document.getElementById('aBody').innerHTML=a.body;
+  var ov=document.getElementById('articleOverlay');
+  ov.classList.add('open');
+  ov.scrollTop=0;
+  document.body.style.overflow='hidden';
+}
+function closeArticle(){
+  document.getElementById('articleOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('closeBtn').addEventListener('click',function(e){e.stopPropagation();closeArticle();});
+document.getElementById('articleOverlay').addEventListener('click',function(e){
+  if(!document.getElementById('articleBox').contains(e.target))closeArticle();
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArticle();});
+
+/* ─────────────────────────────────────
+   INIT ON LOAD
+───────────────────────────────────── */
+window.addEventListener('load',function(){
+
+  /* Initial render */
+  renderCards(ARTICLES);
+
+  /* Particles */
+  if(typeof particlesJS!=='undefined'){
+    particlesJS('particles-js',{
+      particles:{
+        number:{value:28,density:{enable:true,value_area:900}},
+        color:{value:'#00ffcc'},shape:{type:'circle'},
+        opacity:{value:.09,random:true},size:{value:2,random:true},
+        line_linked:{enable:true,distance:130,color:'#1a2535',opacity:.18,width:1},
+        move:{enable:true,speed:.55,random:true,out_mode:'out'}
+      },
+      interactivity:{
+        detect_on:'canvas',
+        events:{onhover:{enable:true,mode:'grab'},onclick:{enable:true,mode:'push'}},
+        modes:{grab:{distance:140,line_linked:{opacity:.35}},push:{particles_nb:2}}
+      },
+      retina_detect:true
+    });
+  }
+
+  /* Cursor glow — desktop only */
+  var glow=document.getElementById('cursor-glow');
+  if(glow&&window.innerWidth>768){
+    glow.style.display='block';
+    document.addEventListener('mousemove',function(e){
+      glow.style.left=e.clientX+'px';
+      glow.style.top=e.clientY+'px';
+    });
+  }
+
+  /* Navbar scroll effect */
+  var nb=document.getElementById('navbar');
+  window.addEventListener('scroll',function(){
+    nb.classList.toggle('scrolled',window.scrollY>20);
+  },{passive:true});
+
+});
+</script>
+</body>
+</html>
