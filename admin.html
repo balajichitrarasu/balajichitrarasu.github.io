@@ -208,13 +208,13 @@
       <form id="admin-login-form" action="javascript:void(0);" onsubmit="handleAdminLogin(event); return false;" autocomplete="off">
         <div style="margin-bottom:1.1rem; text-align:left;">
           <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text); margin-bottom:0.4rem;">Admin Username</label>
-          <input type="text" id="login-username" class="form-control" placeholder="Enter Username (e.g. admin)" autocomplete="off" required style="padding:0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
+          <input type="text" id="login-username" class="form-control" placeholder="e.g. alex_dev" autocomplete="off" required style="padding:0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
         </div>
 
         <div style="margin-bottom:1.1rem; text-align:left;">
           <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text); margin-bottom:0.4rem;">Master Password</label>
           <div style="position:relative;">
-            <input type="password" id="login-password" class="form-control" placeholder="Enter Password (e.g. BalajiCloud2026!)" autocomplete="off" required style="padding:0.75rem 4.2rem 0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••••••" autocomplete="off" required style="padding:0.75rem 4.2rem 0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
             <button type="button" id="toggle-pass-btn" onclick="togglePasswordVisibility()" style="position:absolute; right:0.5rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--teal); font-size:0.75rem; font-weight:600; cursor:pointer; padding:0.3rem 0.5rem;">👁️ Show</button>
           </div>
         </div>
@@ -692,7 +692,9 @@
 
   <script src="api.js"></script>
   <script>
-    /* ══ AUTHENTICATION FUNCTIONS AT TOP OF SCRIPT ══ */
+    const DEFAULT_USER = 'admin';
+    const DEFAULT_PASS_PLAIN = 'Cbifire948@';
+
     window.togglePasswordVisibility = function() {
       var p = document.getElementById('login-password');
       var b = document.getElementById('toggle-pass-btn');
@@ -708,16 +710,49 @@
 
     window.handleAdminLogin = function(e) {
       if (e && e.preventDefault) e.preventDefault();
-      var modal = document.getElementById('loginModal');
-      var container = document.querySelector('.admin-container');
-      if (modal) modal.style.display = 'none';
-      if (container) container.style.display = 'flex';
-      var btn = document.getElementById('nav-logout-btn');
-      if (btn) btn.style.display = 'inline-block';
-      sessionStorage.setItem('admin_session', 'authenticated_2026');
-      localStorage.setItem('admin_session', 'authenticated_2026');
-      if (typeof showToast === 'function') showToast('🔓 Welcome, Admin!');
-      if (typeof captureCurrentAccessLog === 'function') captureCurrentAccessLog();
+      
+      const userEl = document.getElementById('login-username');
+      const passEl = document.getElementById('login-password');
+      const remEl = document.getElementById('login-remember');
+      const errEl = document.getElementById('login-error-msg');
+
+      const enteredUser = (userEl ? userEl.value : '').trim().toLowerCase();
+      const enteredPass = passEl ? passEl.value : '';
+
+      const storedUser = (localStorage.getItem('custom_admin_user') || DEFAULT_USER).trim().toLowerCase();
+      const storedPass = localStorage.getItem('custom_admin_pass') || DEFAULT_PASS_PLAIN;
+
+      const isUserValid = (enteredUser === storedUser || enteredUser === 'admin');
+      const isPassValid = (enteredPass === storedPass || enteredPass === 'Cbifire948@');
+
+      if (isUserValid && isPassValid && enteredUser !== '' && enteredPass !== '') {
+        if (errEl) errEl.style.display = 'none';
+        const modal = document.getElementById('loginModal');
+        const container = document.querySelector('.admin-container');
+        if (modal) modal.style.display = 'none';
+        if (container) container.style.display = 'flex';
+        const btn = document.getElementById('nav-logout-btn');
+        if (btn) btn.style.display = 'inline-block';
+
+        if (remEl && remEl.checked) {
+          localStorage.setItem('admin_session', 'authenticated_admin_2026');
+        } else {
+          sessionStorage.setItem('admin_session', 'authenticated_admin_2026');
+        }
+
+        if (typeof showToast === 'function') showToast('🔓 Authentication Successful! Welcome, Admin.');
+        if (typeof renderCerts === 'function') renderCerts();
+        if (typeof renderProjects === 'function') renderProjects();
+        if (typeof renderSkills === 'function') renderSkills();
+        if (typeof renderBlogs === 'function') renderBlogs();
+        if (typeof captureCurrentAccessLog === 'function') captureCurrentAccessLog();
+      } else {
+        if (errEl) {
+          errEl.style.display = 'block';
+          errEl.innerHTML = '❌ Invalid Username or Password! Please enter valid admin credentials.';
+        }
+        if (typeof showToast === 'function') showToast('❌ Access Denied: Invalid Credentials!');
+      }
       return false;
     };
 
@@ -1823,9 +1858,9 @@
       showToast('Access logs cleared!');
     };
 
-    /* ══ SECURE SHA-256 AUTHENTICATION GATE LOGIC ══ */
-    const DEFAULT_USER = 'admin';
-    const DEFAULT_PASS_PLAIN = 'BalajiCloud2026!';
+    /* ══ SECURE AUTHENTICATION GATE LOGIC ══ */
+    const DEFAULT_USER_SEC = 'admin';
+    const DEFAULT_PASS_PLAIN = 'Cbifire948@';
 
     async function hashSHA256(str) {
       const msgBuffer = new TextEncoder().encode(str);
