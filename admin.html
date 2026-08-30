@@ -1897,9 +1897,6 @@
     };
 
     /* ══ SECURE AUTHENTICATION GATE LOGIC ══ */
-    const DEFAULT_USER_SEC = 'admin';
-    const DEFAULT_PASS_PLAIN = 'Cbifire948@';
-
     async function hashSHA256(str) {
       const msgBuffer = new TextEncoder().encode(str);
       const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
