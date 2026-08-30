@@ -270,6 +270,31 @@
       transform: translateY(-2px); box-shadow: 0 0 12px rgba(100,255,218,0.6);
     }
     
+    /* Prominent Inline Form Status Alerts */
+    .status-alert {
+      display: none;
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.88rem;
+      animation: fadeIn 0.3s var(--ease);
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .status-alert.success {
+      display: flex;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: var(--emerald);
+    }
+    .status-alert.error {
+      display: flex;
+      background: rgba(248, 113, 113, 0.12);
+      border: 1px solid rgba(248, 113, 113, 0.4);
+      color: var(--rose);
+    }
+
     /* Tables */
     table {
       width: 100%;
@@ -757,7 +782,8 @@
               <label style="font-weight:600;">New Master Password</label>
               <input type="password" id="set-admin-pass" class="form-control" placeholder="Leave blank to keep current password (Default: BalajiCloud2026!)">
             </div>
-            <button type="submit" class="btn btn-primary" style="font-weight:700;">Save Settings &amp; Security Credentials</button>
+            <button type="submit" id="settings-submit-btn" class="btn btn-primary" style="font-weight:700;">Save Settings &amp; Security Credentials</button>
+            <div id="settings-alert" class="status-alert"></div>
           </form>
         </div>
       </section>
@@ -1937,28 +1963,49 @@
     $('settings-form').addEventListener('submit', e => {
       e.preventDefault();
       e.stopPropagation();
-      localStorage.setItem('custom_email', $('set-email').value);
-      localStorage.setItem('custom_phone', $('set-phone').value);
-      localStorage.setItem('custom_github', $('set-github').value);
-      localStorage.setItem('custom_linkedin', $('set-linkedin').value);
 
-      if ($('set-admin-user') && $('set-admin-user').value.trim()) {
-        localStorage.setItem('custom_admin_user', $('set-admin-user').value.trim());
-      }
-      if ($('set-admin-pass') && $('set-admin-pass').value.trim()) {
-        localStorage.setItem('custom_admin_pass', $('set-admin-pass').value.trim());
-      }
+      const btn = $('settings-submit-btn') || e.target.querySelector('button[type="submit"]');
+      const origText = btn ? btn.innerText : 'Save Settings & Security Credentials';
+      if (btn) btn.innerHTML = '⚡ Saving Settings & Credentials...';
 
-      localStorage.setItem('hide_recommendations', $('toggle-recs').checked ? 'false' : 'true');
-      localStorage.setItem('hide_events', $('toggle-events').checked ? 'false' : 'true');
-      localStorage.setItem('hide_github', $('toggle-github').checked ? 'false' : 'true');
-      localStorage.setItem('hide_achievements', $('toggle-achievements').checked ? 'false' : 'true');
+      setTimeout(() => {
+        localStorage.setItem('custom_email', $('set-email').value);
+        localStorage.setItem('custom_phone', $('set-phone').value);
+        localStorage.setItem('custom_github', $('set-github').value);
+        localStorage.setItem('custom_linkedin', $('set-linkedin').value);
 
-      if (window.PortfolioAPI && typeof PortfolioAPI.syncGlobalCMSData === 'function') {
-        PortfolioAPI.syncGlobalCMSData();
-      }
+        if ($('set-admin-user') && $('set-admin-user').value.trim()) {
+          localStorage.setItem('custom_admin_user', $('set-admin-user').value.trim());
+        }
+        if ($('set-admin-pass') && $('set-admin-pass').value.trim()) {
+          localStorage.setItem('custom_admin_pass', $('set-admin-pass').value.trim());
+        }
 
-      showToast('Settings & Security Credentials saved!');
+        localStorage.setItem('hide_recommendations', $('toggle-recs').checked ? 'false' : 'true');
+        localStorage.setItem('hide_events', $('toggle-events').checked ? 'false' : 'true');
+        localStorage.setItem('hide_github', $('toggle-github').checked ? 'false' : 'true');
+        localStorage.setItem('hide_achievements', $('toggle-achievements').checked ? 'false' : 'true');
+
+        if (window.PortfolioAPI && typeof PortfolioAPI.syncGlobalCMSData === 'function') {
+          PortfolioAPI.syncGlobalCMSData();
+        }
+
+        if (btn) {
+          btn.innerText = '✓ Settings Saved Successfully!';
+          setTimeout(() => { btn.innerText = origText; }, 2500);
+        }
+
+        const alertEl = $('settings-alert');
+        if (alertEl) {
+          alertEl.className = 'status-alert success';
+          alertEl.innerHTML = '✅ All site settings, section visibilities, resume, and security credentials saved live!';
+          alertEl.style.display = 'flex';
+          setTimeout(() => { alertEl.style.display = 'none'; }, 6000);
+        }
+
+        showToast('⚙️ Settings & Security Credentials saved live!');
+      }, 400);
+
       return false;
     });
 
@@ -2230,6 +2277,6 @@
     });
   </script>
   <div id="toast"></div>
-  <script src="script.js?v=12.0"></script>
+  <script src="script.js?v=13.0"></script>
 </body>
 </html>
