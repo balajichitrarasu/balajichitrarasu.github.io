@@ -1,3 +1,13 @@
+/* ── Global Toast Notification Helper ── */
+window.showToast = function(txt) {
+  var t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = txt;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function () { t.classList.remove('show'); }, 3200);
+};
+
 /* ── Global Theme Toggle (Immediate & Always Available) ── */
 window.toggleTheme = function() {
   var cur = document.documentElement.getAttribute('data-theme') || 'dark';
@@ -7,9 +17,7 @@ window.toggleTheme = function() {
   document.querySelectorAll('#themeToggle, .theme-toggle-btn, .glossy-theme-btn').forEach(function(btn) {
     btn.setAttribute('title', next === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
   });
-  if (typeof showToast === 'function') {
-    showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
-  }
+  window.showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
 };
 
 (function () {
