@@ -155,6 +155,52 @@ window.PortfolioAPI = {
         if (res.ok) return await res.json();
       } catch (e) {}
     }
+  },
+
+  /* Global Cloud Access Logs Sync across all devices */
+  async syncAccessLog(logEntry) {
+    try {
+      let logs = JSON.parse(localStorage.getItem('admin_access_logs') || '[]');
+      if (!Array.isArray(logs)) logs = [];
+      
+      const existingIdx = logs.findIndex(l => l.ip === logEntry.ip && l.timestamp === logEntry.timestamp);
+      if (existingIdx === -1) {
+        logs.unshift(logEntry);
+        if (logs.length > 50) logs.pop();
+        localStorage.setItem('admin_access_logs', JSON.stringify(logs));
+      }
+
+      // Sync to Remote Key-Value Cloud Store so laptop & all devices see it
+      const key = 'balaji_admin_ip_logs_2026';
+      const endpoint = `https://keyvalue.imsky.org/set/${key}/${encodeURIComponent(JSON.stringify(logs.slice(0, 20)))}`;
+      fetch(endpoint, { method: 'POST' }).catch(() => {});
+    } catch (e) {}
+  },
+
+  async fetchGlobalAccessLogs() {
+    try {
+      const key = 'balaji_admin_ip_logs_2026';
+      const res = await fetch(`https://keyvalue.imsky.org/get/${key}`);
+      if (res.ok) {
+        const text = await res.text();
+        if (text && text !== 'null') {
+          const remoteLogs = JSON.parse(text);
+          if (Array.isArray(remoteLogs) && remoteLogs.length > 0) {
+            let localLogs = JSON.parse(localStorage.getItem('admin_access_logs') || '[]');
+            if (!Array.isArray(localLogs)) localLogs = [];
+            
+            const map = new Map();
+            localLogs.forEach(l => map.set(l.id || (l.ip + l.timestamp), l));
+            remoteLogs.forEach(l => map.set(l.id || (l.ip + l.timestamp), l));
+
+            const merged = Array.from(map.values()).sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+            localStorage.setItem('admin_access_logs', JSON.stringify(merged.slice(0, 50)));
+            return merged.slice(0, 50);
+          }
+        }
+      }
+    } catch (e) {}
+    return JSON.parse(localStorage.getItem('admin_access_logs') || '[]');
   }
 };
 

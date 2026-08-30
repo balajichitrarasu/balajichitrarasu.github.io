@@ -1697,9 +1697,8 @@
       }
     });
 
-    /* ══ ACCESS LOGS & IP TRACKER LOGIC ══ */
-    function captureCurrentAccessLog() {
-      let logs = getStorage('admin_access_logs', []);
+    /* ══ ACCESS LOGS & IP TRACKER LOGIC WITH CROSS-DEVICE CLOUD SYNC ══ */
+    async function captureCurrentAccessLog() {
       const now = new Date().toLocaleString();
       const ua = navigator.userAgent;
       let browser = 'Unknown Browser';
@@ -1711,46 +1710,52 @@
       const platform = navigator.platform || 'Windows';
       const screenRes = window.screen ? `${window.screen.width}x${window.screen.height}` : 'N/A';
 
-      fetch('https://api.ipify.org?format=json')
-        .then(res => res.json())
-        .then(data => {
-          const ip = data.ip || '127.0.0.1';
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        if (res.ok) {
+          const data = await res.json();
           const newLog = {
             id: generateId(),
             timestamp: now,
-            ip: ip,
-            location: 'Coimbatore, TN / India (Public IP)',
+            ip: data.ip || '127.0.0.1',
+            location: `${data.city || 'Coimbatore'}, ${data.region || 'TN'}, ${data.country_name || 'India'} (${data.org || 'ISP'})`,
             device: `${browser} on ${platform} (${screenRes})`,
             status: 'Authorized Admin'
           };
-          if (!Array.isArray(logs)) logs = [];
-          if (logs.length === 0 || logs[0].ip !== ip) {
-            logs.unshift(newLog);
-            if (logs.length > 50) logs.pop();
-            setStorage('admin_access_logs', logs);
+          if (window.PortfolioAPI && window.PortfolioAPI.syncAccessLog) {
+            await window.PortfolioAPI.syncAccessLog(newLog);
           }
           renderAccessLogs();
-        })
-        .catch(() => {
-          const fallbackLog = {
-            id: generateId(),
-            timestamp: now,
-            ip: 'Local Access IP',
-            location: 'Local Session',
-            device: `${browser} on ${platform}`,
-            status: 'Active Session'
-          };
-          if (!Array.isArray(logs)) logs = [];
-          if (logs.length === 0) {
-            logs.unshift(fallbackLog);
-            setStorage('admin_access_logs', logs);
-          }
-          renderAccessLogs();
-        });
+          return;
+        }
+      } catch (e) {}
+
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        const fallbackLog = {
+          id: generateId(),
+          timestamp: now,
+          ip: data.ip || '127.0.0.1',
+          location: 'Coimbatore, TN / India',
+          device: `${browser} on ${platform} (${screenRes})`,
+          status: 'Authorized Admin'
+        };
+        if (window.PortfolioAPI && window.PortfolioAPI.syncAccessLog) {
+          await window.PortfolioAPI.syncAccessLog(fallbackLog);
+        }
+        renderAccessLogs();
+      } catch (err) {}
     }
 
-    function renderAccessLogs() {
-      let logs = getStorage('admin_access_logs', []);
+    async function renderAccessLogs() {
+      let logs = [];
+      if (window.PortfolioAPI && window.PortfolioAPI.fetchGlobalAccessLogs) {
+        logs = await window.PortfolioAPI.fetchGlobalAccessLogs();
+      } else {
+        logs = getStorage('admin_access_logs', []);
+      }
+
       if (!Array.isArray(logs) || logs.length === 0) {
         logs = [{
           id: 'log_1',
@@ -1760,24 +1765,28 @@
           device: navigator.userAgent.split(' ')[0] + ' on ' + (navigator.platform || 'Win32'),
           status: 'Authorized Admin'
         }];
-        setStorage('admin_access_logs', logs);
       }
 
       const tb = $('access-logs-tbody');
       if (!tb) return;
       tb.innerHTML = '';
       logs.forEach(l => {
+        const isFailed = l.status && l.status.indexOf('FAILED') > -1;
+        const statusBadge = isFailed
+          ? `<span style="background:rgba(244,63,94,0.12); color:var(--rose); border:1px solid rgba(244,63,94,0.3); padding:0.15rem 0.55rem; border-radius:12px; font-size:0.72rem; font-weight:600;">${l.status}</span>`
+          : `<span style="background:rgba(52,211,153,0.12); color:var(--emerald); border:1px solid rgba(52,211,153,0.3); padding:0.15rem 0.55rem; border-radius:12px; font-size:0.72rem; font-weight:600;">${l.status}</span>`;
+
         tb.innerHTML += `
           <tr style="border-bottom:1px solid var(--border);">
             <td style="padding:0.75rem; color:var(--text-muted);">${l.timestamp}</td>
             <td style="padding:0.75rem; font-family:'DM Mono',monospace; color:var(--teal); font-weight:600;">${l.ip}</td>
             <td style="padding:0.75rem; color:var(--text);">${l.location}</td>
             <td style="padding:0.75rem; font-size:0.78rem; color:var(--text-muted);">${l.device}</td>
-            <td style="padding:0.75rem;"><span style="background:rgba(52,211,153,0.12); color:var(--emerald); border:1px solid rgba(52,211,153,0.3); padding:0.15rem 0.55rem; border-radius:12px; font-size:0.72rem; font-weight:600;">${l.status}</span></td>
+            <td style="padding:0.75rem;">${statusBadge}</td>
           </tr>
         `;
       });
-      if ($('log-count-badge')) $('log-count-badge').innerText = `${logs.length} Session Logged`;
+      if ($('log-count-badge')) $('log-count-badge').innerText = `${logs.length} Cross-Device Sessions Logged`;
     }
 
     window.clearAccessLogs = () => {
