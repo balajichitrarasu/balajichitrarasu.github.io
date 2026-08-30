@@ -582,18 +582,18 @@ body::before {
 /* ── AVATAR ── */
 .avatar-wrap {
   position: relative;
-  width: 165px; height: 165px;
+  width: 190px; height: 190px;
   isolation: isolate;
   flex-shrink: 0;
-  margin-bottom: .7rem;
+  margin-bottom: .9rem;
 }
 .profile {
   display: block;
-  width: 165px; height: 165px;
+  width: 190px; height: 190px;
   border-radius: 50%;
-  object-fit: cover; object-position: center 15%;
-  border: 3px solid rgba(100,255,218,.55);
-  box-shadow: 0 0 0 7px rgba(100,255,218,.08), 0 12px 36px rgba(0,0,0,.68);
+  object-fit: cover; object-position: center 12%;
+  border: 3px solid rgba(100,255,218,.6);
+  box-shadow: 0 0 0 8px rgba(100,255,218,.09), 0 14px 40px rgba(0,0,0,.72);
   position: relative; z-index: 2;
   mix-blend-mode: normal;
   background-color: rgba(100,255,218,0.08); /* fallback if image fails */
