@@ -283,17 +283,18 @@
               <textarea id="cert-desc" class="form-control" rows="3"></textarea>
             </div>
             <div class="form-group">
-              <label>Image Upload (Crop Tool)</label>
-              <input type="file" id="cert-file" class="form-control" accept="image/*">
-              <input type="text" id="cert-image" class="form-control" placeholder="Or enter URL directly" style="margin-top: 0.5rem;">
+              <label>Certificate Image or PDF Document Upload</label>
+              <input type="file" id="cert-file" class="form-control" accept="image/*,.pdf">
+              <input type="text" id="cert-image" class="form-control" placeholder="Or enter Image / PDF URL directly (e.g. cert1.jpg or document.pdf)" style="margin-top: 0.5rem;">
               
-              <div id="crop-container" style="display:none;">
-                <canvas id="crop-canvas"></canvas>
+              <div id="crop-container" style="display:none; margin-top:0.5rem;">
+                <canvas id="crop-canvas" style="max-width:100%; border:1px solid var(--border); border-radius:6px;"></canvas>
                 <br>
                 <button type="button" id="btn-crop" class="btn btn-primary" style="margin-top: 0.5rem;">Apply Crop</button>
               </div>
-              <div>
-                <img id="crop-preview" style="display:none;">
+              <div style="margin-top:0.5rem;">
+                <img id="crop-preview" style="display:none; max-width:100%; max-height:160px; border-radius:6px; border:1px solid var(--border);">
+                <div id="pdf-preview" style="display:none; padding:0.8rem; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:6px; color:var(--teal); font-weight:600; font-size:0.85rem;">📄 PDF Certificate Attached</div>
               </div>
             </div>
             <button type="submit" class="btn btn-primary">Save Certification</button>
@@ -619,25 +620,30 @@
     
     $('cert-file').addEventListener('change', e => {
       const file = e.target.files[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = ev => {
-        cropImg.onload = () => {
-          $('crop-container').style.display = 'inline-block';
-          const maxW = 500;
-          let w = cropImg.width;
-          let h = cropImg.height;
-          if(w > maxW) {
-            h = h * (maxW / w);
-            w = maxW;
-          }
-          canvas.width = w;
-          canvas.height = h;
-          drawCropCanvas();
+      if (!file) return;
+
+      if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          $('cert-image').value = ev.target.result;
+          $('crop-container').style.display = 'none';
+          $('crop-preview').style.display = 'none';
+          if ($('pdf-preview')) $('pdf-preview').style.display = 'block';
+          showToast('PDF Certificate attached!');
         };
-        cropImg.src = ev.target.result;
-      };
-      reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
+      } else {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          $('cert-image').value = ev.target.result;
+          if ($('pdf-preview')) $('pdf-preview').style.display = 'none';
+          $('crop-preview').src = ev.target.result;
+          $('crop-preview').style.display = 'block';
+          $('crop-container').style.display = 'none';
+          showToast('Image uploaded successfully!');
+        };
+        reader.readAsDataURL(file);
+      }
     });
 
     function drawCropCanvas() {
@@ -821,7 +827,7 @@
       else certs.push(cert);
       
       renderCerts();
-      if (window.PortfolioAPI) PortfolioAPI.saveProject(cert);
+      if (window.PortfolioAPI) PortfolioAPI.saveCert(cert);
       e.target.reset();
       $('cert-id').value = '';
       $('crop-container').style.display = 'none';
@@ -839,11 +845,19 @@
       $('cert-org').value = c.org || c.issuer || '';
       $('cert-date').value = c.date || c.status || '';
       $('cert-desc').value = c.desc || c.description || '';
-      $('cert-image').value = c.image || c.img || '';
-      if(c.image || c.img) {
-        $('crop-preview').src = c.image || c.img;
-        $('crop-preview').style.display = 'block';
+      const imgVal = c.image || c.img || '';
+      $('cert-image').value = imgVal;
+      if (imgVal) {
+        if (imgVal.indexOf('data:application/pdf') === 0 || imgVal.toLowerCase().endsWith('.pdf')) {
+          if ($('pdf-preview')) $('pdf-preview').style.display = 'block';
+          $('crop-preview').style.display = 'none';
+        } else {
+          if ($('pdf-preview')) $('pdf-preview').style.display = 'none';
+          $('crop-preview').src = imgVal;
+          $('crop-preview').style.display = 'block';
+        }
       } else {
+        if ($('pdf-preview')) $('pdf-preview').style.display = 'none';
         $('crop-preview').style.display = 'none';
       }
       $('cert-form-title').innerText = 'Edit Certification';

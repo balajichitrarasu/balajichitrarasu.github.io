@@ -91,7 +91,7 @@ window.PortfolioAPI = {
     // Save to local storage first
     try {
       let saved = JSON.parse(localStorage.getItem('custom_projects') || '[]');
-      const idx = saved.findIndex(p => p.id === projectObj.id);
+      const idx = saved.findIndex(p => String(p.id) === String(projectObj.id));
       if (idx !== -1) saved[idx] = projectObj;
       else saved.push(projectObj);
       localStorage.setItem('custom_projects', JSON.stringify(saved));
@@ -104,6 +104,29 @@ window.PortfolioAPI = {
           method: projectObj.id ? 'PUT' : 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(projectObj)
+        });
+      } catch (e) {}
+    }
+  },
+
+  /* Save / Create Certification */
+  async saveCert(certObj) {
+    // Save to local storage first
+    try {
+      let saved = JSON.parse(localStorage.getItem('custom_certs') || '[]');
+      const idx = saved.findIndex(c => String(c.id) === String(certObj.id));
+      if (idx !== -1) saved[idx] = certObj;
+      else saved.push(certObj);
+      localStorage.setItem('custom_certs', JSON.stringify(saved));
+    } catch (e) {}
+
+    // Save to live backend API
+    if (await this.checkHealth()) {
+      try {
+        await fetch(`${API_BASE}/api/certs`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(certObj)
         });
       } catch (e) {}
     }

@@ -330,6 +330,64 @@ document.addEventListener('DOMContentLoaded', function () {
   renderProjects();
 
   /* ────────────────────────────────────────
+     DYNAMIC CERTIFICATIONS RENDERING
+     Reads from admin's localStorage custom_certs
+  ─────────────────────────────────────────── */
+  function renderCerts() {
+    var container = document.getElementById('visualCertGallery');
+    if (!container) return;
+
+    var saved = null;
+    try {
+      saved = localStorage.getItem('custom_certs');
+      if (saved) saved = JSON.parse(saved);
+    } catch (e) {}
+
+    if (!Array.isArray(saved) || saved.length === 0) return;
+
+    container.innerHTML = saved.map(function (c) {
+      var title = c.title || 'Certification';
+      var issuer = c.org || c.issuer || 'Issuer';
+      var statusDate = c.date || c.status || '';
+      var desc = c.desc || c.description || '';
+      var image = c.image || c.img || 'cert1.jpg';
+      var badgeText = c.badgeText || (issuer.indexOf('AWS') > -1 || title.indexOf('AWS') > -1 ? '☁️ Production Certified' : '🏆 Certified');
+      var badgeClass = c.badge || (issuer.indexOf('Anthropic') > -1 ? 'badge-violet' : 'badge-teal');
+
+      var escTitle = title.replace(/'/g, "\\'");
+      var escIssuer = issuer.replace(/'/g, "\\'");
+      var escStatus = statusDate.replace(/'/g, "\\'");
+      var escDesc = desc.replace(/'/g, "\\'");
+      var escImg = image.replace(/'/g, "\\'");
+
+      var isPdf = image.toLowerCase().endsWith('.pdf');
+      var imgHtml = isPdf 
+        ? '<div style="height:160px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); color:var(--teal); font-weight:700; flex-direction:column; gap:0.5rem;"><span style="font-size:2.5rem;">📄</span><span>PDF Certificate Document</span></div>'
+        : '<img src="' + image + '" alt="' + title + '">';
+
+      return '<div class="cert-card reveal" onclick="openCertImg(\'' + escTitle + '\',\'' + escIssuer + '\',\'' + escStatus + '\',\'' + escDesc + '\',\'' + escImg + '\')">' +
+        '<div class="cert-img-wrap">' +
+          imgHtml +
+          '<div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Certificate</p></div>' +
+        '</div>' +
+        '<div class="cert-body">' +
+          '<h4>' + title + '</h4>' +
+          '<p>' + issuer + (statusDate ? ' · ' + statusDate : '') + '</p>' +
+          '<span class="cert-badge ' + badgeClass + '">' + badgeText + '</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    if (typeof revealObs !== 'undefined') {
+      container.querySelectorAll('.reveal').forEach(function (el) { revealObs.observe(el); });
+    } else {
+      container.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
+    }
+  }
+
+  renderCerts();
+
+  /* ────────────────────────────────────────
      SKILL BAR ANIMATION
   ─────────────────────────────────────────── */
   function animateBars() {
@@ -617,10 +675,17 @@ function openCertImg(title, issuer, status, desc, imgUrl) {
   document.getElementById('cStatus').textContent = status || '';
   document.getElementById('cBody').textContent   = desc;
   var wrap = document.getElementById('certModalImgWrap');
-  var img  = document.getElementById('certModalImg');
-  if (imgUrl && wrap && img) {
-    img.src = imgUrl;
-    wrap.style.display = 'block';
+
+  if (imgUrl && wrap) {
+    var isPdf = (imgUrl.indexOf('data:application/pdf') === 0 || imgUrl.toLowerCase().endsWith('.pdf'));
+    if (isPdf) {
+      wrap.innerHTML = '<iframe src="' + imgUrl + '" style="width:100%; height:400px; border:1px solid var(--border); border-radius:6px; margin-top:1rem;"></iframe>' +
+                       '<div style="text-align:center; margin-top:0.5rem;"><a href="' + imgUrl + '" target="_blank" download class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">📥 Download PDF Certificate</a></div>';
+      wrap.style.display = 'block';
+    } else {
+      wrap.innerHTML = '<img id="certModalImg" src="' + imgUrl + '" style="max-width:100%; border-radius:6px; margin-top:1rem;" alt="' + title + '">';
+      wrap.style.display = 'block';
+    }
   } else if (wrap) {
     wrap.style.display = 'none';
   }
