@@ -644,6 +644,140 @@ document.addEventListener('DOMContentLoaded', function () {
   runCounters();
 
   /* ────────────────────────────────────────
+     DYNAMIC EXPERIENCE TIMELINE RENDERING
+  ─────────────────────────────────────────── */
+  function renderTimeline() {
+    var container = document.getElementById('timelineContainer');
+    if (!container) return;
+
+    var saved = null;
+    try {
+      saved = localStorage.getItem('custom_timeline');
+      if (saved) saved = JSON.parse(saved);
+    } catch (e) {}
+
+    if (!Array.isArray(saved) || saved.length === 0) {
+      saved = [
+        {
+          date: 'JUNE 2026 — JULY 2026',
+          role: 'AWS Cloud Engineer Intern',
+          org: 'ZenFuture Technologies · Coimbatore, India (Cert No. ZF-INTERN-0026)',
+          desc: 'Built and deployed ZentroShift ERM across 6 AWS services: EC2, S3, CloudFront, RDS, VPC, and CloudWatch alarms.'
+        },
+        {
+          date: '2023 — PRESENT',
+          role: 'Freelance IT Support & Digital Designer',
+          org: 'Self-Employed · Coimbatore, India',
+          desc: 'Hardware troubleshooting, software setup, and digital design deliverables for small business clients.'
+        },
+        {
+          date: '2023 — 2027',
+          role: 'B.E. Electronics & Communication Engineering',
+          org: 'United Institute of Technology · Coimbatore, Tamil Nadu (CGPA: 7.13 / 10)',
+          desc: 'Awarded Exemplary Achiever Award by ECE department. Serving as IIC Innovation Ambassador.'
+        },
+        {
+          date: '2021 — 2023',
+          role: 'Higher Secondary Certificate (Class XII)',
+          org: 'Govt. Hr. Sec. School, Hale Dharmapuri · Tamil Nadu State Board',
+          desc: 'Completed Higher Secondary Certificate with focus on Physics, Chemistry, and Mathematics.'
+        }
+      ];
+    }
+
+    container.innerHTML = saved.map(function(t) {
+      return '<div class="tl-item reveal visible">' +
+        '<p class="tl-date">' + (t.date || '') + '</p>' +
+        '<h3 class="tl-role">' + (t.role || '') + '</h3>' +
+        '<p class="tl-org">' + (t.org || '') + '</p>' +
+        '<p class="tl-desc">' + (t.desc || '') + '</p>' +
+      '</div>';
+    }).join('');
+  }
+
+  renderTimeline();
+
+  /* ────────────────────────────────────────
+     DYNAMIC EVENTS & ACHIEVEMENTS RENDERING
+  ─────────────────────────────────────────── */
+  function renderEvents() {
+    var container = document.getElementById('achievementsContainer');
+    if (!container) return;
+
+    var saved = null;
+    try {
+      saved = localStorage.getItem('custom_events');
+      if (saved) saved = JSON.parse(saved);
+    } catch (e) {}
+
+    if (!Array.isArray(saved) || saved.length === 0) {
+      saved = [
+        {
+          title: 'Exemplary Achiever Award',
+          org: 'Academic Excellence — ECE Department',
+          location: 'United Institute of Technology, Coimbatore',
+          desc: 'Recognized for outstanding academic performance, leadership, and exemplary contribution in the Department of Electronics and Communication Engineering.',
+          icon: '🎖️',
+          color: 'gold'
+        },
+        {
+          title: 'Production AWS Setup Across 6 Services',
+          org: 'Real Infrastructure — Not a Tutorial Project',
+          location: 'ZenFuture Technologies · June–July 2026',
+          desc: 'Deployed a real, production-grade AWS setup across 6 services (EC2, S3, CloudFront, RDS, VPC, CloudWatch) during the ZenFuture Technologies internship.',
+          icon: '☁️',
+          color: 'teal'
+        },
+        {
+          title: 'IIC Student Innovation Ambassador',
+          org: 'Ministry of Education Innovation Cell',
+          location: 'AICTE & MoE, Government of India',
+          desc: 'Student Innovation Ambassador representing United Institute of Technology at the Institution\'s Innovation Council under the Ministry of Education, Government of India.',
+          icon: '💡',
+          color: 'violet'
+        }
+      ];
+    }
+
+    container.innerHTML = saved.map(function(a) {
+      var escTitle = (a.title || '').replace(/'/g, "\\'");
+      var escSub = (a.org || '').replace(/'/g, "\\'");
+      var escWhere = (a.location || '').replace(/'/g, "\\'");
+      var escDesc = (a.desc || '').replace(/'/g, "\\'");
+      var icon = a.icon || '🎖️';
+      var color = a.color || 'gold';
+      var colorClass = color === 'teal' ? 'ach-icon-teal' : (color === 'violet' ? 'ach-icon-violet' : 'ach-icon-gold');
+
+      return '<div class="ach-item reveal visible" onclick="openAch(\'' + escTitle + '\',\'' + escSub + '\',\'' + escWhere + '\',\'' + escDesc + '\',\'' + icon + '\',\'' + color + '\')">' +
+        '<div class="ach-left">' +
+          '<div class="ach-icon ' + colorClass + '">' + icon + '</div>' +
+          '<div><p class="ach-title">' + (a.title || '') + '</p><p class="ach-sub">' + (a.location || a.org || '') + '</p></div>' +
+        '</div>' +
+        '<span class="ach-arrow">↗</span>' +
+      '</div>';
+    }).join('');
+  }
+
+  renderEvents();
+
+  /* ────────────────────────────────────────
+     DYNAMIC DYNAMIC RESUME LINK & BIO
+  ─────────────────────────────────────────── */
+  function renderBio() {
+    var resumeUrl = localStorage.getItem('custom_resume_pdf');
+    if (resumeUrl && resumeUrl.trim() !== '') {
+      document.querySelectorAll('a[href*="resume"], a[href$=".pdf"], .btn-resume').forEach(function(a) {
+        if (a.getAttribute('href') !== '#contact') {
+          a.href = resumeUrl;
+          a.setAttribute('target', '_blank');
+        }
+      });
+    }
+  }
+
+  renderBio();
+
+  /* ────────────────────────────────────────
      MOBILE NAV TOGGLE
   ─────────────────────────────────────────── */
   var toggle = document.getElementById('navToggle');
