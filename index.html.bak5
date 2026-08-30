@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=43.0">
+<link rel="stylesheet" href="style.css?v=42.0">
 <script>
 var themeToggleLock = false;
 window.toggleTheme = function(e) {
@@ -157,7 +157,7 @@ window.toggleTheme = function(e) {
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <div class="nav-inner">
-    <a class="nav-brand" href="#"><img src="logo.png?v=43.0" id="navBrandLogoImg" class="nav-brand-logo" alt="Logo">Balaji Chitrarasu</a>
+    <a class="nav-brand" href="#"><span class="nav-brand-badge">BC</span>Balaji Chitrarasu</a>
     <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
       <span></span><span></span><span></span>
     </button>
@@ -766,8 +766,8 @@ window.toggleTheme = function(e) {
 <script>
   window.PORTFOLIO_API_URL = "https://balaji-portfolio-backend.onrender.com";
 </script>
-<script src="api.js?v=43.0"></script>
-<script src="script.js?v=43.0"></script>
+<script src="api.js?v=42.0"></script>
+<script src="script.js?v=42.0"></script>
 
 <!-- COMMAND PALETTE MODAL (CTRL+K) -->
 <div id="cmdPalette" class="cmd-modal" role="dialog" aria-modal="true" style="display:none;">

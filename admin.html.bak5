@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=43.0">
+  <link rel="stylesheet" href="style.css?v=42.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -425,7 +425,7 @@
 
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <a class="nav-brand" href="index.html"><img src="logo.png?v=43.0" id="navBrandLogoImg" class="nav-brand-logo" alt="Logo">Balaji Chitrarasu</a>
+      <a class="nav-brand" href="index.html"><span class="nav-brand-badge">BC</span>Balaji Chitrarasu</a>
       <ul>
         <li><a href="index.html">← Portfolio</a></li>
         <li><a href="blog.html">Blog</a></li>
@@ -442,7 +442,7 @@
       
       <div class="shield-badge-container">
         <div class="shield-ring"></div>
-        <img src="logo.png?v=43.0" id="loginLogoImg" class="shield-logo-img" alt="Logo">
+        <div class="shield-icon-inner">🛡️</div>
       </div>
 
       <h2 style="margin:0 0 0.4rem; font-size:1.55rem; color:var(--text); font-weight:800; letter-spacing:-0.02em;">Admin Security Portal</h2>
@@ -485,7 +485,7 @@
 
   <!-- HIGH-TECH WELCOME ANIMATION OVERLAY -->
   <div id="welcomeOverlay" class="welcome-overlay">
-    <div class="welcome-avatar"><img src="logo.png?v=43.0" id="welcomeLogoImg" class="welcome-logo-img" alt="Logo"></div>
+    <div class="welcome-avatar">BC</div>
     <h2 style="font-size:1.6rem; font-weight:800; color:#fff; margin:0 0 0.5rem; text-shadow:0 0 20px rgba(100,255,218,0.4);">🔓 Welcome Back, Admin!</h2>
     <p id="welcomeStatusText" style="font-size:0.85rem; color:var(--teal); margin:0; font-family:'DM Mono',monospace;">⚡ Verifying Security Signatures...</p>
     <div class="welcome-bar-track">
@@ -1116,50 +1116,6 @@
               </button>
               <button type="button" onclick="resetSecurityCredentialsToDefault()" class="btn btn-danger" style="font-weight:700; padding:0.75rem 1.2rem; background:rgba(244,63,94,0.12); color:var(--rose); border:1px solid rgba(244,63,94,0.3);">
                 🔄 Reset Credentials to Default (Cbifire948@)
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- DEDICATED BRAND & HERO EMBLEM LOGO MANAGER CARD -->
-        <div class="card" style="margin-top: 1.5rem; background:rgba(255,255,255,0.025); border:1px solid var(--teal); border-radius:12px; padding:1.8rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:0.8rem;">
-            <h3 style="margin:0; color:var(--teal); font-weight:700; font-size:1.1rem;">🎨 Brand Emblem &amp; Logo Manager</h3>
-            <span id="active-logo-status-badge" style="font-size:0.75rem; color:var(--emerald); background:rgba(52,211,153,0.12); border:1px solid rgba(52,211,153,0.3); padding:0.2rem 0.65rem; border-radius:12px; font-weight:600;">Golden Shield Emblem Active</span>
-          </div>
-          <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1.2rem;">Upload or change your portfolio's emblem logo image below. This logo replaces <code>BC</code> across the Navbar, Admin Login Screen, Welcome Overlay, and Favicon across all devices.</p>
-          
-          <form id="brand-logo-form" action="javascript:void(0);" onsubmit="saveBrandLogo(event); return false;" autocomplete="off">
-            <div class="form-group" style="margin-bottom:1rem;">
-              <label style="font-weight:600; display:block; margin-bottom:0.4rem; color:var(--text);">Upload New Logo Image (PNG / JPG / SVG)</label>
-              <input type="file" id="set-logo-file" class="form-control" accept="image/*" style="max-width:460px;">
-              <input type="text" id="set-logo-url" class="form-control" placeholder="logo.png" style="margin-top:0.5rem; max-width:460px;">
-            </div>
-            
-            <!-- LIVE PREVIEW BOX -->
-            <div style="display:flex; align-items:center; gap:1.5rem; background:rgba(0,0,0,0.3); border:1px dashed var(--border); border-radius:10px; padding:1rem 1.2rem; margin-bottom:1.2rem; flex-wrap:wrap;">
-              <div style="text-align:center;">
-                <span style="font-size:0.72rem; color:var(--text-muted); display:block; margin-bottom:0.4rem; font-weight:600;">Navbar Logo (32px)</span>
-                <img src="logo.png?v=43.0" id="preview-logo-nav" style="width:32px; height:32px; object-fit:contain; border-radius:6px; filter:drop-shadow(0 0 6px rgba(251,191,36,0.5));" alt="Nav Preview">
-              </div>
-              <div style="text-align:center;">
-                <span style="font-size:0.72rem; color:var(--text-muted); display:block; margin-bottom:0.4rem; font-weight:600;">Login Shield (64px)</span>
-                <img src="logo.png?v=43.0" id="preview-logo-login" style="width:64px; height:64px; object-fit:contain; border-radius:12px; filter:drop-shadow(0 0 12px rgba(251,191,36,0.6));" alt="Login Preview">
-              </div>
-              <div style="flex:1; min-width:200px;">
-                <span style="font-size:0.78rem; color:var(--teal); font-weight:600; display:block;">⚡ Live Preview &amp; Automated Method 1</span>
-                <span style="font-size:0.75rem; color:var(--text-muted);">Selecting a new file automatically generates <code>logo.png</code> and triggers an instant file download for direct placement into your repository root!</span>
-              </div>
-            </div>
-
-            <div id="brand-logo-alert" class="status-alert" style="display:none; margin-bottom:1rem; max-width:460px;"></div>
-
-            <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
-              <button type="submit" id="brand-logo-submit-btn" class="btn btn-primary" style="font-weight:700; padding:0.75rem 1.4rem;">
-                🎨 Save &amp; Sync Brand Logo
-              </button>
-              <button type="button" onclick="resetBrandLogoToDefault()" class="btn btn-danger" style="font-weight:700; padding:0.75rem 1.2rem; background:rgba(244,63,94,0.12); color:var(--rose); border:1px solid rgba(244,63,94,0.3);">
-                🔄 Reset Logo to Default (logo.png)
               </button>
             </div>
           </form>
@@ -2637,99 +2593,6 @@
       if (typeof renderSecurityLogs === 'function') renderSecurityLogs();
       showToast('🔄 Security Credentials Reset to Default (Cbifire948@)!');
     };
-
-    window.saveBrandLogo = function(e) {
-      if (e) {
-        if (e.preventDefault) e.preventDefault();
-        if (e.stopPropagation) e.stopPropagation();
-      }
-
-      const urlEl = document.getElementById('set-logo-url');
-      const alertEl = document.getElementById('brand-logo-alert');
-      const btn = document.getElementById('brand-logo-submit-btn');
-
-      const logoVal = (urlEl ? urlEl.value : '').trim() || 'logo.png';
-
-      if (btn) {
-        btn.innerHTML = '⚡ Syncing Brand Logo...';
-        btn.style.opacity = '0.85';
-      }
-
-      setTimeout(() => {
-        localStorage.setItem('custom_brand_logo', logoVal);
-
-        document.querySelectorAll('#navBrandLogoImg, #loginLogoImg, #welcomeLogoImg, #preview-logo-nav, #preview-logo-login').forEach(img => {
-          if (img) img.src = logoVal + '?v=' + Date.now();
-        });
-
-        if (btn) {
-          btn.innerHTML = '✓ Brand Logo Saved Live!';
-          btn.style.opacity = '1';
-          setTimeout(() => { btn.innerHTML = '🎨 Save & Sync Brand Logo'; }, 2200);
-        }
-
-        if (alertEl) {
-          alertEl.className = 'status-alert success';
-          alertEl.innerHTML = '✅ <strong>Brand Logo Successfully Updated!</strong><br>Your custom emblem logo is now live across Navbar, Login Screen, Welcome Overlay, and Favicons!';
-          alertEl.style.display = 'flex';
-          setTimeout(() => { alertEl.style.display = 'none'; }, 6000);
-        }
-
-        if ($('active-logo-status-badge')) $('active-logo-status-badge').innerText = 'Custom Brand Emblem Active';
-        showToast('🎨 Brand Emblem Logo Updated & Live across all pages!');
-      }, 400);
-
-      return false;
-    };
-
-    window.resetBrandLogoToDefault = function() {
-      if (!confirm('Reset brand logo emblem to default (logo.png)?')) return;
-      localStorage.removeItem('custom_brand_logo');
-
-      const urlEl = document.getElementById('set-logo-url');
-      const alertEl = document.getElementById('brand-logo-alert');
-      if (urlEl) urlEl.value = 'logo.png';
-
-      document.querySelectorAll('#navBrandLogoImg, #loginLogoImg, #welcomeLogoImg, #preview-logo-nav, #preview-logo-login').forEach(img => {
-        if (img) img.src = 'logo.png?v=' + Date.now();
-      });
-
-      if (alertEl) {
-        alertEl.className = 'status-alert success';
-        alertEl.innerHTML = '🔄 <strong>Brand Logo Reset to Default!</strong><br>Default Golden Shield Emblem (<code>logo.png</code>) restored across all panels.';
-        alertEl.style.display = 'flex';
-        setTimeout(() => { alertEl.style.display = 'none'; }, 6000);
-      }
-
-      if ($('active-logo-status-badge')) $('active-logo-status-badge').innerText = 'Golden Shield Emblem Active';
-      showToast('🔄 Brand Logo Reset to Default (logo.png)!');
-    };
-
-    const logoFileInput = document.getElementById('set-logo-file');
-    if (logoFileInput) {
-      logoFileInput.addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-          const logoData = ev.target.result;
-          if ($('set-logo-url')) $('set-logo-url').value = 'logo.png';
-          
-          document.querySelectorAll('#navBrandLogoImg, #loginLogoImg, #welcomeLogoImg, #preview-logo-nav, #preview-logo-login').forEach(img => {
-            if (img) img.src = logoData;
-          });
-
-          // Automated Method 1 Download
-          const a = document.createElement('a');
-          a.href = logoData;
-          a.download = 'logo.png';
-          a.click();
-
-          showToast('⚡ Method 1 Automated! Downloaded logo.png — copy to G:\\Portfolio\\logo.png!');
-        };
-        reader.readAsDataURL(file);
-      });
-    }
 
     $('settings-form').addEventListener('submit', e => {
       e.preventDefault();
