@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Admin CMS | Balaji Chitrarasu</title>
-  <link rel="stylesheet" href="style.css?v=9.5">
+  <link rel="stylesheet" href="style.css?v=9.9">
   <style>
     /* Admin Specific CSS */
     .admin-container {
@@ -689,6 +692,35 @@
 
   <script src="api.js"></script>
   <script>
+    /* ══ AUTHENTICATION FUNCTIONS AT TOP OF SCRIPT ══ */
+    window.togglePasswordVisibility = function() {
+      var p = document.getElementById('login-password');
+      var b = document.getElementById('toggle-pass-btn');
+      if (!p) return;
+      if (p.type === 'password') {
+        p.type = 'text';
+        if (b) b.innerHTML = '🙈 Hide';
+      } else {
+        p.type = 'password';
+        if (b) b.innerHTML = '👁️ Show';
+      }
+    };
+
+    window.handleAdminLogin = function(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      var modal = document.getElementById('loginModal');
+      var container = document.querySelector('.admin-container');
+      if (modal) modal.style.display = 'none';
+      if (container) container.style.display = 'flex';
+      var btn = document.getElementById('nav-logout-btn');
+      if (btn) btn.style.display = 'inline-block';
+      sessionStorage.setItem('admin_session', 'authenticated_2026');
+      localStorage.setItem('admin_session', 'authenticated_2026');
+      if (typeof showToast === 'function') showToast('🔓 Welcome, Admin!');
+      if (typeof captureCurrentAccessLog === 'function') captureCurrentAccessLog();
+      return false;
+    };
+
     // Utility functions
     const $ = id => document.getElementById(id);
     const getStorage = (key, def) => {
