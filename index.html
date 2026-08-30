@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=28.0">
+<link rel="stylesheet" href="style.css?v=29.0">
 <script>
 var themeToggleLock = false;
 window.toggleTheme = function(e) {
@@ -167,7 +167,17 @@ window.toggleTheme = function(e) {
   <h1 class="seo-h1">Balaji Chitrarasu — AWS Cloud Engineer &amp; ECE Graduate, Coimbatore India</h1>
   <div class="hero-inner">
     <div class="avatar-wrap">
-      <img src="profile.jpg" id="heroAvatarImg" class="profile" alt="Balaji Chitrarasu">
+      <img src="profile.jpg?v=28.0" id="heroAvatarImg" class="profile" alt="Balaji Chitrarasu">
+      <script>
+      (function(){
+        try {
+          var saved = localStorage.getItem('custom_profile_avatar');
+          if (saved && saved.trim()) {
+            document.getElementById('heroAvatarImg').src = saved;
+          }
+        } catch(e) {}
+      })();
+      </script>
       <div class="avatar-ring" aria-hidden="true"></div>
       <div class="avatar-ring r2" aria-hidden="true"></div>
       <div class="avatar-dot" title="Open to Work"></div>
@@ -741,8 +751,8 @@ window.toggleTheme = function(e) {
 <script>
   window.PORTFOLIO_API_URL = "https://balaji-portfolio-backend.onrender.com";
 </script>
-<script src="api.js?v=28.0"></script>
-<script src="script.js?v=28.0"></script>
+<script src="api.js?v=29.0"></script>
+<script src="script.js?v=29.0"></script>
 
 <!-- COMMAND PALETTE MODAL (CTRL+K) -->
 <div id="cmdPalette" class="cmd-modal" role="dialog" aria-modal="true" style="display:none;">

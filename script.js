@@ -99,11 +99,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (savedAvatar && savedAvatar.trim() !== '') {
           imgEl.src = savedAvatar;
         } else {
-          imgEl.src = 'profile.jpg';
+          imgEl.src = 'profile.jpg?v=28.0';
         }
         imgEl.onerror = function () {
           this.onerror = null;
-          this.src = 'profile.jpg';
+          this.src = 'profile.jpg?v=28.0';
         };
       }
 
