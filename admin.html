@@ -510,14 +510,23 @@
     </main>
   </div>
 
-  <div id="toast"></div>
-
+  <script src="api.js"></script>
   <script>
     // Utility functions
     const $ = id => document.getElementById(id);
     const getStorage = (key, def) => {
-      try { return JSON.parse(localStorage.getItem(key)) || def; } 
-      catch { return localStorage.getItem(key) || def; }
+      try {
+        const item = localStorage.getItem(key);
+        if (item === null || item === undefined || item === '') return def;
+        const parsed = JSON.parse(item);
+        if (Array.isArray(parsed) && parsed.length === 0 && Array.isArray(def) && def.length > 0) {
+          return def;
+        }
+        return parsed !== null && parsed !== undefined ? parsed : def;
+      } catch (e) {
+        const val = localStorage.getItem(key);
+        return (val !== null && val !== undefined && val !== '') ? val : def;
+      }
     };
     const setStorage = (key, val) => {
       localStorage.setItem(key, typeof val === 'object' ? JSON.stringify(val) : val);
@@ -753,7 +762,9 @@
     // Certs CRUD
     let certs = getStorage('custom_certs', defaultCerts);
     function renderCerts() {
+      if (!Array.isArray(certs) || certs.length === 0) certs = defaultCerts;
       const list = $('cert-list');
+      if (!list) return;
       list.innerHTML = '';
       certs.forEach(c => {
         const issuer = c.org || c.issuer || 'Issuer';
@@ -786,11 +797,12 @@
         image: $('cert-image').value
       };
       
-      const idx = certs.findIndex(c => c.id === id);
+      const idx = certs.findIndex(c => String(c.id) === String(id));
       if(idx > -1) certs[idx] = cert;
       else certs.push(cert);
       
       renderCerts();
+      if (window.PortfolioAPI) PortfolioAPI.saveProject(cert);
       e.target.reset();
       $('cert-id').value = '';
       $('crop-container').style.display = 'none';
@@ -801,16 +813,16 @@
     });
 
     window.editCert = id => {
-      const c = certs.find(x => x.id === id);
+      const c = certs.find(x => String(x.id) === String(id));
       if(!c) return;
       $('cert-id').value = c.id;
-      $('cert-title').value = c.title;
-      $('cert-org').value = c.org;
-      $('cert-date').value = c.date || '';
-      $('cert-desc').value = c.desc || '';
-      $('cert-image').value = c.image || '';
-      if(c.image) {
-        $('crop-preview').src = c.image;
+      $('cert-title').value = c.title || '';
+      $('cert-org').value = c.org || c.issuer || '';
+      $('cert-date').value = c.date || c.status || '';
+      $('cert-desc').value = c.desc || c.description || '';
+      $('cert-image').value = c.image || c.img || '';
+      if(c.image || c.img) {
+        $('crop-preview').src = c.image || c.img;
         $('crop-preview').style.display = 'block';
       } else {
         $('crop-preview').style.display = 'none';
@@ -822,7 +834,7 @@
 
     window.deleteCert = id => {
       if(!confirm('Delete this certification?')) return;
-      certs = certs.filter(c => c.id !== id);
+      certs = certs.filter(c => String(c.id) !== String(id));
       renderCerts();
       showToast('Deleted!');
     };
@@ -839,7 +851,9 @@
     // Projects CRUD
     let projects = getStorage('custom_projects', defaultProjects);
     function renderProjects() {
+      if (!Array.isArray(projects) || projects.length === 0) projects = defaultProjects;
       const list = $('proj-list');
+      if (!list) return;
       list.innerHTML = '';
       projects.forEach(p => {
         list.innerHTML += `
@@ -878,11 +892,12 @@
         repoUrl: $('projRepo').value
       };
       
-      const idx = projects.findIndex(x => x.id === id);
+      const idx = projects.findIndex(x => String(x.id) === String(id));
       if(idx > -1) projects[idx] = proj;
       else projects.push(proj);
       
       renderProjects();
+      if (window.PortfolioAPI) PortfolioAPI.saveProject(proj);
       e.target.reset();
       $('proj-id').value = '';
       $('proj-form-title').innerText = 'Add Project';
@@ -891,15 +906,15 @@
     });
 
     window.editProj = id => {
-      const p = projects.find(x => x.id === id);
+      const p = projects.find(x => String(x.id) === String(id));
       if(!p) return;
       $('proj-id').value = p.id;
-      $('proj-title').value = p.title;
-      $('proj-cat').value = p.category;
-      $('proj-image').value = p.image || '';
+      $('proj-title').value = p.title || '';
+      if ($('proj-cat')) $('proj-cat').value = p.category || 'cloud';
+      $('proj-image').value = p.image || p.img || '';
       $('proj-tags').value = p.tags || '';
       $('proj-summary').value = p.summary || '';
-      $('proj-details').value = p.details || '';
+      $('proj-details').value = p.details || p.summary || '';
       $('projStatus').value = p.status || 'ongoing';
       $('projProgress').value = p.progress !== undefined ? p.progress : 65;
       if ($('projProgressVal')) $('projProgressVal').innerText = $('projProgress').value;
@@ -913,7 +928,7 @@
 
     window.deleteProj = id => {
       if(!confirm('Delete this project?')) return;
-      projects = projects.filter(x => x.id !== id);
+      projects = projects.filter(x => String(x.id) !== String(id));
       renderProjects();
       showToast('Deleted!');
     };
