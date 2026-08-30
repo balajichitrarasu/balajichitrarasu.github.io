@@ -623,6 +623,111 @@
     };
     const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
 
+    // Default Datasets (Hoisted to top to prevent ReferenceErrors)
+    const defaultCerts = [
+      {
+        id: 'cert_1',
+        title: 'AWS Cloud Engineer Intern',
+        org: 'ZenFuture Technologies',
+        date: 'ZF-INTERN-0026 · June–July 2026',
+        desc: 'Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.',
+        image: 'cert1.jpg'
+      },
+      {
+        id: 'cert_2',
+        title: 'AI Fluency Frameworks',
+        org: 'Anthropic',
+        date: 'Certified · 2025',
+        desc: 'Certified by Anthropic in AI frameworks, LLM system architecture, prompt engineering, and AI safety foundations.',
+        image: 'cert1.jpg'
+      },
+      {
+        id: 'cert_3',
+        title: 'Industry 4.0 & IIoT',
+        org: 'NPTEL · IIT Kharagpur',
+        date: 'Certified · 2024',
+        desc: 'Completed 12-week proctored NPTEL course on Industrial IoT funded by the Ministry of Education, Government of India.',
+        image: 'cert1.jpg'
+      },
+      {
+        id: 'cert_4',
+        title: 'Software Engineer Certificate',
+        org: 'HackerRank',
+        date: 'Role Certification (2024)',
+        desc: 'Passed HackerRank Software Engineer role certification — covering algorithms, data structures, and software development.',
+        image: 'cert1.jpg'
+      }
+    ];
+
+    const defaultProjects = [
+      {
+        id: 'proj_1',
+        title: 'ZentroShift ERM App',
+        category: 'cloud',
+        status: 'completed',
+        progress: 100,
+        image: 'project2.jpg',
+        tags: 'EC2, S3, RDS, CloudFront, VPC',
+        summary: 'Full-stack ERM system deployed across 6 AWS services with custom VPC, IAM roles, and CloudWatch monitoring.',
+        details: 'During my internship at ZenFuture Technologies (June–July 2026), I built and deployed ZentroShift — a full-stack ERM system across 6 AWS services: EC2 (server), S3 (assets), CloudFront (CDN), RDS (MySQL database), custom VPC (with public subnets, Internet Gateway, NAT Gateway, security groups), and CloudWatch (server health alarms). Features: 4-tier IAM role access control, location-based clock-in, attendance management, and REST APIs tested via Postman.'
+      },
+      {
+        id: 'proj_2',
+        title: 'Smart Solar Crossing',
+        category: 'embedded',
+        status: 'completed',
+        progress: 100,
+        image: 'project3.jpg',
+        tags: 'Arduino, IR Sensor, Solar, LDR',
+        summary: 'Arduino-powered pedestrian crossing alert system with solar panel, boost converter battery management, IR & LDR sensors.',
+        details: 'Designed and built a solar-powered zebra crossing alert system. Hardware: Arduino Uno, IR sensors (pedestrian detection), LDR (ambient light sensing), solar panel, boost converter (battery charge management), Li-ion battery pack, LEDs, and a buzzer. When IR sensors detect an approaching pedestrian in low-light conditions (LDR threshold), the system triggers audio-visual warnings for drivers while the solar boost converter keeps the battery charged.'
+      },
+      {
+        id: 'proj_3',
+        title: 'Developer Portfolio',
+        category: 'web',
+        status: 'ongoing',
+        progress: 85,
+        image: 'project1.jpg',
+        tags: 'HTML5, CSS3, JavaScript, Node.js',
+        summary: 'Responsive portfolio with full SEO, JSON-LD schema, admin CMS panel, and tech blog.',
+        details: 'Built a fully responsive developer portfolio with clean UI, JSON-LD structured data, Open Graph meta tags, GitHub Pages deployment, an admin CMS panel (REST API & localStorage-backed CRUD for projects, certs, blog posts), and a tech blog.'
+      }
+    ];
+
+    const defaultSkills = [
+      { name: 'AWS Cloud Services', icon: '☁️', pct: 90, category: 'Cloud' },
+      { name: 'Python & REST APIs', icon: '🐍', pct: 85, category: 'Backend' },
+      { name: 'MySQL & Amazon RDS', icon: '🛢️', pct: 82, category: 'Database' },
+      { name: 'Arduino & Embedded IoT', icon: '⚡', pct: 88, category: 'Hardware' },
+      { name: 'Git & Linux Administration', icon: '🐧', pct: 85, category: 'DevOps' },
+      { name: 'HTML5 / CSS3 / JS (ES6+)', icon: '🌐', pct: 92, category: 'Frontend' }
+    ];
+
+    const defaultBlogs = [
+      {
+        id: 'blog_1',
+        title: 'Building ZentroShift: Deploying ERM App Across 6 AWS Services',
+        category: 'AWS Cloud',
+        excerpt: 'Deep dive into VPC architecture, EC2 instance sizing, CloudFront CDN edge distribution, RDS MySQL setup, and CloudWatch alarm triggers built during my AWS Cloud internship at ZenFuture Technologies.',
+        body: 'During my AWS Cloud Internship at ZenFuture Technologies (June-July 2026), I architected and deployed ZentroShift — an enterprise resource management application across 6 production AWS services.',
+        date: '2026-07-28'
+      },
+      {
+        id: 'blog_2',
+        title: 'Designing Smart Solar Zebra Crossing with Arduino & IoT Sensors',
+        category: 'Embedded & IoT',
+        excerpt: 'Hardware engineering walkthrough: Combining IR sensors, LDR ambient light thresholding, solar boost converters, and Li-ion battery charging circuits for intelligent pedestrian safety.',
+        body: 'Road safety at unlit zebra crossings can be significantly improved with automated solar-powered sensing system.',
+        date: '2026-05-14'
+      }
+    ];
+
+    let certs = getStorage('custom_certs', defaultCerts);
+    let projects = getStorage('custom_projects', defaultProjects);
+    let skills = getStorage('custom_skills', defaultSkills);
+    let blogs = getStorage('custom_blog_posts', defaultBlogs);
+
     // Tab Switching
     document.querySelectorAll('.tab-link').forEach(link => {
       link.addEventListener('click', e => {
@@ -979,81 +1084,7 @@
       cropRect = null;
     });
 
-    // Default Certifications Data
-    const defaultCerts = [
-      {
-        id: 'cert_1',
-        title: 'AWS Cloud Engineer Intern',
-        org: 'ZenFuture Technologies',
-        date: 'ZF-INTERN-0026 · June–July 2026',
-        desc: 'Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.',
-        image: 'cert1.jpg'
-      },
-      {
-        id: 'cert_2',
-        title: 'AI Fluency Frameworks',
-        org: 'Anthropic',
-        date: 'Certified · 2025',
-        desc: 'Certified by Anthropic in AI frameworks, LLM system architecture, prompt engineering, and AI safety foundations.',
-        image: 'cert1.jpg'
-      },
-      {
-        id: 'cert_3',
-        title: 'Industry 4.0 & IIoT',
-        org: 'NPTEL · IIT Kharagpur',
-        date: 'Certified · 2024',
-        desc: 'Completed 12-week proctored NPTEL course on Industrial IoT funded by the Ministry of Education, Government of India.',
-        image: 'cert1.jpg'
-      },
-      {
-        id: 'cert_4',
-        title: 'Software Engineer Certificate',
-        org: 'HackerRank',
-        date: 'Role Certification (2024)',
-        desc: 'Passed HackerRank Software Engineer role certification — covering algorithms, data structures, and software development.',
-        image: 'cert1.jpg'
-      }
-    ];
-
-    // Default Projects Data
-    const defaultProjects = [
-      {
-        id: 'proj_1',
-        title: 'ZentroShift ERM App',
-        category: 'cloud',
-        status: 'completed',
-        progress: 100,
-        image: 'project2.jpg',
-        tags: 'EC2, S3, RDS, CloudFront, VPC',
-        summary: 'Full-stack ERM system deployed across 6 AWS services with custom VPC, IAM roles, and CloudWatch monitoring.',
-        details: 'During my internship at ZenFuture Technologies (June–July 2026), I built and deployed ZentroShift — a full-stack ERM system across 6 AWS services: EC2 (server), S3 (assets), CloudFront (CDN), RDS (MySQL database), custom VPC (with public subnets, Internet Gateway, NAT Gateway, security groups), and CloudWatch (server health alarms). Features: 4-tier IAM role access control, location-based clock-in, attendance management, and REST APIs tested via Postman.'
-      },
-      {
-        id: 'proj_2',
-        title: 'Smart Solar Crossing',
-        category: 'embedded',
-        status: 'completed',
-        progress: 100,
-        image: 'project3.jpg',
-        tags: 'Arduino, IR Sensor, Solar, LDR',
-        summary: 'Arduino-powered pedestrian crossing alert system with solar panel, boost converter battery management, IR & LDR sensors.',
-        details: 'Designed and built a solar-powered zebra crossing alert system. Hardware: Arduino Uno, IR sensors (pedestrian detection), LDR (ambient light sensing), solar panel, boost converter (battery charge management), Li-ion battery pack, LEDs, and a buzzer. When IR sensors detect an approaching pedestrian in low-light conditions (LDR threshold), the system triggers audio-visual warnings for drivers while the solar boost converter keeps the battery charged.'
-      },
-      {
-        id: 'proj_3',
-        title: 'Developer Portfolio',
-        category: 'web',
-        status: 'ongoing',
-        progress: 85,
-        image: 'project1.jpg',
-        tags: 'HTML5, CSS3, JavaScript, Node.js',
-        summary: 'Responsive portfolio with full SEO, JSON-LD schema, admin CMS panel, and tech blog.',
-        details: 'Built a fully responsive developer portfolio with clean UI, JSON-LD structured data, Open Graph meta tags, GitHub Pages deployment, an admin CMS panel (REST API & localStorage-backed CRUD for projects, certs, blog posts), and a tech blog.'
-      }
-    ];
-
     // Certs CRUD
-    let certs = getStorage('custom_certs', defaultCerts);
     function renderCerts() {
       if (!Array.isArray(certs) || certs.length === 0) certs = defaultCerts;
       const list = $('cert-list');
@@ -1157,7 +1188,6 @@
     });
 
     // Projects CRUD
-    let projects = getStorage('custom_projects', defaultProjects);
     function renderProjects() {
       if (!Array.isArray(projects) || projects.length === 0) projects = defaultProjects;
       const list = $('proj-list');
@@ -1273,16 +1303,6 @@
 
 
     // Skills CRUD
-    const defaultSkills = [
-      { name: 'AWS Cloud (EC2, S3, CloudFront, IAM, RDS, VPC, CloudWatch, CLI)', icon: '☁️', pct: 92, category: 'Cloud' },
-      { name: 'Network Architecture (VPC, Subnets, Route Tables, Security Groups)', icon: '🌐', pct: 88, category: 'Network' },
-      { name: 'Programming (Python, C, Java, JavaScript, REST APIs)', icon: '💻', pct: 85, category: 'Code' },
-      { name: 'Databases & Storage (MySQL, Amazon RDS, SQL)', icon: '🗄️', pct: 84, category: 'Database' },
-      { name: 'Embedded Systems & IoT (Arduino, IR, LDR, Solar)', icon: '🔌', pct: 86, category: 'IoT' },
-      { name: 'Dev Tools (Git, GitHub, Linux Bash, Postman, AWS CLI)', icon: '🛠️', pct: 90, category: 'Tools' }
-    ];
-    let skills = getStorage('custom_skills', defaultSkills);
-    
     function renderSkills() {
       const tb = $('skill-tbody');
       tb.innerHTML = '';
@@ -1362,26 +1382,6 @@
     });
 
     // Blog CRUD
-    const defaultBlogs = [
-      {
-        id: 'blog_1',
-        title: 'Building ZentroShift: Deploying ERM App Across 6 AWS Services',
-        category: 'AWS Cloud',
-        excerpt: 'Deep dive into VPC architecture, EC2 instance sizing, CloudFront CDN edge distribution, RDS MySQL setup, and CloudWatch alarm triggers built during my AWS Cloud internship at ZenFuture Technologies.',
-        body: 'During my AWS Cloud Internship at ZenFuture Technologies (June-July 2026), I architected and deployed ZentroShift — an enterprise resource management application across 6 production AWS services.',
-        date: '2026-07-28'
-      },
-      {
-        id: 'blog_2',
-        title: 'Designing Smart Solar Zebra Crossing with Arduino & IoT Sensors',
-        category: 'Embedded & IoT',
-        excerpt: 'Hardware engineering walkthrough: Combining IR sensors, LDR ambient light thresholding, solar boost converters, and Li-ion battery charging circuits for intelligent pedestrian safety.',
-        body: 'Road safety at unlit zebra crossings can be significantly improved with automated solar-powered sensing system.',
-        date: '2026-05-14'
-      }
-    ];
-
-    let blogs = getStorage('custom_blog_posts', defaultBlogs);
     function renderBlogs() {
       if (!Array.isArray(blogs) || blogs.length === 0) blogs = defaultBlogs;
       const list = $('blog-list');
