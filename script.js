@@ -773,6 +773,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
     }
+
+    var customCopy = localStorage.getItem('custom_footer_copy');
+    if (customCopy && customCopy.trim() !== '') {
+      var copyEl = document.getElementById('footerCopyText');
+      if (copyEl) copyEl.innerHTML = customCopy;
+    }
   }
 
   renderBio();
