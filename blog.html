@@ -10,17 +10,29 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1117'/%3E%3Ctext x='16' y='22' font-size='18' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%2364ffda'%3EB%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=19.0">
+<link rel="stylesheet" href="style.css?v=20.0">
 <script>
-window.toggleTheme = function() {
+var themeToggleLock = false;
+window.toggleTheme = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+  }
+  if (themeToggleLock) return;
+  themeToggleLock = true;
+  setTimeout(function() { themeToggleLock = false; }, 300);
+
   var cur = document.documentElement.getAttribute('data-theme') || 'dark';
   var next = cur === 'dark' ? 'light' : 'dark';
+
   document.documentElement.setAttribute('data-theme', next);
   if (document.body) document.body.setAttribute('data-theme', next);
   try { localStorage.setItem('site_theme', next); } catch(e) {}
+
   document.querySelectorAll('.glossy-theme-btn, #themeToggle').forEach(function(b) {
     b.setAttribute('title', next === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
   });
+
   if (typeof window.showToast === 'function') {
     window.showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
   }

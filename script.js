@@ -8,17 +8,31 @@ window.showToast = function(txt) {
   t._timer = setTimeout(function () { t.classList.remove('show'); }, 3200);
 };
 
-/* ── Global Theme Toggle (Immediate & Always Available) ── */
-window.toggleTheme = function() {
+/* ── Global Theme Toggle (Immediate & Always Available with Debounce Guard) ── */
+var themeToggleLock = false;
+window.toggleTheme = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+  }
+  if (themeToggleLock) return;
+  themeToggleLock = true;
+  setTimeout(function() { themeToggleLock = false; }, 300);
+
   var cur = document.documentElement.getAttribute('data-theme') || 'dark';
   var next = cur === 'dark' ? 'light' : 'dark';
+
   document.documentElement.setAttribute('data-theme', next);
   if (document.body) document.body.setAttribute('data-theme', next);
   try { localStorage.setItem('site_theme', next); } catch(e) {}
+
   document.querySelectorAll('#themeToggle, .theme-toggle-btn, .glossy-theme-btn').forEach(function(btn) {
     btn.setAttribute('title', next === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
   });
-  window.showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
+
+  if (typeof window.showToast === 'function') {
+    window.showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
+  }
 };
 
 (function () {
@@ -70,10 +84,6 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('a[href^="mailto:"]').forEach(function(a) { a.href = 'mailto:' + em; });
     }
   })();
-
-  document.querySelectorAll('#themeToggle, .theme-toggle-btn, .glossy-theme-btn').forEach(function(btn) {
-    btn.addEventListener('click', window.toggleTheme);
-  });
 
   /* ────────────────────────────────────────
      CMS: Profile avatar / name from admin

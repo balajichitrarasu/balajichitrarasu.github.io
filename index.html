@@ -20,17 +20,29 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=19.0">
+<link rel="stylesheet" href="style.css?v=20.0">
 <script>
-window.toggleTheme = function() {
+var themeToggleLock = false;
+window.toggleTheme = function(e) {
+  if (e) {
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+  }
+  if (themeToggleLock) return;
+  themeToggleLock = true;
+  setTimeout(function() { themeToggleLock = false; }, 300);
+
   var cur = document.documentElement.getAttribute('data-theme') || 'dark';
   var next = cur === 'dark' ? 'light' : 'dark';
+
   document.documentElement.setAttribute('data-theme', next);
   if (document.body) document.body.setAttribute('data-theme', next);
   try { localStorage.setItem('site_theme', next); } catch(e) {}
+
   document.querySelectorAll('.glossy-theme-btn, #themeToggle').forEach(function(b) {
     b.setAttribute('title', next === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
   });
+
   if (typeof window.showToast === 'function') {
     window.showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
   }
@@ -729,8 +741,8 @@ window.toggleTheme = function() {
 <script>
   window.PORTFOLIO_API_URL = "https://balaji-portfolio-backend.onrender.com";
 </script>
-<script src="api.js?v=19.0"></script>
-<script src="script.js?v=19.0"></script>
+<script src="api.js?v=20.0"></script>
+<script src="script.js?v=20.0"></script>
 
 <!-- COMMAND PALETTE MODAL (CTRL+K) -->
 <div id="cmdPalette" class="cmd-modal" role="dialog" aria-modal="true" style="display:none;">
