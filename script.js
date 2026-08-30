@@ -18,6 +18,37 @@
 document.addEventListener('DOMContentLoaded', function () {
 
   /* ────────────────────────────────────────
+     DYNAMIC RESUME & SOCIAL LINKS SYNC CONTROLLER
+  ─────────────────────────────────────────── */
+  (function syncLinks() {
+    var rData = localStorage.getItem('custom_resume_data');
+    var rUrl = localStorage.getItem('custom_resume');
+    var rTarget = rData || rUrl;
+    if (rTarget) {
+      document.querySelectorAll('a[href*="resume.pdf"], a.btn-primary[download], #resumeBtn').forEach(function(a) {
+        a.href = rTarget;
+        a.target = '_blank';
+        if (rData && rData.indexOf('data:') === 0) a.download = 'Balaji_Chitrarasu_Resume.pdf';
+      });
+    }
+
+    var gh = localStorage.getItem('custom_github');
+    if (gh) {
+      document.querySelectorAll('a[href*="github.com"]').forEach(function(a) { a.href = gh; });
+    }
+
+    var li = localStorage.getItem('custom_linkedin');
+    if (li) {
+      document.querySelectorAll('a[href*="linkedin.com"]').forEach(function(a) { a.href = li; });
+    }
+
+    var em = localStorage.getItem('custom_email');
+    if (em) {
+      document.querySelectorAll('a[href^="mailto:"]').forEach(function(a) { a.href = 'mailto:' + em; });
+    }
+  })();
+
+  /* ────────────────────────────────────────
      LIGHT / DARK THEME TOGGLE (Sun / Moon)
   ─────────────────────────────────────────── */
   var themeBtn = document.getElementById('themeToggle');

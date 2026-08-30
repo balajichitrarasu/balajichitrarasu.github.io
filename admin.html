@@ -458,6 +458,21 @@
               <textarea id="blog-excerpt" class="form-control" rows="2"></textarea>
             </div>
             <div class="form-group">
+              <label>Cover / Header Image Upload</label>
+              <input type="file" id="blog-image-file" class="form-control" accept="image/*">
+              <input type="text" id="blog-image" class="form-control" placeholder="Or enter Image URL directly" style="margin-top: 0.5rem;">
+            </div>
+            <div class="form-group">
+              <label>Attach PDF / Technical Report / Document (PDF / DOCX)</label>
+              <input type="file" id="blog-pdf-file" class="form-control" accept="application/pdf,.doc,.docx">
+              <input type="text" id="blog-pdf" class="form-control" placeholder="Or enter Document PDF URL directly" style="margin-top: 0.5rem;">
+              <div id="blog-pdf-status" style="margin-top:0.3rem; font-size:0.78rem; color:var(--teal);"></div>
+            </div>
+            <div class="form-group">
+              <label>Report Diagrams &amp; Screenshots Gallery (Comma separated URLs)</label>
+              <textarea id="blog-gallery" class="form-control" rows="2" placeholder="e.g. diagram1.png, chart2.png"></textarea>
+            </div>
+            <div class="form-group">
               <label>Body</label>
               <textarea id="blog-body" class="form-control" rows="8"></textarea>
             </div>
@@ -509,6 +524,12 @@
             <div class="form-group">
               <label>LinkedIn URL</label>
               <input type="url" id="set-linkedin" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Upload New Resume Document (PDF / DOCX)</label>
+              <input type="file" id="set-resume-file" class="form-control" accept="application/pdf,.doc,.docx">
+              <input type="text" id="set-resume" class="form-control" placeholder="Or enter Resume URL directly (e.g. resume.pdf)" style="margin-top: 0.5rem;">
+              <div id="resume-status" style="margin-top:0.4rem; font-size:0.78rem; color:var(--teal);"></div>
             </div>
             <hr style="border-color:var(--border); margin:1.5rem 0;">
             <h3 style="margin-bottom:1rem; color:var(--teal);">Section Visibility Control (Toggle ON/OFF)</h3>
@@ -1154,6 +1175,33 @@
       loadAnalytics();
     }
     
+    if ($('blog-image-file')) {
+      $('blog-image-file').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          $('blog-image').value = ev.target.result;
+          showToast('Blog cover image uploaded!');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    if ($('blog-pdf-file')) {
+      $('blog-pdf-file').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          $('blog-pdf').value = ev.target.result;
+          if ($('blog-pdf-status')) $('blog-pdf-status').innerText = '📄 Document Attached: ' + file.name;
+          showToast('Blog PDF Report / Document attached!');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     $('blog-form').addEventListener('submit', e => {
       e.preventDefault();
       const id = $('blog-id').value || generateId();
@@ -1163,6 +1211,9 @@
         category: $('blog-cat').value,
         excerpt: $('blog-excerpt').value,
         body: $('blog-body').value,
+        image: $('blog-image') ? $('blog-image').value : '',
+        pdf: $('blog-pdf') ? $('blog-pdf').value : '',
+        gallery: $('blog-gallery') ? $('blog-gallery').value : '',
         date: new Date().toISOString().split('T')[0]
       };
       const idx = blogs.findIndex(x => String(x.id) === String(id));
@@ -1173,6 +1224,7 @@
       $('blog-id').value = '';
       $('blog-form-title').innerText = 'Write Post';
       $('blog-cancel').style.display = 'none';
+      if ($('blog-pdf-status')) $('blog-pdf-status').innerText = '';
       showToast('Post published!');
     });
 
@@ -1181,9 +1233,12 @@
       if(!b) return;
       $('blog-id').value = b.id;
       $('blog-title').value = b.title || '';
-      $('blog-cat').value = b.category || '';
+      $('blog-cat').value = b.category || b.cat || '';
       $('blog-excerpt').value = b.excerpt || '';
       $('blog-body').value = b.body || '';
+      if ($('blog-image')) $('blog-image').value = b.image || b.img || '';
+      if ($('blog-pdf')) $('blog-pdf').value = b.pdf || b.pdfUrl || '';
+      if ($('blog-gallery')) $('blog-gallery').value = b.gallery || '';
       $('blog-form-title').innerText = 'Edit Post';
       $('blog-cancel').style.display = 'inline-block';
       window.scrollTo(0, $('blog').offsetTop);
@@ -1203,12 +1258,32 @@
       $('blog-cancel').style.display = 'none';
     });
 
+    if ($('set-resume-file')) {
+      $('set-resume-file').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          localStorage.setItem('custom_resume_data', ev.target.result);
+          localStorage.setItem('custom_resume', file.name);
+          if ($('set-resume')) $('set-resume').value = file.name;
+          if ($('resume-status')) $('resume-status').innerText = '📄 Resume Uploaded: ' + file.name + ' (Live on site!)';
+          showToast('New Resume uploaded! Live on site download button.');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     // Settings
     function loadSettings() {
       $('set-email').value = localStorage.getItem('custom_email') || '';
       $('set-phone').value = localStorage.getItem('custom_phone') || '';
       $('set-github').value = localStorage.getItem('custom_github') || '';
       $('set-linkedin').value = localStorage.getItem('custom_linkedin') || '';
+      if ($('set-resume')) $('set-resume').value = localStorage.getItem('custom_resume') || '';
+
+      const resData = localStorage.getItem('custom_resume_data');
+      if (resData && $('resume-status')) $('resume-status').innerText = '📄 Resume Document Attached & Saved';
 
       $('toggle-recs').checked = localStorage.getItem('hide_recommendations') !== 'true';
       $('toggle-events').checked = localStorage.getItem('hide_events') !== 'true';

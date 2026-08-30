@@ -250,12 +250,42 @@ function renderArticles() {
 }
 
 function openArticle(id) {
-  var a = articles.find(function(x) { return x.id == id; });
+  var a = articles.find(function(x) { return String(x.id) === String(id); });
   if (!a) return;
-  document.getElementById('aCat').textContent = a.cat.toUpperCase() + ' · ' + (a.date || '2026');
+  document.getElementById('aCat').textContent = (a.category || a.cat || 'TECH').toUpperCase() + ' · ' + (a.date || '2026');
   document.getElementById('aTitle').textContent = a.title;
   document.getElementById('aMeta').textContent = (a.time || '5 min') + ' read';
-  document.getElementById('aBody').innerHTML = a.body;
+
+  var bodyHtml = a.body || '';
+  
+  /* Add cover image if exists */
+  var cover = a.image || a.img;
+  if (cover) {
+    bodyHtml = '<img src="' + cover + '" style="width:100%; max-height:300px; object-fit:cover; border-radius:8px; margin-bottom:1.2rem; border:1px solid var(--border);">' + bodyHtml;
+  }
+
+  /* Add PDF attachment button if exists */
+  var pdf = a.pdf || a.pdfUrl;
+  if (pdf) {
+    bodyHtml += '<div style="margin-top:1.5rem; padding:1rem; background:rgba(100,255,218,0.05); border:1px solid rgba(100,255,218,0.2); border-radius:8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">' +
+      '<div style="color:var(--teal); font-weight:600; font-size:0.9rem;">📄 Attached Technical Report / Document</div>' +
+      '<a href="' + pdf + '" target="_blank" download class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">📥 Download / View PDF Report</a>' +
+    '</div>';
+  }
+
+  /* Add screenshots/diagrams gallery if exists */
+  if (a.gallery) {
+    var imgs = a.gallery.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+    if (imgs.length) {
+      bodyHtml += '<h3 style="margin-top:1.5rem;">Report Screenshots &amp; Diagrams</h3><div style="display:flex; gap:0.5rem; overflow-x:auto; margin-top:0.5rem; padding-bottom:0.5rem;">' +
+        imgs.map(function(src) {
+          return '<img src="' + src + '" style="height:140px; border-radius:6px; object-fit:cover; border:1px solid var(--border); cursor:pointer;" onclick="window.open(\'' + src + '\',\'_blank\')">';
+        }).join('') +
+      '</div>';
+    }
+  }
+
+  document.getElementById('aBody').innerHTML = bodyHtml;
   var modal = document.getElementById('articleModal');
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
