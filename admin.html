@@ -1365,37 +1365,42 @@
     let cropStart = null;
     let cropRect = null;
     const canvas = $('crop-canvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas ? canvas.getContext('2d') : null;
     
-    $('cert-file').addEventListener('change', e => {
-      const file = e.target.files[0];
-      if (!file) return;
+    if ($('cert-file')) {
+      $('cert-file').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
 
-      if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
-        const reader = new FileReader();
-        reader.onload = ev => {
-          $('cert-image').value = ev.target.result;
-          $('crop-container').style.display = 'none';
-          $('crop-preview').style.display = 'none';
-          if ($('pdf-preview')) $('pdf-preview').style.display = 'block';
-          showToast('PDF Certificate attached!');
-        };
-        reader.readAsDataURL(file);
-      } else {
-        const reader = new FileReader();
-        reader.onload = ev => {
-          $('cert-image').value = ev.target.result;
-          if ($('pdf-preview')) $('pdf-preview').style.display = 'none';
-          $('crop-preview').src = ev.target.result;
-          $('crop-preview').style.display = 'block';
-          $('crop-container').style.display = 'none';
-          showToast('Image uploaded successfully!');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+        if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+          const reader = new FileReader();
+          reader.onload = ev => {
+            if ($('cert-image')) $('cert-image').value = ev.target.result;
+            if ($('crop-container')) $('crop-container').style.display = 'none';
+            if ($('crop-preview')) $('crop-preview').style.display = 'none';
+            if ($('pdf-preview')) $('pdf-preview').style.display = 'block';
+            showToast('PDF Certificate attached!');
+          };
+          reader.readAsDataURL(file);
+        } else {
+          const reader = new FileReader();
+          reader.onload = ev => {
+            if ($('cert-image')) $('cert-image').value = ev.target.result;
+            if ($('pdf-preview')) $('pdf-preview').style.display = 'none';
+            if ($('crop-preview')) {
+              $('crop-preview').src = ev.target.result;
+              $('crop-preview').style.display = 'block';
+            }
+            if ($('crop-container')) $('crop-container').style.display = 'none';
+            showToast('Image uploaded successfully!');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
 
     function drawCropCanvas() {
+      if (!ctx || !canvas) return;
       ctx.clearRect(0,0, canvas.width, canvas.height);
       ctx.drawImage(cropImg, 0, 0, canvas.width, canvas.height);
       if(cropRect) {
@@ -1415,49 +1420,6 @@
       }
     }
 
-    canvas.addEventListener('mousedown', e => {
-      const rect = canvas.getBoundingClientRect();
-      cropStart = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-      cropRect = { x: cropStart.x, y: cropStart.y, w: 0, h: 0 };
-    });
-    canvas.addEventListener('mousemove', e => {
-      if(!cropStart) return;
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      cropRect.w = x - cropStart.x;
-      cropRect.h = y - cropStart.y;
-      drawCropCanvas();
-    });
-    canvas.addEventListener('mouseup', () => {
-      if(cropRect) {
-        if(cropRect.w < 0) { cropRect.x += cropRect.w; cropRect.w = Math.abs(cropRect.w); }
-        if(cropRect.h < 0) { cropRect.y += cropRect.h; cropRect.h = Math.abs(cropRect.h); }
-      }
-      cropStart = null;
-    });
-
-    $('btn-crop').addEventListener('click', () => {
-      if(!cropRect || cropRect.w === 0 || cropRect.h === 0) return;
-      const scaleX = cropImg.width / canvas.width;
-      const scaleY = cropImg.height / canvas.height;
-      
-      const tempCanvas = document.createElement('canvas');
-      tempCanvas.width = cropRect.w;
-      tempCanvas.height = cropRect.h;
-      const tCtx = tempCanvas.getContext('2d');
-      
-      tCtx.drawImage(cropImg, 
-        cropRect.x * scaleX, cropRect.y * scaleY, cropRect.w * scaleX, cropRect.h * scaleY,
-        0, 0, cropRect.w, cropRect.h
-      );
-      
-      const b64 = tempCanvas.toDataURL('image/jpeg', 0.85);
-      $('cert-image').value = b64;
-      $('crop-preview').src = b64;
-      $('crop-preview').style.display = 'block';
-      $('crop-container').style.display = 'none';
-      cropRect = null;
     });
 
     // Certs CRUD
