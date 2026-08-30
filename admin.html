@@ -245,7 +245,7 @@
         <li><a class="tab-link" data-tab="database">💾 Database</a></li>
         <li><a class="tab-link" data-tab="settings">⚙ Settings</a></li>
         <li><a class="tab-link" data-tab="logs">🛡️ Access &amp; IP Logs</a></li>
-        <li style="margin-top:1.5rem; border-top:1px solid var(--border); padding-top:0.75rem;"><a onclick="adminLogout()" style="color:var(--rose); cursor:pointer;">🔒 Logout Session</a></li>
+        <li style="margin-top:1.5rem; border-top:1px solid var(--border); padding-top:0.75rem;"><a id="sidebar-logout-btn" onclick="adminLogout()" style="color:var(--rose); cursor:pointer;">🔒 Logout Session</a></li>
       </ul>
     </aside>
 
@@ -695,9 +695,27 @@
     const DEFAULT_USER = 'admin';
     const DEFAULT_PASS_PLAIN = 'Cbifire948@';
 
+    window.showLoginModal = function() {
+      const modal = document.getElementById('loginModal');
+      const container = document.querySelector('.admin-container');
+      const btn = document.getElementById('nav-logout-btn');
+      if (modal) modal.style.display = 'flex';
+      if (container) container.style.display = 'none';
+      if (btn) btn.style.display = 'none';
+    };
+
+    window.hideLoginModal = function() {
+      const modal = document.getElementById('loginModal');
+      const container = document.querySelector('.admin-container');
+      const btn = document.getElementById('nav-logout-btn');
+      if (modal) modal.style.display = 'none';
+      if (container) container.style.display = 'flex';
+      if (btn) btn.style.display = 'inline-block';
+    };
+
     window.togglePasswordVisibility = function() {
-      var p = document.getElementById('login-password');
-      var b = document.getElementById('toggle-pass-btn');
+      const p = document.getElementById('login-password');
+      const b = document.getElementById('toggle-pass-btn');
       if (!p) return;
       if (p.type === 'password') {
         p.type = 'text';
@@ -708,8 +726,22 @@
       }
     };
 
+    window.adminLogout = function() {
+      sessionStorage.removeItem('admin_session');
+      localStorage.removeItem('admin_session');
+      const passEl = document.getElementById('login-password');
+      const userEl = document.getElementById('login-username');
+      if (passEl) passEl.value = '';
+      if (userEl) userEl.value = '';
+      window.showLoginModal();
+      if (typeof showToast === 'function') showToast('🔒 Logged out securely.');
+    };
+
     window.handleAdminLogin = function(e) {
-      if (e && e.preventDefault) e.preventDefault();
+      if (e) {
+        if (e.preventDefault) e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
+      }
       
       const userEl = document.getElementById('login-username');
       const passEl = document.getElementById('login-password');
@@ -727,19 +759,14 @@
 
       if (isUserValid && isPassValid && enteredUser !== '' && enteredPass !== '') {
         if (errEl) errEl.style.display = 'none';
-        const modal = document.getElementById('loginModal');
-        const container = document.querySelector('.admin-container');
-        if (modal) modal.style.display = 'none';
-        if (container) container.style.display = 'flex';
-        const btn = document.getElementById('nav-logout-btn');
-        if (btn) btn.style.display = 'inline-block';
-
+        
         if (remEl && remEl.checked) {
           localStorage.setItem('admin_session', 'authenticated_admin_2026');
         } else {
           sessionStorage.setItem('admin_session', 'authenticated_admin_2026');
         }
 
+        window.hideLoginModal();
         if (typeof showToast === 'function') showToast('🔓 Authentication Successful! Welcome, Admin.');
         if (typeof renderCerts === 'function') renderCerts();
         if (typeof renderProjects === 'function') renderProjects();
@@ -754,6 +781,17 @@
         if (typeof showToast === 'function') showToast('❌ Access Denied: Invalid Credentials!');
       }
       return false;
+    };
+
+    window.checkAuthSession = function() {
+      const sessionToken = sessionStorage.getItem('admin_session') || localStorage.getItem('admin_session');
+      if (sessionToken === 'authenticated_admin_2026') {
+        window.hideLoginModal();
+        return true;
+      } else {
+        window.showLoginModal();
+        return false;
+      }
     };
 
     // Utility functions
@@ -1942,16 +1980,9 @@
         .catch(() => {});
     }
 
-    window.adminLogout = () => {
-      sessionStorage.removeItem('admin_session');
-      localStorage.removeItem('admin_session');
-      showLoginModal();
-      showToast('🔒 Logged out securely.');
-    };
-
     // Init
     function initAll() {
-      const isAuth = checkAuthSession();
+      const isAuth = window.checkAuthSession();
       loadAnalytics();
       loadProfile();
       renderCerts();
@@ -1966,13 +1997,19 @@
     document.addEventListener('DOMContentLoaded', () => {
       initAll();
       const form = $('admin-login-form');
-      if (form) {
-        form.addEventListener('submit', handleAdminLogin);
-      }
+      if (form) form.addEventListener('submit', window.handleAdminLogin);
+
+      const loginBtn = $('login-submit-btn');
+      if (loginBtn) loginBtn.addEventListener('click', window.handleAdminLogin);
+
       const toggleBtn = $('toggle-pass-btn');
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', togglePasswordVisibility);
-      }
+      if (toggleBtn) toggleBtn.addEventListener('click', window.togglePasswordVisibility);
+
+      const navLogoutBtn = $('nav-logout-btn');
+      if (navLogoutBtn) navLogoutBtn.addEventListener('click', window.adminLogout);
+
+      const sideLogoutBtn = $('sidebar-logout-btn');
+      if (sideLogoutBtn) sideLogoutBtn.addEventListener('click', window.adminLogout);
     });
   </script>
 </body>
