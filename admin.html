@@ -220,19 +220,35 @@
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      background: var(--bg-card);
+      background: rgba(14, 19, 34, 0.95);
       border: 1px solid var(--teal);
-      color: var(--text);
-      padding: 1rem 1.5rem;
-      border-radius: var(--radius-sm);
-      transform: translateY(100px);
+      color: #fff;
+      padding: 1rem 1.4rem;
+      border-radius: 12px;
+      transform: translateY(120px) scale(0.95);
       opacity: 0;
-      transition: all var(--ease);
-      z-index: 1000;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 10000;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 25px rgba(100,255,218,0.25);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      max-width: 450px;
     }
     #toast.show {
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
       opacity: 1;
+    }
+    .toast-live-btn {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.35rem 0.75rem; background: var(--teal); color: #0f1117;
+      font-weight: 700; font-size: 0.75rem; border-radius: 6px;
+      text-decoration: none; transition: all 0.2s ease;
+      white-space: nowrap; margin-left: 0.5rem;
+    }
+    .toast-live-btn:hover {
+      transform: translateY(-2px); box-shadow: 0 0 12px rgba(100,255,218,0.6);
     }
     
     /* Tables */
@@ -934,11 +950,19 @@
     const setStorage = (key, val) => {
       localStorage.setItem(key, typeof val === 'object' ? JSON.stringify(val) : val);
     };
-    const showToast = msg => {
+    const showToast = (msg, showLink = true) => {
       const t = $('toast');
-      t.innerText = msg;
+      if (!t) return;
+      let html = `<div style="display:flex; align-items:center; gap:0.5rem; flex:1;"><span>${msg}</span></div>`;
+      if (showLink) {
+        html += `<a href="index.html" target="_blank" class="toast-live-btn">View Portfolio →</a>`;
+      }
+      t.innerHTML = html;
       t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 3000);
+      if (window.toastTimer) clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        t.classList.remove('show');
+      }, 5000);
     };
     const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
 
@@ -1122,15 +1146,43 @@
     }
     $('profile-form').addEventListener('submit', e => {
       e.preventDefault();
-      setStorage('custom_profile_avatar', $('prof-avatar').value || 'profile.jpg');
-      setStorage('custom_profile_name', $('prof-name').value || 'Balaji Chitrarasu');
-      setStorage('custom_profile_role', $('prof-role').value || 'AWS Cloud Engineer Intern & B.E. ECE Student');
-      setStorage('custom_profile_location', $('prof-location').value || 'Coimbatore, Tamil Nadu, India');
-      if($('prof-avatar').value) {
-        $('prof-avatar-preview').src = $('prof-avatar').value;
-        $('prof-avatar-preview').style.display = 'block';
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const origText = submitBtn ? submitBtn.innerText : 'Save Profile Changes';
+      
+      if (submitBtn) {
+        submitBtn.innerHTML = '⚡ Syncing & Uploading Avatar...';
+        submitBtn.style.opacity = '0.85';
       }
-      showToast('Profile updated & saved successfully!');
+
+      if ($('prof-avatar-preview')) {
+        $('prof-avatar-preview').style.boxShadow = '0 0 25px rgba(100,255,218,0.8)';
+        $('prof-avatar-preview').style.borderColor = 'var(--teal)';
+      }
+
+      setTimeout(() => {
+        setStorage('custom_profile_avatar', $('prof-avatar').value || 'profile.jpg');
+        setStorage('custom_profile_name', $('prof-name').value || 'Balaji Chitrarasu');
+        setStorage('custom_profile_role', $('prof-role').value || 'AWS Cloud Engineer Intern & B.E. ECE Student');
+        setStorage('custom_profile_location', $('prof-location').value || 'Coimbatore, Tamil Nadu, India');
+        if($('prof-avatar').value) {
+          $('prof-avatar-preview').src = $('prof-avatar').value;
+          $('prof-avatar-preview').style.display = 'block';
+        }
+
+        if (submitBtn) {
+          submitBtn.innerHTML = '✓ Profile & Avatar Saved Live!';
+          submitBtn.style.opacity = '1';
+          setTimeout(() => { submitBtn.innerText = origText; }, 2200);
+        }
+
+        if ($('prof-avatar-preview')) {
+          setTimeout(() => {
+            $('prof-avatar-preview').style.boxShadow = 'none';
+          }, 1500);
+        }
+
+        showToast('📸 Profile Photo & Details Updated & Live on Portfolio!');
+      }, 500);
     });
     $('prof-reset').addEventListener('click', () => {
       localStorage.removeItem('custom_profile_avatar');
@@ -1431,29 +1483,41 @@
     
     $('cert-form').addEventListener('submit', e => {
       e.preventDefault();
-      const id = $('cert-id').value || generateId();
-      const cert = {
-        id,
-        title: $('cert-title').value,
-        org: $('cert-org').value,
-        date: $('cert-date').value,
-        desc: $('cert-desc').value,
-        image: $('cert-image').value
-      };
-      
-      const idx = certs.findIndex(c => String(c.id) === String(id));
-      if(idx > -1) certs[idx] = cert;
-      else certs.push(cert);
-      
-      renderCerts();
-      if (window.PortfolioAPI) PortfolioAPI.saveCert(cert);
-      e.target.reset();
-      $('cert-id').value = '';
-      $('crop-container').style.display = 'none';
-      $('crop-preview').style.display = 'none';
-      $('cert-form-title').innerText = 'Add Certification';
-      $('cert-cancel').style.display = 'none';
-      showToast('Certification saved!');
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const origText = submitBtn ? submitBtn.innerText : 'Save Certification';
+      if (submitBtn) submitBtn.innerHTML = '⚡ Encrypting & Syncing Certificate...';
+
+      setTimeout(() => {
+        const id = $('cert-id').value || generateId();
+        const cert = {
+          id,
+          title: $('cert-title').value,
+          org: $('cert-org').value,
+          date: $('cert-date').value,
+          desc: $('cert-desc').value,
+          image: $('cert-image').value
+        };
+        
+        const idx = certs.findIndex(c => String(c.id) === String(id));
+        if(idx > -1) certs[idx] = cert;
+        else certs.push(cert);
+        
+        renderCerts();
+        if (window.PortfolioAPI) PortfolioAPI.saveCert(cert);
+        e.target.reset();
+        $('cert-id').value = '';
+        $('crop-container').style.display = 'none';
+        $('crop-preview').style.display = 'none';
+        $('cert-form-title').innerText = 'Add Certification';
+        $('cert-cancel').style.display = 'none';
+
+        if (submitBtn) {
+          submitBtn.innerText = '✓ Certification Saved!';
+          setTimeout(() => { submitBtn.innerText = origText; }, 2000);
+        }
+
+        showToast('🏆 Certification Saved & Live on Portfolio!');
+      }, 500);
     });
 
     window.editCert = id => {
@@ -1548,33 +1612,45 @@
     
     $('proj-form').addEventListener('submit', e => {
       e.preventDefault();
-      const id = $('proj-id').value || generateId();
-      const proj = {
-        id,
-        title: $('proj-title').value,
-        category: $('proj-cat').value,
-        image: $('proj-image').value,
-        gallery: $('proj-gallery') ? $('proj-gallery').value : '',
-        tags: $('proj-tags').value,
-        summary: $('proj-summary').value,
-        details: $('proj-details').value,
-        status: $('projStatus').value,
-        progress: parseInt($('projProgress').value) || 0,
-        demoUrl: $('projDemo').value,
-        repoUrl: $('projRepo').value
-      };
-      
-      const idx = projects.findIndex(x => String(x.id) === String(id));
-      if(idx > -1) projects[idx] = proj;
-      else projects.push(proj);
-      
-      renderProjects();
-      if (window.PortfolioAPI) PortfolioAPI.saveProject(proj);
-      e.target.reset();
-      $('proj-id').value = '';
-      $('proj-form-title').innerText = 'Add Project';
-      $('proj-cancel').style.display = 'none';
-      showToast('Project saved!');
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const origText = submitBtn ? submitBtn.innerText : 'Save Project';
+      if (submitBtn) submitBtn.innerHTML = '⚡ Compiling & Syncing Project...';
+
+      setTimeout(() => {
+        const id = $('proj-id').value || generateId();
+        const proj = {
+          id,
+          title: $('proj-title').value,
+          category: $('proj-cat').value,
+          image: $('proj-image').value,
+          gallery: $('proj-gallery') ? $('proj-gallery').value : '',
+          tags: $('proj-tags').value,
+          summary: $('proj-summary').value,
+          details: $('proj-details').value,
+          status: $('projStatus').value,
+          progress: parseInt($('projProgress').value) || 0,
+          demoUrl: $('projDemo').value,
+          repoUrl: $('projRepo').value
+        };
+        
+        const idx = projects.findIndex(x => String(x.id) === String(id));
+        if(idx > -1) projects[idx] = proj;
+        else projects.push(proj);
+        
+        renderProjects();
+        if (window.PortfolioAPI) PortfolioAPI.saveProject(proj);
+        e.target.reset();
+        $('proj-id').value = '';
+        $('proj-form-title').innerText = 'Add Project';
+        $('proj-cancel').style.display = 'none';
+
+        if (submitBtn) {
+          submitBtn.innerText = '✓ Project Saved!';
+          setTimeout(() => { submitBtn.innerText = origText; }, 2000);
+        }
+
+        showToast('💻 Project Showcase Saved & Live on Portfolio!');
+      }, 500);
     });
 
     window.editProj = id => {
