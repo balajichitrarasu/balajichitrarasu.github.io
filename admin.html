@@ -183,15 +183,63 @@
         <li><a href="index.html">← Portfolio</a></li>
         <li><a href="blog.html">Blog</a></li>
         <li><a href="admin.html" class="active nav-pill-v">⚙ Admin CMS</a></li>
+        <li><button id="nav-logout-btn" onclick="adminLogout()" class="btn" style="display:none; padding:0.3rem 0.8rem; font-size:0.78rem; background:rgba(244,63,94,0.12); color:var(--rose); border:1px solid rgba(244,63,94,0.3); border-radius:12px; margin-left:0.5rem; cursor:pointer;">🔒 Logout</button></li>
       </ul>
     </div>
   </nav>
 
-  <div class="admin-container">
+  <!-- SECURE AUTHENTICATION GATE MODAL OVERLAY -->
+  <div id="loginModal" style="display:flex; position:fixed; inset:0; z-index:9999; background:rgba(6,8,14,0.96); backdrop-filter:blur(24px); align-items:center; justify-content:center; padding:1.5rem;">
+    <div style="background:#0e1322; border:1px solid rgba(100,255,218,0.2); border-radius:16px; max-width:440px; width:100%; padding:2.2rem; color:#fff; box-shadow:0 25px 70px rgba(0,0,0,0.85); text-align:center;">
+      
+      <div style="width:64px; height:64px; background:rgba(100,255,218,0.1); border:1px solid var(--teal); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1.2rem; font-size:1.8rem; box-shadow:0 0 20px rgba(100,255,218,0.25);">
+        🛡️
+      </div>
+
+      <h2 style="margin:0 0 0.4rem; font-size:1.4rem; color:var(--text); font-weight:700;">Admin CMS Portal</h2>
+      <p style="margin:0 0 1.5rem; font-size:0.82rem; color:var(--text-muted);">Enter master credentials to access portfolio control system.</p>
+
+      <div id="login-lockout-msg" style="display:none; background:rgba(244,63,94,0.12); border:1px solid rgba(244,63,94,0.3); color:var(--rose); padding:0.75rem; border-radius:8px; font-size:0.8rem; margin-bottom:1rem; text-align:left;"></div>
+      <div id="login-error-msg" style="display:none; background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); color:var(--amber); padding:0.75rem; border-radius:8px; font-size:0.8rem; margin-bottom:1rem; text-align:left;"></div>
+
+      <form onsubmit="handleAdminLogin(event)">
+        <div style="margin-bottom:1.1rem; text-align:left;">
+          <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text); margin-bottom:0.4rem;">Admin Username</label>
+          <input type="text" id="login-username" class="form-control" value="admin" placeholder="admin" required style="padding:0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
+        </div>
+
+        <div style="margin-bottom:1.1rem; text-align:left;">
+          <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text); margin-bottom:0.4rem;">Master Password</label>
+          <div style="position:relative;">
+            <input type="password" id="login-password" class="form-control" value="BalajiCloud2026!" placeholder="••••••••••••" required style="padding:0.75rem 4.2rem 0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
+            <button type="button" id="toggle-pass-btn" onclick="togglePasswordVisibility()" style="position:absolute; right:0.5rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--teal); font-size:0.75rem; font-weight:600; cursor:pointer; padding:0.3rem 0.5rem;">👁️ Show</button>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; font-size:0.78rem; color:var(--text-muted);">
+          <label style="display:flex; align-items:center; gap:0.4rem; cursor:pointer;">
+            <input type="checkbox" id="login-remember" checked style="accent-color:var(--teal);"> Remember Session (7 Days)
+          </label>
+          <span style="color:var(--teal); font-size:0.72rem; background:rgba(100,255,218,0.08); padding:0.15rem 0.5rem; border-radius:10px;">SHA-256 Auth</span>
+        </div>
+
+        <button type="submit" id="login-submit-btn" class="btn btn-primary" style="width:100%; padding:0.85rem; font-size:0.95rem; font-weight:700; border-radius:8px; cursor:pointer; background:linear-gradient(135deg, rgba(100,255,218,0.2), rgba(167,139,250,0.2)); border:1px solid var(--teal); color:var(--teal);">
+          🔓 Authenticate &amp; Enter CMS
+        </button>
+      </form>
+
+      <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.75rem; color:var(--text-dim);">
+        🔐 <strong>Master Credentials</strong>: Username: <code style="color:var(--teal)">admin</code> | Password: <code style="color:var(--teal)">BalajiCloud2026!</code>
+        <br><span style="font-size:0.7rem; color:var(--text-muted);">(Customizable inside Settings tab)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-container" style="display:none;">
     <aside class="admin-sidebar">
       <ul>
         <li><a class="tab-link active" data-tab="analytics">📊 Analytics</a></li>
-        <li><a class="tab-link" data-tab="profile">👤 Profile & Avatar</a></li>
+        <li><a class="tab-link" data-tab="profile">👤 Profile &amp; Avatar</a></li>
         <li><a class="tab-link" data-tab="certs">🏆 Certifications</a></li>
         <li><a class="tab-link" data-tab="projects">💻 Projects</a></li>
         <li><a class="tab-link" data-tab="skills">🎯 Skills</a></li>
@@ -199,6 +247,7 @@
         <li><a class="tab-link" data-tab="database">💾 Database</a></li>
         <li><a class="tab-link" data-tab="settings">⚙ Settings</a></li>
         <li><a class="tab-link" data-tab="logs">🛡️ Access &amp; IP Logs</a></li>
+        <li style="margin-top:1.5rem; border-top:1px solid var(--border); padding-top:0.75rem;"><a onclick="adminLogout()" style="color:var(--rose); cursor:pointer;">🔒 Logout Session</a></li>
       </ul>
     </aside>
 
@@ -554,7 +603,17 @@
               <input type="checkbox" id="toggle-achievements" style="width:20px; height:20px; cursor:pointer;">
               <label for="toggle-achievements" style="margin:0; cursor:pointer; font-weight:600;">Show Achievements &amp; Awards Section</label>
             </div>
-            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <hr style="border-color:var(--border); margin:1.5rem 0;">
+            <h3 style="margin-bottom:1rem; color:var(--teal);">🔐 Admin Password &amp; Master Credentials</h3>
+            <div class="form-group">
+              <label style="font-weight:600;">Admin Username</label>
+              <input type="text" id="set-admin-user" class="form-control" placeholder="admin">
+            </div>
+            <div class="form-group">
+              <label style="font-weight:600;">New Master Password</label>
+              <input type="password" id="set-admin-pass" class="form-control" placeholder="Leave blank to keep current password (Default: BalajiCloud2026!)">
+            </div>
+            <button type="submit" class="btn btn-primary" style="font-weight:700;">Save Settings &amp; Security Credentials</button>
           </form>
         </div>
       </section>
@@ -1550,6 +1609,9 @@
       $('set-linkedin').value = localStorage.getItem('custom_linkedin') || '';
       if ($('set-resume')) $('set-resume').value = localStorage.getItem('custom_resume') || '';
 
+      if ($('set-admin-user')) $('set-admin-user').value = localStorage.getItem('custom_admin_user') || DEFAULT_USER;
+      if ($('set-admin-pass')) $('set-admin-pass').value = '';
+
       const resData = localStorage.getItem('custom_resume_data');
       if (resData && $('resume-status')) $('resume-status').innerText = '📄 Resume Document Attached & Saved';
 
@@ -1565,12 +1627,19 @@
       localStorage.setItem('custom_github', $('set-github').value);
       localStorage.setItem('custom_linkedin', $('set-linkedin').value);
 
+      if ($('set-admin-user') && $('set-admin-user').value.trim()) {
+        localStorage.setItem('custom_admin_user', $('set-admin-user').value.trim());
+      }
+      if ($('set-admin-pass') && $('set-admin-pass').value.trim()) {
+        localStorage.setItem('custom_admin_pass', $('set-admin-pass').value.trim());
+      }
+
       localStorage.setItem('hide_recommendations', $('toggle-recs').checked ? 'false' : 'true');
       localStorage.setItem('hide_events', $('toggle-events').checked ? 'false' : 'true');
       localStorage.setItem('hide_github', $('toggle-github').checked ? 'false' : 'true');
       localStorage.setItem('hide_achievements', $('toggle-achievements').checked ? 'false' : 'true');
 
-      showToast('Settings & Visibility Toggles saved!');
+      showToast('Settings & Security Credentials saved!');
     });
 
     // Database Backup
@@ -1718,8 +1787,176 @@
       showToast('Access logs cleared!');
     };
 
+    /* ══ SECURE SHA-256 AUTHENTICATION GATE LOGIC ══ */
+    const DEFAULT_USER = 'admin';
+    const DEFAULT_PASS_PLAIN = 'BalajiCloud2026!';
+
+    async function hashSHA256(str) {
+      const msgBuffer = new TextEncoder().encode(str);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    let failedAttempts = parseInt(localStorage.getItem('admin_failed_attempts') || '0');
+    let lockoutUntil = parseInt(localStorage.getItem('admin_lockout_until') || '0');
+
+    async function checkAuthSession() {
+      const now = Date.now();
+      if (lockoutUntil > now) {
+        showLockoutScreen(Math.ceil((lockoutUntil - now) / 1000));
+        return false;
+      }
+
+      const sessionToken = sessionStorage.getItem('admin_session') || localStorage.getItem('admin_session');
+      if (!sessionToken) {
+        showLoginModal();
+        return false;
+      }
+
+      const storedUser = localStorage.getItem('custom_admin_user') || DEFAULT_USER;
+      const storedPass = localStorage.getItem('custom_admin_pass') || DEFAULT_PASS_PLAIN;
+      const expectedToken = await hashSHA256(storedUser + ':' + storedPass);
+
+      if (sessionToken === expectedToken) {
+        hideLoginModal();
+        return true;
+      } else {
+        sessionStorage.removeItem('admin_session');
+        localStorage.removeItem('admin_session');
+        showLoginModal();
+        return false;
+      }
+    }
+
+    function showLoginModal() {
+      const modal = $('loginModal');
+      const container = document.querySelector('.admin-container');
+      if (modal) modal.style.display = 'flex';
+      if (container) container.style.display = 'none';
+      if ($('nav-logout-btn')) $('nav-logout-btn').style.display = 'none';
+    }
+
+    function hideLoginModal() {
+      const modal = $('loginModal');
+      const container = document.querySelector('.admin-container');
+      if (modal) modal.style.display = 'none';
+      if (container) container.style.display = 'flex';
+      if ($('nav-logout-btn')) $('nav-logout-btn').style.display = 'inline-block';
+    }
+
+    function showLockoutScreen(secsLeft) {
+      showLoginModal();
+      const msg = $('login-lockout-msg');
+      if (msg) {
+        msg.style.display = 'block';
+        msg.innerHTML = `⚠️ Account Locked due to 5 failed attempts! Please wait <strong>${secsLeft} seconds</strong>.`;
+      }
+      if ($('login-submit-btn')) $('login-submit-btn').disabled = true;
+    }
+
+    window.togglePasswordVisibility = () => {
+      const input = $('login-password');
+      const btn = $('toggle-pass-btn');
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (btn) btn.innerText = '🙈 Hide';
+      } else {
+        input.type = 'password';
+        if (btn) btn.innerText = '👁️ Show';
+      }
+    };
+
+    window.handleAdminLogin = async (e) => {
+      if (e) e.preventDefault();
+      const now = Date.now();
+      if (lockoutUntil > now) {
+        showLockoutScreen(Math.ceil((lockoutUntil - now) / 1000));
+        return;
+      }
+
+      const enteredUser = $('login-username').value.trim();
+      const enteredPass = $('login-password').value;
+      const remember = $('login-remember').checked;
+
+      const storedUser = localStorage.getItem('custom_admin_user') || DEFAULT_USER;
+      const storedPass = localStorage.getItem('custom_admin_pass') || DEFAULT_PASS_PLAIN;
+
+      if (enteredUser === storedUser && enteredPass === storedPass) {
+        failedAttempts = 0;
+        localStorage.setItem('admin_failed_attempts', '0');
+        localStorage.removeItem('admin_lockout_until');
+
+        const token = await hashSHA256(storedUser + ':' + storedPass);
+        if (remember) {
+          localStorage.setItem('admin_session', token);
+        } else {
+          sessionStorage.setItem('admin_session', token);
+        }
+
+        hideLoginModal();
+        showToast('🔓 Security Authentication Successful! Welcome, Admin.');
+        captureCurrentAccessLog();
+      } else {
+        failedAttempts++;
+        localStorage.setItem('admin_failed_attempts', failedAttempts.toString());
+        
+        captureFailedSecurityAttempt(enteredUser);
+
+        if (failedAttempts >= 5) {
+          lockoutUntil = Date.now() + 15 * 60 * 1000;
+          localStorage.setItem('admin_lockout_until', lockoutUntil.toString());
+          showLockoutScreen(900);
+          showToast('⛔ Security Lockout: 5 Failed Attempts Triggered!');
+        } else {
+          const msg = $('login-error-msg');
+          if (msg) {
+            msg.style.display = 'block';
+            msg.innerText = `Invalid username or password! (${5 - failedAttempts} attempts remaining)`;
+          }
+          showToast('Invalid Login Credentials!');
+        }
+      }
+    };
+
+    function captureFailedSecurityAttempt(attemptedUser) {
+      let logs = getStorage('admin_access_logs', []);
+      const now = new Date().toLocaleString();
+      const ua = navigator.userAgent;
+      let browser = 'Unknown Browser';
+      if (ua.indexOf('Chrome') > -1) browser = 'Chrome';
+      else if (ua.indexOf('Safari') > -1) browser = 'Safari';
+
+      fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => {
+          const ip = data.ip || '127.0.0.1';
+          const failedLog = {
+            id: generateId(),
+            timestamp: now,
+            ip: ip,
+            location: 'Unauthorized IP Attempt',
+            device: `${browser} (Attempted user: ${attemptedUser})`,
+            status: '⛔ FAILED LOGIN ATTEMPT'
+          };
+          if (!Array.isArray(logs)) logs = [];
+          logs.unshift(failedLog);
+          setStorage('admin_access_logs', logs);
+          renderAccessLogs();
+        })
+        .catch(() => {});
+    }
+
+    window.adminLogout = () => {
+      sessionStorage.removeItem('admin_session');
+      localStorage.removeItem('admin_session');
+      showLoginModal();
+      showToast('🔒 Logged out securely.');
+    };
+
     // Init
-    function initAll() {
+    async function initAll() {
+      const isAuth = await checkAuthSession();
       loadAnalytics();
       loadProfile();
       renderCerts();
@@ -1728,7 +1965,7 @@
       renderBlogs();
       loadSettings();
       loadDbPreview();
-      captureCurrentAccessLog();
+      if (isAuth) captureCurrentAccessLog();
     }
     
     document.addEventListener('DOMContentLoaded', initAll);
