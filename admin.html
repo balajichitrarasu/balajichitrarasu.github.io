@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=31.0">
+  <link rel="stylesheet" href="style.css?v=32.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1563,10 +1563,18 @@
         if (!file) return;
         const reader = new FileReader();
         reader.onload = ev => {
-          $('prof-avatar').value = ev.target.result;
-          $('prof-avatar-preview').src = ev.target.result;
+          const dataUrl = ev.target.result;
+          $('prof-avatar').value = 'profile.jpg';
+          $('prof-avatar-preview').src = dataUrl;
           $('prof-avatar-preview').style.display = 'block';
-          showToast('Avatar image loaded! Click "Crop Avatar Image" to crop.');
+          
+          // Automate Method 1: Auto-download as profile.jpg
+          const a = document.createElement('a');
+          a.href = dataUrl;
+          a.download = 'profile.jpg';
+          a.click();
+
+          showToast('⚡ Method 1 Automated! Downloaded profile.jpg — place in G:\\Portfolio\\ for 100% global reflection!');
         };
         reader.readAsDataURL(file);
       });
@@ -1827,27 +1835,39 @@
         const file = e.target.files[0];
         if (!file) return;
 
+        const safeFileName = file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
+
         if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
           const reader = new FileReader();
           reader.onload = ev => {
-            if ($('cert-image')) $('cert-image').value = ev.target.result;
-            if ($('crop-container')) $('crop-container').style.display = 'none';
-            if ($('crop-preview')) $('crop-preview').style.display = 'none';
+            if ($('cert-image')) $('cert-image').value = safeFileName;
             if ($('pdf-preview')) $('pdf-preview').style.display = 'block';
-            showToast('PDF Certificate attached!');
+
+            // Auto-download for repo
+            const a = document.createElement('a');
+            a.href = ev.target.result;
+            a.download = safeFileName;
+            a.click();
+
+            showToast('⚡ Method 1 Automated! Downloaded ' + safeFileName + ' — copy to G:\\Portfolio\\!');
           };
           reader.readAsDataURL(file);
         } else {
           const reader = new FileReader();
           reader.onload = ev => {
-            if ($('cert-image')) $('cert-image').value = ev.target.result;
-            if ($('pdf-preview')) $('pdf-preview').style.display = 'none';
+            if ($('cert-image')) $('cert-image').value = safeFileName;
             if ($('crop-preview')) {
               $('crop-preview').src = ev.target.result;
               $('crop-preview').style.display = 'block';
             }
-            if ($('crop-container')) $('crop-container').style.display = 'none';
-            showToast('Image uploaded successfully!');
+
+            // Auto-download for repo
+            const a = document.createElement('a');
+            a.href = ev.target.result;
+            a.download = safeFileName;
+            a.click();
+
+            showToast('⚡ Method 1 Automated! Downloaded ' + safeFileName + ' — copy to G:\\Portfolio\\!');
           };
           reader.readAsDataURL(file);
         }
@@ -2020,10 +2040,18 @@
       $('proj-file').addEventListener('change', e => {
         const file = e.target.files[0];
         if (!file) return;
+        const safeFileName = file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
         const reader = new FileReader();
         reader.onload = ev => {
-          $('proj-image').value = ev.target.result;
-          showToast('Project cover image uploaded!');
+          $('proj-image').value = safeFileName;
+
+          // Auto-download for repo
+          const a = document.createElement('a');
+          a.href = ev.target.result;
+          a.download = safeFileName;
+          a.click();
+
+          showToast('⚡ Method 1 Automated! Downloaded ' + safeFileName + ' — copy to G:\\Portfolio\\!');
         };
         reader.readAsDataURL(file);
       });
