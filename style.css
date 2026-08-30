@@ -981,7 +981,7 @@ footer {
    REVEAL ANIMATIONS
    ══════════════════════════════════════ */
 .reveal {
-  opacity: 0; transform: translateY(22px);
+  opacity: 1; transform: translateY(0);
   transition: opacity .65s var(--ease), transform .65s var(--ease);
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }

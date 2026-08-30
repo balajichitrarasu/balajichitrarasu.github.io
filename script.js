@@ -266,22 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
      REVEAL ON SCROLL (fixed NodeList bug)
   ─────────────────────────────────────────── */
   var revealEls = document.querySelectorAll('.reveal');
-
-  if ('IntersectionObserver' in window) {
-    var revealObs = new IntersectionObserver(function (ents) {
-      ents.forEach(function (e) {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          revealObs.unobserve(e.target); /* only fire once */
-        }
-      });
-    }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
-
-    revealEls.forEach(function (el) { revealObs.observe(el); });
-  } else {
-    /* Fallback for old browsers */
-    revealEls.forEach(function (el) { el.classList.add('visible'); });
-  }
+  revealEls.forEach(function (el) { el.classList.add('visible'); });
 
   /* ────────────────────────────────────────
      DYNAMIC SKILLS RENDERING
@@ -612,17 +597,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* Try IntersectionObserver with a very low threshold */
   var statsEl = document.getElementById('stats');
-  if (statsEl) {
-    if ('IntersectionObserver' in window) {
-      var statsObs = new IntersectionObserver(function (ents) {
-        if (ents[0].isIntersecting) { runCounters(); statsObs.disconnect(); }
-      }, { threshold: 0 });  /* threshold 0 = fires as soon as ANY pixel is visible */
-      statsObs.observe(statsEl);
-    }
-    /* ALSO fire after 1.5s as a hard fallback (catches cases where element
-       is visible on load but the observer fires too late) */
-    setTimeout(runCounters, 1500);
-  }
+  runCounters();
 
   /* ────────────────────────────────────────
      MOBILE NAV TOGGLE
