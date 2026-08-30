@@ -351,18 +351,68 @@ body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, 
   }
 }
 
+/* ══════════════════════════════════════
+   UNIQUE LIGHT MODE PASTEL PRISM AURORA ANIMATION
+   ══════════════════════════════════════ */
 [data-theme="light"] .aurora-wave-wrap {
-  opacity: 0.4;
+  opacity: 0.95 !important;
+}
+
+[data-theme="light"] .aurora-wave {
+  background: repeat-x url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C150,90 350,-40 500,40 C650,120 900,10 1200,50 L1200,120 L0,120 Z' fill='url(%23lightWaveGrad1)'/%3E%3Cdefs%3E%3ClinearGradient id='lightWaveGrad1' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='rgba(2,132,199,0.08)'/%3E%3Cstop offset='50%25' stop-color='rgba(79,70,229,0.07)'/%3E%3Cstop offset='100%25' stop-color='rgba(13,148,136,0.06)'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E") !important;
+  filter: blur(8px) !important;
+}
+
+[data-theme="light"] .aurora-wave.w2 {
+  background: repeat-x url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C200,-30 450,80 700,20 C950,-40 1100,60 1200,10 L1200,120 L0,120 Z' fill='url(%23lightWaveGrad2)'/%3E%3Cdefs%3E%3ClinearGradient id='lightWaveGrad2' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='rgba(79,70,229,0.08)'/%3E%3Cstop offset='50%25' stop-color='rgba(2,132,199,0.07)'/%3E%3Cstop offset='100%25' stop-color='rgba(5,150,105,0.06)'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E") !important;
+  filter: blur(12px) !important;
 }
 
 [data-theme="light"] .bg-glow-orb.orb-1 {
-  background: radial-gradient(circle, rgba(2, 132, 199, 0.07) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(2, 132, 199, 0.12) 0%, transparent 70%) !important;
+  filter: blur(100px) !important;
 }
 [data-theme="light"] .bg-glow-orb.orb-2 {
-  background: radial-gradient(circle, rgba(79, 70, 229, 0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, transparent 70%) !important;
+  filter: blur(110px) !important;
 }
 [data-theme="light"] .bg-glow-orb.orb-3 {
-  background: radial-gradient(circle, rgba(5, 150, 105, 0.05) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(5, 150, 105, 0.09) 0%, transparent 70%) !important;
+  filter: blur(105px) !important;
+}
+
+/* Light mode floating sunlit prism dots */
+.light-prism-dot {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  display: none;
+}
+
+[data-theme="light"] .light-prism-dot {
+  display: block;
+  opacity: 0.6;
+  animation: prismFloat 18s ease-in-out infinite alternate;
+}
+
+[data-theme="light"] .light-prism-dot.p1 {
+  top: 15%; left: 25%; background: rgba(2, 132, 199, 0.4); box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
+}
+[data-theme="light"] .light-prism-dot.p2 {
+  top: 40%; right: 20%; background: rgba(79, 70, 229, 0.4); box-shadow: 0 0 12px rgba(79, 70, 229, 0.5); animation-delay: -6s;
+}
+[data-theme="light"] .light-prism-dot.p3 {
+  bottom: 25%; left: 35%; background: rgba(5, 150, 105, 0.4); box-shadow: 0 0 10px rgba(5, 150, 105, 0.5); animation-delay: -12s;
+}
+
+@keyframes prismFloat {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+  50% { transform: translate(30px, -40px) scale(1.4); opacity: 0.7; }
+  100% { transform: translate(-25px, 25px) scale(0.9); opacity: 0.4; }
 }
 
 /* Light mode elevated cards & shadows */
