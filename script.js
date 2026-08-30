@@ -299,8 +299,9 @@ document.addEventListener('DOMContentLoaded', function () {
       var imgSrc = p.image || p.img || 'project1.jpg';
       var escTitle = (p.title || '').replace(/'/g, "\\'");
       var escDetails = (p.details || p.summary || '').replace(/'/g, "\\'");
+      var escGallery = (p.gallery || p.image || p.img || '').replace(/'/g, "\\'");
 
-      return '<div class="proj-card reveal" data-category="' + (p.category || 'all') + '" onclick="openPopup(\'' + escTitle + '\',\'' + escDetails + '\')">' +
+      return '<div class="proj-card reveal" data-category="' + (p.category || 'all') + '" onclick="openPopup(\'' + escTitle + '\',\'' + escDetails + '\',\'' + escGallery + '\')">' +
         '<div class="proj-thumb">' +
           '<img src="' + imgSrc + '" alt="' + (p.title || '') + '">' +
           '<div class="proj-thumb-overlay"><span style="font-size:1.6rem">↗</span><p>View Details</p></div>' +
@@ -655,11 +656,51 @@ function closeAbout() {
   document.body.style.overflow = '';
 }
 
-/* Project modal */
-function openPopup(title, body) {
+/* Section Visibility Controls */
+(function initVisibility() {
+  function apply() {
+    var recs = localStorage.getItem('hide_recommendations');
+    var rEl = document.getElementById('recommendations');
+    if (rEl) rEl.style.display = (recs === 'true') ? 'none' : 'block';
+
+    var evs = localStorage.getItem('hide_events');
+    var eEl = document.getElementById('events');
+    if (eEl) eEl.style.display = (evs === 'true') ? 'none' : 'block';
+
+    var ghs = localStorage.getItem('hide_github');
+    var gEl = document.getElementById('github');
+    if (gEl) gEl.style.display = (ghs === 'true') ? 'none' : 'block';
+
+    var achs = localStorage.getItem('hide_achievements');
+    var aEl = document.getElementById('achievements');
+    if (aEl) aEl.style.display = (achs === 'true') ? 'none' : 'block';
+  }
+  document.addEventListener('DOMContentLoaded', apply);
+  window.refreshVisibility = apply;
+})();
+
+/* Project modal with multi-image gallery support */
+function openPopup(title, body, galleryImagesStr) {
   var el = document.getElementById('popup'); if (!el) return;
   document.getElementById('ptitle').textContent = title;
   document.getElementById('pbody').textContent  = body;
+  
+  var oldGallery = document.getElementById('projModalGallery');
+  if (oldGallery) oldGallery.remove();
+
+  if (galleryImagesStr && galleryImagesStr.trim() !== '') {
+    var imgs = galleryImagesStr.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+    if (imgs.length > 0) {
+      var gDiv = document.createElement('div');
+      gDiv.id = 'projModalGallery';
+      gDiv.style.cssText = 'display:flex; gap:0.5rem; overflow-x:auto; margin:1rem 0; padding-bottom:0.5rem;';
+      gDiv.innerHTML = imgs.map(function(src) {
+        return '<img src="' + src + '" style="height:140px; border-radius:6px; object-fit:cover; border:1px solid var(--border); cursor:pointer;" onclick="window.open(\'' + src + '\',\'_blank\')">';
+      }).join('');
+      document.getElementById('pbody').insertAdjacentElement('beforebegin', gDiv);
+    }
+  }
+
   el.classList.add('open'); document.body.style.overflow = 'hidden';
 }
 function closePopup() {

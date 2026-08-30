@@ -329,8 +329,13 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Cover Image URL</label>
-              <input type="text" id="proj-image" class="form-control">
+              <label>Cover Image File Upload</label>
+              <input type="file" id="proj-file" class="form-control" accept="image/*">
+              <input type="text" id="proj-image" class="form-control" placeholder="Or enter Cover Image URL directly" style="margin-top:0.5rem;">
+            </div>
+            <div class="form-group">
+              <label>Multiple Gallery Images (Comma separated URLs or Base64)</label>
+              <textarea id="proj-gallery" class="form-control" rows="2" placeholder="e.g. project1.jpg, project2.jpg, project3.jpg"></textarea>
             </div>
             <div class="form-group">
               <label>Tech Tags (comma separated)</label>
@@ -505,9 +510,23 @@
               <label>LinkedIn URL</label>
               <input type="url" id="set-linkedin" class="form-control">
             </div>
-            <div class="form-group">
-              <label>Resume Filename</label>
-              <input type="text" id="set-resume" class="form-control">
+            <hr style="border-color:var(--border); margin:1.5rem 0;">
+            <h3 style="margin-bottom:1rem; color:var(--teal);">Section Visibility Control (Toggle ON/OFF)</h3>
+            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;">
+              <input type="checkbox" id="toggle-recs" style="width:20px; height:20px; cursor:pointer;">
+              <label for="toggle-recs" style="margin:0; cursor:pointer; font-weight:600;">Show Endorsements / Recommendations Section</label>
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;">
+              <input type="checkbox" id="toggle-events" style="width:20px; height:20px; cursor:pointer;">
+              <label for="toggle-events" style="margin:0; cursor:pointer; font-weight:600;">Show Industrial Exposure &amp; Events Section</label>
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;">
+              <input type="checkbox" id="toggle-github" style="width:20px; height:20px; cursor:pointer;">
+              <label for="toggle-github" style="margin:0; cursor:pointer; font-weight:600;">Show GitHub Open Source Section</label>
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1.5rem;">
+              <input type="checkbox" id="toggle-achievements" style="width:20px; height:20px; cursor:pointer;">
+              <label for="toggle-achievements" style="margin:0; cursor:pointer; font-weight:600;">Show Achievements &amp; Awards Section</label>
             </div>
             <button type="submit" class="btn btn-primary">Save Settings</button>
           </form>
@@ -915,6 +934,19 @@
       loadAnalytics();
     }
     
+    if ($('proj-file')) {
+      $('proj-file').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          $('proj-image').value = ev.target.result;
+          showToast('Project cover image uploaded!');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    
     $('proj-form').addEventListener('submit', e => {
       e.preventDefault();
       const id = $('proj-id').value || generateId();
@@ -923,6 +955,7 @@
         title: $('proj-title').value,
         category: $('proj-cat').value,
         image: $('proj-image').value,
+        gallery: $('proj-gallery') ? $('proj-gallery').value : '',
         tags: $('proj-tags').value,
         summary: $('proj-summary').value,
         details: $('proj-details').value,
@@ -952,6 +985,7 @@
       $('proj-title').value = p.title || '';
       if ($('proj-cat')) $('proj-cat').value = p.category || 'cloud';
       $('proj-image').value = p.image || p.img || '';
+      if ($('proj-gallery')) $('proj-gallery').value = p.gallery || p.image || '';
       $('proj-tags').value = p.tags || '';
       $('proj-summary').value = p.summary || '';
       $('proj-details').value = p.details || p.summary || '';
@@ -1022,6 +1056,7 @@
         `;
       });
       setStorage('custom_skills', skills);
+      if (window.PortfolioAPI) PortfolioAPI.saveSkills(skills);
     }
 
     $('skill-form').addEventListener('submit', e => {
@@ -1174,7 +1209,11 @@
       $('set-phone').value = localStorage.getItem('custom_phone') || '';
       $('set-github').value = localStorage.getItem('custom_github') || '';
       $('set-linkedin').value = localStorage.getItem('custom_linkedin') || '';
-      $('set-resume').value = localStorage.getItem('custom_resume') || '';
+
+      $('toggle-recs').checked = localStorage.getItem('hide_recommendations') !== 'true';
+      $('toggle-events').checked = localStorage.getItem('hide_events') !== 'true';
+      $('toggle-github').checked = localStorage.getItem('hide_github') !== 'true';
+      $('toggle-achievements').checked = localStorage.getItem('hide_achievements') !== 'true';
     }
     $('settings-form').addEventListener('submit', e => {
       e.preventDefault();
@@ -1182,8 +1221,13 @@
       localStorage.setItem('custom_phone', $('set-phone').value);
       localStorage.setItem('custom_github', $('set-github').value);
       localStorage.setItem('custom_linkedin', $('set-linkedin').value);
-      localStorage.setItem('custom_resume', $('set-resume').value);
-      showToast('Settings saved!');
+
+      localStorage.setItem('hide_recommendations', $('toggle-recs').checked ? 'false' : 'true');
+      localStorage.setItem('hide_events', $('toggle-events').checked ? 'false' : 'true');
+      localStorage.setItem('hide_github', $('toggle-github').checked ? 'false' : 'true');
+      localStorage.setItem('hide_achievements', $('toggle-achievements').checked ? 'false' : 'true');
+
+      showToast('Settings & Visibility Toggles saved!');
     });
 
     // Database Backup

@@ -1302,6 +1302,26 @@ footer {
 .ticker-item img { width: 22px; height: 22px; object-fit: contain; }
 .ticker-item span { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); }
 
+/* Light Theme Ticker Fix */
+[data-theme="light"] .logo-ticker-wrap {
+  background: rgba(15,23,42,0.02);
+  border-color: rgba(15,23,42,0.08);
+}
+[data-theme="light"] .logo-ticker-wrap::before {
+  background: linear-gradient(90deg, #f8fafc, transparent);
+}
+[data-theme="light"] .logo-ticker-wrap::after {
+  background: linear-gradient(-90deg, #f8fafc, transparent);
+}
+[data-theme="light"] .ticker-item {
+  background: #ffffff;
+  border-color: rgba(15,23,42,0.08);
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+[data-theme="light"] .ticker-item span {
+  color: #0f172a;
+}
+
 /* ══ EVENTS & LEADERSHIP SHOWCASE ══ */
 .events-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.8rem;
