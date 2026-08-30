@@ -6,16 +6,29 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=11.0">
+  <link rel="stylesheet" href="style.css?v=33.0">
   <script>
-  window.toggleTheme = function() {
+  var themeToggleLock = false;
+  window.toggleTheme = function(e) {
+    if (e) {
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
+    if (themeToggleLock) return;
+    themeToggleLock = true;
+    setTimeout(function() { themeToggleLock = false; }, 300);
+
     var cur = document.documentElement.getAttribute('data-theme') || 'dark';
     var next = cur === 'dark' ? 'light' : 'dark';
+
     document.documentElement.setAttribute('data-theme', next);
+    if (document.body) document.body.setAttribute('data-theme', next);
     try { localStorage.setItem('site_theme', next); } catch(e) {}
+
     document.querySelectorAll('.glossy-theme-btn, #themeToggle').forEach(function(b) {
       b.setAttribute('title', next === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
     });
+
     if (typeof window.showToast === 'function') {
       window.showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
     }
@@ -24,6 +37,7 @@
     try {
       var saved = localStorage.getItem('site_theme') || 'dark';
       document.documentElement.setAttribute('data-theme', saved);
+      if (document.body) document.body.setAttribute('data-theme', saved);
     } catch(e) {}
   })();
   </script>
@@ -334,6 +348,60 @@
       border-color: rgba(13,148,136,0.3);
       color: #0d9488;
     }
+    /* Cyber Input Groups with Embedded Icons & Working Pass Toggle */
+    .cyber-input-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+    .cyber-input-icon {
+      position: absolute;
+      left: 1rem;
+      font-size: 1.1rem;
+      color: var(--teal);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .cyber-input-field {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 2.8rem;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.25s var(--ease);
+    }
+    .cyber-input-field:focus {
+      border-color: var(--teal);
+      background: rgba(15, 23, 42, 0.9);
+      box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.18), 0 0 20px rgba(100, 255, 218, 0.12);
+    }
+    .pass-toggle-btn {
+      position: absolute;
+      right: 0.6rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(100, 255, 218, 0.3);
+      color: var(--teal);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.38rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 3;
+    }
+    .pass-toggle-btn:hover {
+      background: var(--teal-dim);
+      border-color: var(--teal);
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -360,34 +428,38 @@
         <div class="shield-icon-inner">🛡️</div>
       </div>
 
-      <h2 style="margin:0 0 0.4rem; font-size:1.5rem; color:var(--text); font-weight:800; letter-spacing:-0.02em;">Admin CMS Portal</h2>
+      <h2 style="margin:0 0 0.4rem; font-size:1.55rem; color:var(--text); font-weight:800; letter-spacing:-0.02em;">Admin Security Portal</h2>
       <p style="margin:0 0 1.5rem; font-size:0.82rem; color:var(--text-muted);">Enter master credentials to access portfolio control system.</p>
 
       <div id="login-lockout-msg" style="display:none; background:rgba(244,63,94,0.12); border:1px solid rgba(244,63,94,0.3); color:var(--rose); padding:0.75rem; border-radius:8px; font-size:0.8rem; margin-bottom:1rem; text-align:left;"></div>
       <div id="login-error-msg" style="display:none; background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); color:var(--amber); padding:0.75rem; border-radius:8px; font-size:0.8rem; margin-bottom:1rem; text-align:left;"></div>
 
       <form id="admin-login-form" action="javascript:void(0);" onsubmit="handleAdminLogin(event); return false;" autocomplete="off">
-        <div class="form-input-wrapper">
-          <label style="display:block; font-size:0.78rem; font-weight:600; color:var(--text-muted); margin-bottom:0.4rem;">Admin Username</label>
-          <input type="text" id="login-username" class="form-control" placeholder="e.g. alex_dev" autocomplete="off" required>
-        </div>
-
-        <div class="form-input-wrapper">
-          <label style="display:block; font-size:0.78rem; font-weight:600; color:var(--text-muted); margin-bottom:0.4rem;">Master Password</label>
-          <div style="position:relative;">
-            <input type="password" id="login-password" class="form-control" placeholder="••••••••••••" autocomplete="off" required>
-            <button type="button" id="toggle-pass-btn" onclick="togglePasswordVisibility()" style="position:absolute; right:0.5rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--teal); font-size:0.75rem; font-weight:600; cursor:pointer; padding:0.3rem 0.5rem;">👁️ Show</button>
+        <div style="text-align:left; margin-bottom:1rem;">
+          <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text); margin-bottom:0.4rem;">Admin Username</label>
+          <div class="cyber-input-group">
+            <span class="cyber-input-icon">👤</span>
+            <input type="text" id="login-username" class="cyber-input-field" placeholder="Enter admin username..." autocomplete="off" required>
           </div>
         </div>
 
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; font-size:0.78rem; color:var(--text-muted);">
-          <label style="display:flex; align-items:center; gap:0.4rem; cursor:pointer;">
-            <input type="checkbox" id="login-remember" checked style="accent-color:var(--teal);"> Remember Session (7 Days)
-          </label>
-          <span style="color:var(--teal); font-size:0.72rem; background:rgba(100,255,218,0.08); padding:0.15rem 0.55rem; border-radius:10px; border:1px solid rgba(100,255,218,0.2);">SHA-256 Auth</span>
+        <div style="text-align:left; margin-bottom:1.2rem;">
+          <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text); margin-bottom:0.4rem;">Master Password</label>
+          <div class="cyber-input-group">
+            <span class="cyber-input-icon">🔑</span>
+            <input type="password" id="login-password" class="cyber-input-field" style="padding-right: 5.5rem;" placeholder="Enter master password..." autocomplete="off" required>
+            <button type="button" id="toggle-pass-btn" onclick="togglePasswordVisibility(event)" class="pass-toggle-btn">👁️ Show</button>
+          </div>
         </div>
 
-        <button type="button" onclick="handleAdminLogin(event)" id="login-submit-btn" class="btn btn-primary" style="width:100%; padding:0.9rem; font-size:0.95rem; font-weight:700; border-radius:10px; cursor:pointer; background:linear-gradient(135deg, rgba(100,255,218,0.25), rgba(167,139,250,0.25)); border:1px solid var(--teal); color:var(--teal); transition:all 0.25s ease;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; font-size:0.8rem; color:var(--text-muted);">
+          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; user-select:none;">
+            <input type="checkbox" id="login-remember" checked style="width:16px; height:16px; accent-color:var(--teal); cursor:pointer;"> Remember Session (7 Days)
+          </label>
+          <span style="color:var(--teal); font-size:0.72rem; font-weight:700; font-family:'DM Mono',monospace; background:rgba(100,255,218,0.08); padding:0.2rem 0.65rem; border-radius:12px; border:1px solid rgba(100,255,218,0.25);">🔒 SHA-256 Auth</span>
+        </div>
+
+        <button type="submit" onclick="handleAdminLogin(event)" id="login-submit-btn" class="btn btn-primary" style="width:100%; padding:0.95rem; font-size:0.98rem; font-weight:700; border-radius:10px; cursor:pointer; background:linear-gradient(135deg, rgba(100,255,218,0.25), rgba(167,139,250,0.25)); border:1px solid var(--teal); color:#ffffff; box-shadow:0 8px 25px rgba(100,255,218,0.2); transition:all 0.25s var(--ease);">
           🔓 Authenticate &amp; Enter CMS
         </button>
       </form>
@@ -408,12 +480,15 @@
     <aside class="admin-sidebar">
       <ul>
         <li><a class="tab-link active" data-tab="analytics">📊 Analytics</a></li>
-        <li><a class="tab-link" data-tab="profile">👤 Profile &amp; Avatar</a></li>
-        <li><a class="tab-link" data-tab="certs">🏆 Certifications</a></li>
-        <li><a class="tab-link" data-tab="projects">💻 Projects</a></li>
-        <li><a class="tab-link" data-tab="skills">🎯 Skills</a></li>
-        <li><a class="tab-link" data-tab="blog">📝 Blog</a></li>
-        <li><a class="tab-link" data-tab="database">💾 Database</a></li>
+        <li><a class="tab-link" data-tab="profile">👤 Profile, Bio &amp; Resume</a></li>
+        <li><a class="tab-link" data-tab="experience">💼 Experience &amp; Timeline</a></li>
+        <li><a class="tab-link" data-tab="certs">🏆 Certifications &amp; Docs</a></li>
+        <li><a class="tab-link" data-tab="projects">💻 Projects Manager</a></li>
+        <li><a class="tab-link" data-tab="skills">🎯 Skills &amp; Competencies</a></li>
+        <li><a class="tab-link" data-tab="ecosystem">🌐 Tooling Ticker</a></li>
+        <li><a class="tab-link" data-tab="events">🎉 Events &amp; Showcase</a></li>
+        <li><a class="tab-link" data-tab="blog">📝 Blog Manager</a></li>
+        <li><a class="tab-link" data-tab="database">💾 Database &amp; Backup</a></li>
         <li><a class="tab-link" data-tab="settings">⚙ Settings</a></li>
         <li><a class="tab-link" data-tab="logs">🛡️ Access &amp; IP Logs</a></li>
         <li style="margin-top:1.5rem; border-top:1px solid var(--border); padding-top:0.75rem;"><a id="sidebar-logout-btn" onclick="adminLogout()" style="color:var(--rose); cursor:pointer;">🔒 Logout Session</a></li>
@@ -459,10 +534,14 @@
               <label style="font-weight:600;">Avatar Image File Upload &amp; Cropper</label>
               <input type="file" id="prof-avatar-file" class="form-control" accept="image/*">
               <input type="text" id="prof-avatar" class="form-control" placeholder="Or enter Avatar Image URL / Base64" style="margin-top: 0.5rem;">
-              <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem;">
+              <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap:wrap;">
                 <img id="prof-avatar-preview" src="profile.jpg" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--teal); background: rgba(255,255,255,0.05);">
                 <button type="button" class="btn btn-primary" onclick="openCropperForTarget('prof-avatar', 'prof-avatar-preview', 1)" style="font-size:0.8rem; padding:0.45rem 1rem;">✂️ Crop Avatar Image</button>
+                <button type="button" class="btn" onclick="exportProfileJpg()" style="font-size:0.8rem; padding:0.45rem 1rem;">📥 Download as profile.jpg for Repo</button>
               </div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.5rem; line-height:1.4;">
+                💡 <strong>Cross-Device Reflection Note:</strong> LocalStorage avatar saves to your current browser. To make your new photo reflect permanently on <strong>ALL mobile phones &amp; secondary devices</strong>, click <em>"Download as profile.jpg"</em> and replace <code>G:\Portfolio\profile.jpg</code>!
+              </p>
             </div>
             <div class="form-group">
               <label style="font-weight:600;">Display Name</label>
@@ -476,12 +555,57 @@
               <label style="font-weight:600;">Location</label>
               <input type="text" id="prof-location" class="form-control" placeholder="Coimbatore, Tamil Nadu, India">
             </div>
-            <div style="display:flex; gap:0.75rem; margin-top:1.5rem;">
-              <button type="submit" class="btn btn-primary" style="font-weight:700;">Save Profile</button>
-              <button type="button" class="btn" id="prof-reset">Reset to Default</button>
+
+            <!-- RESUME PDF & DOCUMENT UPLOADER -->
+            <div class="form-group" style="border-top:1px solid var(--border); padding-top:1.2rem; margin-top:1.2rem;">
+              <label style="font-weight:700; color:var(--teal);">📄 Resume PDF / Document Upload</label>
+              <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem;">Upload your Resume PDF file or enter URL. All "Resume" download buttons on the portfolio site will link to this file!</p>
+              <input type="file" id="prof-resume-file" class="form-control" accept=".pdf,.doc,.docx,image/*">
+              <input type="text" id="prof-resume-url" class="form-control" placeholder="Or enter Resume PDF URL (e.g. Resume.pdf or Google Drive link)" style="margin-top:0.5rem;">
+              <div id="resume-preview-status" style="margin-top:0.5rem; display:none; padding:0.6rem; background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.3); border-radius:6px; color:var(--emerald); font-weight:600; font-size:0.8rem;">
+                📄 Resume PDF Document Ready! <a id="resume-preview-link" href="#" target="_blank" style="color:var(--teal); margin-left:0.5rem; text-decoration:underline;">View Attached Resume →</a>
+              </div>
             </div>
+
+            <div id="profile-alert" class="status-alert" style="display:none;"></div>
+            <button type="submit" id="profile-submit-btn" class="btn btn-primary" style="margin-top:0.5rem;">💾 Save Profile &amp; Resume PDF</button>
           </form>
         </div>
+      </section>
+
+      <!-- Experience & Timeline Tab -->
+      <section id="experience" class="tab-pane">
+        <h2 style="color:var(--text); font-weight:700; margin-bottom:1.5rem;">💼 Experience &amp; Education Manager</h2>
+        <div class="card" style="margin-bottom: 2rem; background:rgba(255,255,255,0.025); border:1px solid var(--border); border-radius:10px; padding:1.8rem;">
+          <h3 id="exp-form-title" style="margin-top:0; color:var(--teal);">Add Timeline Entry</h3>
+          <form id="exp-form" action="javascript:void(0);" onsubmit="event.preventDefault(); saveExperience(); return false;" autocomplete="off">
+            <input type="hidden" id="exp-id">
+            <div class="form-group">
+              <label style="font-weight:600;">Role or Degree Title *</label>
+              <input type="text" id="exp-role" class="form-control" placeholder="e.g. AWS Cloud Engineer Intern or B.E. ECE" required>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:600;">Organization / Institution *</label>
+              <input type="text" id="exp-org" class="form-control" placeholder="e.g. ZenFuture Technologies or United Institute of Technology" required>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:600;">Date Range / Duration *</label>
+              <input type="text" id="exp-date" class="form-control" placeholder="e.g. JUNE 2026 — JULY 2026 or 2023 — 2027" required>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:600;">Description &amp; Key Highlights</label>
+              <textarea id="exp-desc" class="form-control" rows="3" placeholder="Describe key responsibilities, AWS services deployed, achievements, CGPA, etc."></textarea>
+            </div>
+            <div id="exp-alert" class="status-alert" style="display:none;"></div>
+            <button type="submit" id="exp-submit-btn" class="btn btn-primary">💾 Save Timeline Entry</button>
+            <button type="button" class="btn" id="exp-cancel" onclick="clearExpForm()" style="display:none; margin-left:0.5rem;">Cancel</button>
+          </form>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <h3 style="margin:0;">Existing Timeline Entries</h3>
+          <button type="button" class="btn btn-primary" onclick="restoreTimeline()" style="padding:0.3rem 0.8rem; font-size:0.8rem;">↻ Restore Default Timeline</button>
+        </div>
+        <div id="exp-list" class="grid"></div>
       </section>
 
       <!-- Certs Tab -->
@@ -660,6 +784,83 @@
         </div>
       </section>
 
+      <!-- Tooling Ticker & Ecosystem Tab -->
+      <section id="ecosystem" class="tab-pane">
+        <h2 style="color:var(--text); font-weight:700; margin-bottom:1.5rem;">🌐 Tooling Ticker &amp; Ecosystem Manager</h2>
+        <div class="card" style="margin-bottom: 2rem; background:rgba(255,255,255,0.025); border:1px solid var(--border); border-radius:10px; padding:1.8rem;">
+          <h3 id="ticker-form-title" style="margin-top:0; color:var(--teal);">Add Tooling Ticker Item</h3>
+          <form id="ticker-form" action="javascript:void(0);" onsubmit="event.preventDefault(); saveTickerItem(); return false;" autocomplete="off">
+            <input type="hidden" id="ticker-id">
+            <div class="form-group">
+              <label style="font-weight:600;">Technology / Tool Name *</label>
+              <input type="text" id="ticker-name" class="form-control" placeholder="e.g. AWS Cloud, Docker, Postman, Linux Bash" required>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:600;">Icon (SimpleIcons slug, SVG Data URI, or Image URL)</label>
+              <input type="text" id="ticker-icon" class="form-control" placeholder="e.g. python, docker, linux, aws, or image URL">
+              <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:0.3rem;">For standard tech icons, enter slugs like: <code>python</code>, <code>docker</code>, <code>mysql</code>, <code>linux</code>, <code>git</code>, <code>github</code>, <code>postman</code>. AWS uses an auto-embedded SVG URI.</span>
+            </div>
+            <div id="ticker-alert" class="status-alert" style="display:none;"></div>
+            <button type="submit" id="ticker-submit-btn" class="btn btn-primary">💾 Save Ticker Item</button>
+            <button type="button" class="btn" id="ticker-cancel" onclick="clearTickerForm()" style="display:none; margin-left:0.5rem;">Cancel</button>
+          </form>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <h3 style="margin:0;">Current Tooling Ticker Ecosystem</h3>
+          <button type="button" class="btn btn-primary" onclick="restoreTicker()" style="padding:0.3rem 0.8rem; font-size:0.8rem;">↻ Restore Default Ticker</button>
+        </div>
+        <div id="ticker-list" class="grid"></div>
+      </section>
+
+      <!-- Events & Leadership Showcase Tab -->
+      <section id="events" class="tab-pane">
+        <h2 style="color:var(--text); font-weight:700; margin-bottom:1.5rem;">🎉 Events &amp; Leadership Showcase Manager</h2>
+        <div class="card" style="margin-bottom: 2rem; background:rgba(255,255,255,0.025); border:1px solid var(--border); border-radius:10px; padding:1.8rem;">
+          <h3 id="events-form-title" style="margin-top:0; color:var(--teal);">Add Event / Award Item</h3>
+          <form id="events-form" action="javascript:void(0);" onsubmit="event.preventDefault(); saveEventItem(); return false;" autocomplete="off">
+            <input type="hidden" id="events-id">
+            <div class="form-group">
+              <label style="font-weight:600;">Event / Award Title *</label>
+              <input type="text" id="events-title" class="form-control" placeholder="e.g. Exemplary Achiever Award or Production AWS Setup" required>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:600;">Subtitle / Category *</label>
+              <input type="text" id="events-org" class="form-control" placeholder="e.g. Academic Excellence — ECE Department" required>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:600;">Location / Organization *</label>
+              <input type="text" id="events-location" class="form-control" placeholder="e.g. United Institute of Technology, Coimbatore" required>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:600;">Description</label>
+              <textarea id="events-desc" class="form-control" rows="3" placeholder="Describe award details, recognition, AICTE / Ministry of Education roles, etc."></textarea>
+            </div>
+            <div class="form-group" style="display:flex; gap:1rem;">
+              <div style="flex:1;">
+                <label style="font-weight:600;">Icon Emoji / Symbol</label>
+                <input type="text" id="events-icon" class="form-control" placeholder="e.g. 🎖️, ☁️, 💡, 🏆">
+              </div>
+              <div style="flex:1;">
+                <label style="font-weight:600;">Badge Color Accent</label>
+                <select id="events-color" class="form-control">
+                  <option value="gold">Gold 🎖️</option>
+                  <option value="teal">Teal ☁️</option>
+                  <option value="violet">Violet 💡</option>
+                </select>
+              </div>
+            </div>
+            <div id="events-alert" class="status-alert" style="display:none;"></div>
+            <button type="submit" id="events-submit-btn" class="btn btn-primary">💾 Save Event / Award</button>
+            <button type="button" class="btn" id="events-cancel" onclick="clearEventsForm()" style="display:none; margin-left:0.5rem;">Cancel</button>
+          </form>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <h3 style="margin:0;">Current Events &amp; Awards</h3>
+          <button type="button" class="btn btn-primary" onclick="restoreEvents()" style="padding:0.3rem 0.8rem; font-size:0.8rem;">↻ Restore Default Events</button>
+        </div>
+        <div id="events-list" class="grid"></div>
+      </section>
+
       <!-- Blog Tab -->
       <section id="blog" class="tab-pane">
         <h2>Blog Manager</h2>
@@ -755,22 +956,113 @@
               <div id="resume-status" style="margin-top:0.4rem; font-size:0.78rem; color:var(--teal);"></div>
             </div>
             <hr style="border-color:var(--border); margin:1.5rem 0;">
-            <h3 style="margin-bottom:1rem; color:var(--teal);">Section Visibility Control (Toggle ON/OFF)</h3>
-            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;">
-              <input type="checkbox" id="toggle-recs" style="width:20px; height:20px; cursor:pointer;">
-              <label for="toggle-recs" style="margin:0; cursor:pointer; font-weight:600;">Show Endorsements / Recommendations Section</label>
-            </div>
-            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;">
-              <input type="checkbox" id="toggle-events" style="width:20px; height:20px; cursor:pointer;">
-              <label for="toggle-events" style="margin:0; cursor:pointer; font-weight:600;">Show Industrial Exposure &amp; Events Section</label>
-            </div>
-            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;">
-              <input type="checkbox" id="toggle-github" style="width:20px; height:20px; cursor:pointer;">
-              <label for="toggle-github" style="margin:0; cursor:pointer; font-weight:600;">Show GitHub Open Source Section</label>
-            </div>
-            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1.5rem;">
-              <input type="checkbox" id="toggle-achievements" style="width:20px; height:20px; cursor:pointer;">
-              <label for="toggle-achievements" style="margin:0; cursor:pointer; font-weight:600;">Show Achievements &amp; Awards Section</label>
+            <h3 style="margin-bottom:0.4rem; color:var(--teal); font-weight:700;">🎛️ Section Visibility Control (Toggle ON/OFF)</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1.2rem;">Enable or disable visibility of any section on your live portfolio homepage instantly with slick ON/OFF toggle switches.</p>
+
+            <div class="toggle-switch-grid">
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">⚡ Availability Banner</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-avail" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">📊 Live Stats Counters</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-stats" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">👤 Background &amp; Core Bio</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-about" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🌐 Tooling Ticker Bar</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-ticker" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">💼 Experience &amp; Timeline</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-experience" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">💻 Selected Projects</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-projects" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🎯 Technical Skills Bars</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-skills" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🏆 Verified Certifications</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-certifications" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🎉 Industrial Exposure &amp; Events</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-events" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🎖️ Achievements &amp; Awards</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-achievements" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">💬 Endorsements / Feedback</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-recs" onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🐙 GitHub &amp; Open Source</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-github" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">📬 Get In Touch &amp; Contact</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-contact" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
             </div>
             <hr style="border-color:var(--border); margin:1.5rem 0;">
             <h3 style="margin-bottom:1rem; color:var(--teal);">🔐 Admin Password &amp; Master Credentials</h3>
@@ -885,7 +1177,11 @@
       if (btn) btn.style.display = 'inline-block';
     };
 
-    window.togglePasswordVisibility = function() {
+    window.togglePasswordVisibility = function(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
       const p = document.getElementById('login-password');
       const b = document.getElementById('toggle-pass-btn');
       if (!p) return;
@@ -1039,7 +1335,7 @@
         org: 'ZenFuture Technologies',
         date: 'ZF-INTERN-0026 · June–July 2026',
         desc: 'Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.',
-        image: 'cert1.jpg'
+        image: ''
       },
       {
         id: 'cert_2',
@@ -1047,7 +1343,7 @@
         org: 'Anthropic',
         date: 'Certified · 2025',
         desc: 'Certified by Anthropic in AI frameworks, LLM system architecture, prompt engineering, and AI safety foundations.',
-        image: 'cert1.jpg'
+        image: ''
       },
       {
         id: 'cert_3',
@@ -1063,7 +1359,7 @@
         org: 'HackerRank',
         date: 'Role Certification (2024)',
         desc: 'Passed HackerRank Software Engineer role certification — covering algorithms, data structures, and software development.',
-        image: 'cert1.jpg'
+        image: ''
       }
     ];
 
@@ -1131,10 +1427,88 @@
       }
     ];
 
+    const defaultTimeline = [
+      {
+        id: 'exp_1',
+        date: 'JUNE 2026 — JULY 2026',
+        role: 'AWS Cloud Engineer Intern',
+        org: 'ZenFuture Technologies · Coimbatore, India (Cert No. ZF-INTERN-0026)',
+        desc: 'Built and deployed ZentroShift ERM across 6 AWS services: EC2, S3, CloudFront, RDS, VPC, and CloudWatch alarms.'
+      },
+      {
+        id: 'exp_2',
+        date: '2023 — PRESENT',
+        role: 'Freelance IT Support & Digital Designer',
+        org: 'Self-Employed · Coimbatore, India',
+        desc: 'Hardware troubleshooting, software setup, and digital design deliverables for small business clients.'
+      },
+      {
+        id: 'exp_3',
+        date: '2023 — 2027',
+        role: 'B.E. Electronics & Communication Engineering',
+        org: 'United Institute of Technology · Coimbatore, Tamil Nadu (CGPA: 7.13 / 10)',
+        desc: 'Awarded Exemplary Achiever Award by ECE department. Serving as IIC Innovation Ambassador.'
+      },
+      {
+        id: 'exp_4',
+        date: '2021 — 2023',
+        role: 'Higher Secondary Certificate (Class XII)',
+        org: 'Govt. Hr. Sec. School, Hale Dharmapuri · Tamil Nadu State Board',
+        desc: 'Completed Higher Secondary Certificate with focus on Physics, Chemistry, and Mathematics.'
+      }
+    ];
+
+    const defaultTicker = [
+      { id: 'tick_1', name: 'AWS Cloud', icon: 'aws' },
+      { id: 'tick_2', name: 'Python', icon: 'python' },
+      { id: 'tick_3', name: 'MySQL RDS', icon: 'mysql' },
+      { id: 'tick_4', name: 'Arduino & IoT', icon: 'arduino' },
+      { id: 'tick_5', name: 'Git', icon: 'git' },
+      { id: 'tick_6', name: 'GitHub', icon: 'github' },
+      { id: 'tick_7', name: 'Linux Bash', icon: 'linux' },
+      { id: 'tick_8', name: 'Postman', icon: 'postman' },
+      { id: 'tick_9', name: 'Docker', icon: 'docker' },
+      { id: 'tick_10', name: 'JavaScript', icon: 'javascript' },
+      { id: 'tick_11', name: 'Networking', icon: 'cisco' }
+    ];
+
+    const defaultEvents = [
+      {
+        id: 'ev_1',
+        title: 'Exemplary Achiever Award',
+        org: 'Academic Excellence — ECE Department',
+        location: 'United Institute of Technology, Coimbatore',
+        desc: 'Recognized for outstanding academic performance, leadership, and exemplary contribution in the Department of Electronics and Communication Engineering.',
+        icon: '🎖️',
+        color: 'gold'
+      },
+      {
+        id: 'ev_2',
+        title: 'Production AWS Setup Across 6 Services',
+        org: 'Real Infrastructure — Not a Tutorial Project',
+        location: 'ZenFuture Technologies · June–July 2026',
+        desc: 'Deployed a real, production-grade AWS setup across 6 services (EC2, S3, CloudFront, RDS, VPC, CloudWatch) during the ZenFuture Technologies internship.',
+        icon: '☁️',
+        color: 'teal'
+      },
+      {
+        id: 'ev_3',
+        title: 'IIC Student Innovation Ambassador',
+        org: 'Ministry of Education Innovation Cell',
+        location: 'AICTE & MoE, Government of India',
+        desc: 'Student Innovation Ambassador representing United Institute of Technology at the Institution\'s Innovation Council under the Ministry of Education, Government of India.',
+        icon: '💡',
+        color: 'violet'
+      }
+    ];
+
     let certs = getStorage('custom_certs', defaultCerts);
     let projects = getStorage('custom_projects', defaultProjects);
     let skills = getStorage('custom_skills', defaultSkills);
     let blogs = getStorage('custom_blog_posts', defaultBlogs);
+    let timeline = getStorage('custom_timeline', defaultTimeline);
+    let ticker = getStorage('custom_ticker', defaultTicker);
+    let events = getStorage('custom_events', defaultEvents);
 
     // Tab Switching
     document.querySelectorAll('.tab-link').forEach(link => {
@@ -1158,6 +1532,9 @@
         if (tabId === 'profile') loadProfile();
         if (tabId === 'analytics') loadAnalytics();
         if (tabId === 'logs') renderAccessLogs();
+        if (tabId === 'experience') renderTimelineList();
+        if (tabId === 'ecosystem') renderTickerList();
+        if (tabId === 'events') renderEventsList();
       });
     });
 
@@ -1186,10 +1563,18 @@
         if (!file) return;
         const reader = new FileReader();
         reader.onload = ev => {
-          $('prof-avatar').value = ev.target.result;
-          $('prof-avatar-preview').src = ev.target.result;
+          const dataUrl = ev.target.result;
+          $('prof-avatar').value = 'profile.jpg';
+          $('prof-avatar-preview').src = dataUrl;
           $('prof-avatar-preview').style.display = 'block';
-          showToast('Avatar image loaded! Click "Crop Avatar Image" to crop.');
+          
+          // Automate Method 1: Auto-download as profile.jpg
+          const a = document.createElement('a');
+          a.href = dataUrl;
+          a.download = 'profile.jpg';
+          a.click();
+
+          showToast('⚡ Method 1 Automated! Downloaded profile.jpg — place in G:\\Portfolio\\ for 100% global reflection!');
         };
         reader.readAsDataURL(file);
       });
@@ -1261,6 +1646,19 @@
       loadProfile();
       showToast('Profile reset to default!');
     });
+
+    window.exportProfileJpg = () => {
+      const avatarData = ($('prof-avatar') ? $('prof-avatar').value : '') || localStorage.getItem('custom_profile_avatar');
+      if (!avatarData || avatarData.trim() === '') {
+        showToast('⚠️ No custom avatar photo loaded yet!');
+        return;
+      }
+      const a = document.createElement('a');
+      a.href = avatarData;
+      a.download = 'profile.jpg';
+      a.click();
+      showToast('📥 Downloaded profile.jpg! Replace G:\\Portfolio\\profile.jpg with this file to apply across all devices.');
+    };
 
     /* ══ REUSABLE INTERACTIVE IMAGE CROPPER MODAL LOGIC ══ */
     let cropperTargetInput = null;
@@ -1437,27 +1835,39 @@
         const file = e.target.files[0];
         if (!file) return;
 
+        const safeFileName = file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
+
         if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
           const reader = new FileReader();
           reader.onload = ev => {
-            if ($('cert-image')) $('cert-image').value = ev.target.result;
-            if ($('crop-container')) $('crop-container').style.display = 'none';
-            if ($('crop-preview')) $('crop-preview').style.display = 'none';
+            if ($('cert-image')) $('cert-image').value = safeFileName;
             if ($('pdf-preview')) $('pdf-preview').style.display = 'block';
-            showToast('PDF Certificate attached!');
+
+            // Auto-download for repo
+            const a = document.createElement('a');
+            a.href = ev.target.result;
+            a.download = safeFileName;
+            a.click();
+
+            showToast('⚡ Method 1 Automated! Downloaded ' + safeFileName + ' — copy to G:\\Portfolio\\!');
           };
           reader.readAsDataURL(file);
         } else {
           const reader = new FileReader();
           reader.onload = ev => {
-            if ($('cert-image')) $('cert-image').value = ev.target.result;
-            if ($('pdf-preview')) $('pdf-preview').style.display = 'none';
+            if ($('cert-image')) $('cert-image').value = safeFileName;
             if ($('crop-preview')) {
               $('crop-preview').src = ev.target.result;
               $('crop-preview').style.display = 'block';
             }
-            if ($('crop-container')) $('crop-container').style.display = 'none';
-            showToast('Image uploaded successfully!');
+
+            // Auto-download for repo
+            const a = document.createElement('a');
+            a.href = ev.target.result;
+            a.download = safeFileName;
+            a.click();
+
+            showToast('⚡ Method 1 Automated! Downloaded ' + safeFileName + ' — copy to G:\\Portfolio\\!');
           };
           reader.readAsDataURL(file);
         }
@@ -1630,10 +2040,18 @@
       $('proj-file').addEventListener('change', e => {
         const file = e.target.files[0];
         if (!file) return;
+        const safeFileName = file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
         const reader = new FileReader();
         reader.onload = ev => {
-          $('proj-image').value = ev.target.result;
-          showToast('Project cover image uploaded!');
+          $('proj-image').value = safeFileName;
+
+          // Auto-download for repo
+          const a = document.createElement('a');
+          a.href = ev.target.result;
+          a.download = safeFileName;
+          a.click();
+
+          showToast('⚡ Method 1 Automated! Downloaded ' + safeFileName + ' — copy to G:\\Portfolio\\!');
         };
         reader.readAsDataURL(file);
       });
@@ -1951,11 +2369,21 @@
       const resData = localStorage.getItem('custom_resume_data');
       if (resData && $('resume-status')) $('resume-status').innerText = '📄 Resume Document Attached & Saved';
 
-      $('toggle-recs').checked = localStorage.getItem('hide_recommendations') !== 'true';
-      $('toggle-events').checked = localStorage.getItem('hide_events') !== 'true';
-      $('toggle-github').checked = localStorage.getItem('hide_github') !== 'true';
-      $('toggle-achievements').checked = localStorage.getItem('hide_achievements') !== 'true';
+      const keys = ['avail', 'stats', 'about', 'ticker', 'experience', 'projects', 'skills', 'certifications', 'events', 'achievements', 'recs', 'github', 'contact'];
+      keys.forEach(k => {
+        const storageKey = (k === 'recs') ? 'hide_recommendations' : ('hide_' + k);
+        const el = $('toggle-' + k);
+        if (el) {
+          // Default recs is hidden unless enabled; others default to shown
+          if (k === 'recs') {
+            el.checked = localStorage.getItem(storageKey) === 'false';
+          } else {
+            el.checked = localStorage.getItem(storageKey) !== 'true';
+          }
+        }
+      });
     }
+
     $('settings-form').addEventListener('submit', e => {
       e.preventDefault();
       e.stopPropagation();
@@ -1977,10 +2405,14 @@
           localStorage.setItem('custom_admin_pass', $('set-admin-pass').value.trim());
         }
 
-        localStorage.setItem('hide_recommendations', $('toggle-recs').checked ? 'false' : 'true');
-        localStorage.setItem('hide_events', $('toggle-events').checked ? 'false' : 'true');
-        localStorage.setItem('hide_github', $('toggle-github').checked ? 'false' : 'true');
-        localStorage.setItem('hide_achievements', $('toggle-achievements').checked ? 'false' : 'true');
+        const keys = ['avail', 'stats', 'about', 'ticker', 'experience', 'projects', 'skills', 'certifications', 'events', 'achievements', 'recs', 'github', 'contact'];
+        keys.forEach(k => {
+          const storageKey = (k === 'recs') ? 'hide_recommendations' : ('hide_' + k);
+          const el = $('toggle-' + k);
+          if (el) {
+            localStorage.setItem(storageKey, el.checked ? 'false' : 'true');
+          }
+        });
 
         if (window.PortfolioAPI && typeof PortfolioAPI.syncGlobalCMSData === 'function') {
           PortfolioAPI.syncGlobalCMSData();
@@ -2152,11 +2584,299 @@
       if ($('log-count-badge')) $('log-count-badge').innerText = `${logs.length} Cross-Device Sessions Logged`;
     }
 
-    window.clearAccessLogs = () => {
-      if (!confirm('Clear all access security logs?')) return;
-      localStorage.removeItem('admin_access_logs');
-      renderAccessLogs();
-      showToast('Access logs cleared!');
+    /* ══ RESUME PDF & DOCUMENT FILE UPLOADER ══ */
+    const profResumeFile = $('prof-resume-file');
+    if (profResumeFile) {
+      profResumeFile.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          const resUrl = ev.target.result;
+          if ($('prof-resume-url')) $('prof-resume-url').value = resUrl;
+          if ($('resume-preview-status')) $('resume-preview-status').style.display = 'block';
+          if ($('resume-preview-link')) $('resume-preview-link').href = resUrl;
+          showToast('📄 Resume document loaded! Click "Save Profile & Resume PDF" to apply site-wide.');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Load Resume URL on profile tab open
+    const origLoadProfile = typeof loadProfile === 'function' ? loadProfile : null;
+    loadProfile = function() {
+      if (origLoadProfile) origLoadProfile();
+      const savedRes = localStorage.getItem('custom_resume_pdf') || '';
+      if (savedRes && $('prof-resume-url')) {
+        $('prof-resume-url').value = savedRes;
+        if ($('resume-preview-status')) $('resume-preview-status').style.display = 'block';
+        if ($('resume-preview-link')) $('resume-preview-link').href = savedRes;
+      }
+    };
+
+    /* ══ TIMELINE & EXPERIENCE CRUD ══ */
+    function renderTimelineList() {
+      const container = $('exp-list');
+      if (!container) return;
+      let items = getStorage('custom_timeline', defaultTimeline);
+      container.innerHTML = items.map((t, idx) => `
+        <div class="card" style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:1.2rem;">
+          <p style="font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--teal); font-weight:600; margin-bottom:0.2rem;">${t.date}</p>
+          <h4 style="margin:0 0 0.3rem; color:#fff; font-size:1rem;">${t.role}</h4>
+          <p style="margin:0 0 0.5rem; font-size:0.8rem; color:var(--text-muted);">${t.org}</p>
+          <p style="font-size:0.82rem; color:var(--text-dim); line-height:1.5; margin-bottom:1rem;">${t.desc}</p>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-primary" onclick="editExperience('${t.id}')" style="padding:0.25rem 0.65rem; font-size:0.75rem;">✏️ Edit</button>
+            <button type="button" class="btn btn-danger" onclick="deleteExperience('${t.id}')" style="padding:0.25rem 0.65rem; font-size:0.75rem;">🗑️ Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.saveExperience = () => {
+      const id = $('exp-id').value || generateId();
+      const role = $('exp-role').value;
+      const org = $('exp-org').value;
+      const date = $('exp-date').value;
+      const desc = $('exp-desc').value;
+
+      let items = getStorage('custom_timeline', defaultTimeline);
+      const existingIdx = items.findIndex(item => item.id === id);
+      const newEntry = { id, role, org, date, desc };
+
+      if (existingIdx > -1) {
+        items[existingIdx] = newEntry;
+      } else {
+        items.unshift(newEntry);
+      }
+
+      setStorage('custom_timeline', items);
+      if (window.PortfolioAPI && window.PortfolioAPI.syncTimeline) {
+        window.PortfolioAPI.syncTimeline(items);
+      }
+      renderTimelineList();
+      clearExpForm();
+      showToast('✓ Experience timeline entry saved successfully!');
+    };
+
+    window.editExperience = (id) => {
+      let items = getStorage('custom_timeline', defaultTimeline);
+      const item = items.find(t => t.id === id);
+      if (!item) return;
+      $('exp-id').value = item.id;
+      $('exp-role').value = item.role;
+      $('exp-org').value = item.org;
+      $('exp-date').value = item.date;
+      $('exp-desc').value = item.desc;
+      if ($('exp-form-title')) $('exp-form-title').innerText = 'Edit Timeline Entry';
+      if ($('exp-cancel')) $('exp-cancel').style.display = 'inline-block';
+      window.scrollTo({ top: $('exp-form').offsetTop - 80, behavior: 'smooth' });
+    };
+
+    window.deleteExperience = (id) => {
+      if (!confirm('Delete this timeline entry?')) return;
+      let items = getStorage('custom_timeline', defaultTimeline);
+      items = items.filter(t => t.id !== id);
+      setStorage('custom_timeline', items);
+      if (window.PortfolioAPI && window.PortfolioAPI.syncTimeline) {
+        window.PortfolioAPI.syncTimeline(items);
+      }
+      renderTimelineList();
+      showToast('🗑️ Timeline entry deleted.');
+    };
+
+    window.restoreTimeline = () => {
+      if (!confirm('Restore default experience timeline entries?')) return;
+      setStorage('custom_timeline', defaultTimeline);
+      renderTimelineList();
+      showToast('↻ Default timeline entries restored!');
+    };
+
+    window.clearExpForm = () => {
+      $('exp-id').value = '';
+      $('exp-role').value = '';
+      $('exp-org').value = '';
+      $('exp-date').value = '';
+      $('exp-desc').value = '';
+      if ($('exp-form-title')) $('exp-form-title').innerText = 'Add Timeline Entry';
+      if ($('exp-cancel')) $('exp-cancel').style.display = 'none';
+    };
+
+    /* ══ TOOLING TICKER & ECOSYSTEM CRUD ══ */
+    function renderTickerList() {
+      const container = $('ticker-list');
+      if (!container) return;
+      let items = getStorage('custom_ticker', defaultTicker);
+      container.innerHTML = items.map((t, idx) => `
+        <div class="card" style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:1rem; display:flex; align-items:center; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <span style="font-size:1.4rem; font-weight:700; color:var(--teal); font-family:'DM Mono',monospace;">${t.icon && t.icon.length > 2 ? '🖼️' : (t.icon || '⚡')}</span>
+            <div><h4 style="margin:0; color:#fff; font-size:0.95rem;">${t.name}</h4><p style="margin:0; font-size:0.75rem; color:var(--text-muted); font-family:'DM Mono',monospace;">Icon: ${t.icon}</p></div>
+          </div>
+          <div style="display:flex; gap:0.4rem;">
+            <button type="button" class="btn btn-primary" onclick="editTickerItem('${t.id}')" style="padding:0.25rem 0.55rem; font-size:0.75rem;">✏️ Edit</button>
+            <button type="button" class="btn btn-danger" onclick="deleteTickerItem('${t.id}')" style="padding:0.25rem 0.55rem; font-size:0.75rem;">🗑️ Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.saveTickerItem = () => {
+      const id = $('ticker-id').value || generateId();
+      const name = $('ticker-name').value;
+      const icon = $('ticker-icon').value;
+
+      let items = getStorage('custom_ticker', defaultTicker);
+      const existingIdx = items.findIndex(item => item.id === id);
+      const newEntry = { id, name, icon };
+
+      if (existingIdx > -1) {
+        items[existingIdx] = newEntry;
+      } else {
+        items.push(newEntry);
+      }
+
+      setStorage('custom_ticker', items);
+      if (window.PortfolioAPI && window.PortfolioAPI.syncTicker) {
+        window.PortfolioAPI.syncTicker(items);
+      }
+      renderTickerList();
+      clearTickerForm();
+      showToast('✓ Tooling ticker item saved successfully!');
+    };
+
+    window.editTickerItem = (id) => {
+      let items = getStorage('custom_ticker', defaultTicker);
+      const item = items.find(t => t.id === id);
+      if (!item) return;
+      $('ticker-id').value = item.id;
+      $('ticker-name').value = item.name;
+      $('ticker-icon').value = item.icon;
+      if ($('ticker-form-title')) $('ticker-form-title').innerText = 'Edit Ticker Item';
+      if ($('ticker-cancel')) $('ticker-cancel').style.display = 'inline-block';
+      window.scrollTo({ top: $('ticker-form').offsetTop - 80, behavior: 'smooth' });
+    };
+
+    window.deleteTickerItem = (id) => {
+      if (!confirm('Delete this ticker item?')) return;
+      let items = getStorage('custom_ticker', defaultTicker);
+      items = items.filter(t => t.id !== id);
+      setStorage('custom_ticker', items);
+      if (window.PortfolioAPI && window.PortfolioAPI.syncTicker) {
+        window.PortfolioAPI.syncTicker(items);
+      }
+      renderTickerList();
+      showToast('🗑️ Ticker item deleted.');
+    };
+
+    window.restoreTicker = () => {
+      if (!confirm('Restore default tooling ticker items?')) return;
+      setStorage('custom_ticker', defaultTicker);
+      renderTickerList();
+      showToast('↻ Default ticker items restored!');
+    };
+
+    window.clearTickerForm = () => {
+      $('ticker-id').value = '';
+      $('ticker-name').value = '';
+      $('ticker-icon').value = '';
+      if ($('ticker-form-title')) $('ticker-form-title').innerText = 'Add Tooling Ticker Item';
+      if ($('ticker-cancel')) $('ticker-cancel').style.display = 'none';
+    };
+
+    /* ══ EVENTS & LEADERSHIP SHOWCASE CRUD ══ */
+    function renderEventsList() {
+      const container = $('events-list');
+      if (!container) return;
+      let items = getStorage('custom_events', defaultEvents);
+      container.innerHTML = items.map((e, idx) => `
+        <div class="card" style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:1.2rem;">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.4rem;">
+            <span style="font-size:1.4rem;">${e.icon || '🎖️'}</span>
+            <div><h4 style="margin:0; color:#fff; font-size:1rem;">${e.title}</h4><p style="margin:0; font-size:0.78rem; color:var(--teal);">${e.location || e.org}</p></div>
+          </div>
+          <p style="font-size:0.82rem; color:var(--text-dim); line-height:1.5; margin-bottom:1rem;">${e.desc}</p>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-primary" onclick="editEventItem('${e.id}')" style="padding:0.25rem 0.65rem; font-size:0.75rem;">✏️ Edit</button>
+            <button type="button" class="btn btn-danger" onclick="deleteEventItem('${e.id}')" style="padding:0.25rem 0.65rem; font-size:0.75rem;">🗑️ Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.saveEventItem = () => {
+      const id = $('events-id').value || generateId();
+      const title = $('events-title').value;
+      const org = $('events-org').value;
+      const location = $('events-location').value;
+      const desc = $('events-desc').value;
+      const icon = $('events-icon').value || '🎖️';
+      const color = $('events-color').value || 'gold';
+
+      let items = getStorage('custom_events', defaultEvents);
+      const existingIdx = items.findIndex(item => item.id === id);
+      const newEntry = { id, title, org, location, desc, icon, color };
+
+      if (existingIdx > -1) {
+        items[existingIdx] = newEntry;
+      } else {
+        items.unshift(newEntry);
+      }
+
+      setStorage('custom_events', items);
+      if (window.PortfolioAPI && window.PortfolioAPI.syncEvents) {
+        window.PortfolioAPI.syncEvents(items);
+      }
+      renderEventsList();
+      clearEventsForm();
+      showToast('✓ Event / Award item saved successfully!');
+    };
+
+    window.editEventItem = (id) => {
+      let items = getStorage('custom_events', defaultEvents);
+      const item = items.find(e => e.id === id);
+      if (!item) return;
+      $('events-id').value = item.id;
+      $('events-title').value = item.title;
+      $('events-org').value = item.org;
+      $('events-location').value = item.location;
+      $('events-desc').value = item.desc;
+      $('events-icon').value = item.icon;
+      $('events-color').value = item.color || 'gold';
+      if ($('events-form-title')) $('events-form-title').innerText = 'Edit Event / Award Item';
+      if ($('events-cancel')) $('events-cancel').style.display = 'inline-block';
+      window.scrollTo({ top: $('events-form').offsetTop - 80, behavior: 'smooth' });
+    };
+
+    window.deleteEventItem = (id) => {
+      if (!confirm('Delete this event item?')) return;
+      let items = getStorage('custom_events', defaultEvents);
+      items = items.filter(e => e.id !== id);
+      setStorage('custom_events', items);
+      if (window.PortfolioAPI && window.PortfolioAPI.syncEvents) {
+        window.PortfolioAPI.syncEvents(items);
+      }
+      renderEventsList();
+      showToast('🗑️ Event item deleted.');
+    };
+
+    window.restoreEvents = () => {
+      if (!confirm('Restore default events & leadership items?')) return;
+      setStorage('custom_events', defaultEvents);
+      renderEventsList();
+      showToast('↻ Default event items restored!');
+    };
+
+    window.clearEventsForm = () => {
+      $('events-id').value = '';
+      $('events-title').value = '';
+      $('events-org').value = '';
+      $('events-location').value = '';
+      $('events-desc').value = '';
+      $('events-icon').value = '';
+      $('events-color').value = 'gold';
+      if ($('events-form-title')) $('events-form-title').innerText = 'Add Event / Award Item';
+      if ($('events-cancel')) $('events-cancel').style.display = 'none';
     };
 
     /* ══ SECURE AUTHENTICATION GATE LOGIC ══ */
@@ -2273,6 +2993,6 @@
     });
   </script>
   <div id="toast"></div>
-  <script src="script.js?v=14.0"></script>
+  <script src="script.js?v=25.0"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=33.0">
+  <link rel="stylesheet" href="style.css?v=34.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -394,7 +394,10 @@
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
-      z-index: 3;
+      z-index: 20;
+      pointer-events: auto;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .pass-toggle-btn:hover {
       background: var(--teal-dim);
@@ -448,7 +451,7 @@
           <div class="cyber-input-group">
             <span class="cyber-input-icon">🔑</span>
             <input type="password" id="login-password" class="cyber-input-field" style="padding-right: 5.5rem;" placeholder="Enter master password..." autocomplete="off" required>
-            <button type="button" id="toggle-pass-btn" onclick="togglePasswordVisibility(event)" class="pass-toggle-btn">👁️ Show</button>
+            <button type="button" id="toggle-pass-btn" onmousedown="togglePasswordVisibility(event)" onclick="togglePasswordVisibility(event)" class="pass-toggle-btn">👁️ Show</button>
           </div>
         </div>
 
@@ -1192,6 +1195,7 @@
         p.type = 'password';
         if (b) b.innerHTML = '👁️ Show';
       }
+      return false;
     };
 
     window.adminLogout = function() {
@@ -1220,11 +1224,12 @@
       const enteredUser = (userEl ? userEl.value : '').trim().toLowerCase();
       const enteredPass = passEl ? passEl.value : '';
 
-      const storedUser = (localStorage.getItem('custom_admin_user') || DEFAULT_USER).trim().toLowerCase();
-      const storedPass = localStorage.getItem('custom_admin_pass') || DEFAULT_PASS_PLAIN;
+      const storedUser = (localStorage.getItem('custom_admin_user') || 'user').trim().toLowerCase();
+      const storedPass = localStorage.getItem('custom_admin_pass') || 'Cbifire948@';
 
-      const isUserValid = (enteredUser === storedUser || enteredUser === 'admin');
-      const isPassValid = (enteredPass === storedPass || enteredPass === 'Cbifire948@');
+      // STRICT SECURITY: Only stored password matches! Old passwords immediately invalidated!
+      const isUserValid = (enteredUser === storedUser || enteredUser === 'admin' || enteredUser === 'user');
+      const isPassValid = (enteredPass === storedPass);
 
       if (isUserValid && isPassValid && enteredUser !== '' && enteredPass !== '') {
         if (errEl) errEl.style.display = 'none';
