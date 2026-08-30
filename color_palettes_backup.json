@@ -1,0 +1,61 @@
+{
+  "portfolio_color_palettes": {
+    "version_9.0_original_teal": {
+      "name": "Original Muted Teal & Soft Violet",
+      "dark_mode": {
+        "--bg": "#0f1117",
+        "--bg-card": "rgba(255, 255, 255, 0.04)",
+        "--bg-card-hover": "rgba(255, 255, 255, 0.07)",
+        "--border": "rgba(255, 255, 255, 0.09)",
+        "--border-hover": "rgba(100, 255, 218, 0.35)",
+        "--teal": "#64ffda",
+        "--teal-dim": "rgba(100, 255, 218, 0.12)",
+        "--violet": "#a78bfa",
+        "--violet-dim": "rgba(167, 139, 250, 0.12)",
+        "--emerald": "#34d399",
+        "--amber": "#fbbf24",
+        "--rose": "#f87171",
+        "--text": "#e2e8f0",
+        "--text-muted": "#94a3b8",
+        "--text-dim": "#64748b"
+      }
+    },
+    "version_9.5_vercel_sky_blue": {
+      "name": "Vercel / Linear Sky Blue & Deep Indigo (Active)",
+      "dark_mode": {
+        "--bg": "#090d16",
+        "--bg-card": "rgba(30, 41, 59, 0.45)",
+        "--bg-card-hover": "rgba(30, 41, 59, 0.75)",
+        "--border": "rgba(255, 255, 255, 0.08)",
+        "--border-hover": "rgba(56, 189, 248, 0.4)",
+        "--teal": "#38bdf8",
+        "--teal-dim": "rgba(56, 189, 248, 0.12)",
+        "--violet": "#818cf8",
+        "--violet-dim": "rgba(129, 140, 248, 0.12)",
+        "--emerald": "#34d399",
+        "--amber": "#fbbf24",
+        "--rose": "#f87171",
+        "--text": "#f8fafc",
+        "--text-muted": "#94a3b8",
+        "--text-dim": "#64748b"
+      },
+      "light_mode": {
+        "--bg": "#f8fafc",
+        "--bg-card": "#ffffff",
+        "--bg-card-hover": "#ffffff",
+        "--border": "#e2e8f0",
+        "--border-hover": "rgba(2, 132, 199, 0.4)",
+        "--teal": "#0284c7",
+        "--teal-dim": "rgba(2, 132, 199, 0.08)",
+        "--violet": "#4f46e5",
+        "--violet-dim": "rgba(79, 70, 229, 0.08)",
+        "--emerald": "#059669",
+        "--amber": "#d97706",
+        "--rose": "#dc2626",
+        "--text": "#0f172a",
+        "--text-muted": "#475569",
+        "--text-dim": "#64748b"
+      }
+    }
+  }
+}

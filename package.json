@@ -1,0 +1,19 @@
+{
+  "name": "balaji-portfolio-backend",
+  "version": "1.0.0",
+  "description": "Open-Source Backend REST API for Balaji Chitrarasu's Developer Portfolio",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "portfolio",
+    "backend",
+    "aws",
+    "rest-api",
+    "open-source"
+  ],
+  "author": "Balaji Chitrarasu",
+  "license": "MIT"
+}

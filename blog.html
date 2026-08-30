@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech Blog | Balaji Chitrarasu — AWS Cloud, Embedded Systems & Software Engineering</title>
+<meta name="description" content="Technical blog by Balaji Chitrarasu — Guides on AWS cloud, PC hardware, office networking, IoT, and software development from Coimbatore, India.">
+<meta name="author" content="Balaji Chitrarasu">
+<link rel="canonical" href="https://balajichitrarasu.github.io/blog.html">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1117'/%3E%3Ctext x='16' y='22' font-size='18' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%2364ffda'%3EB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=9.5">
+<style>
+.blog-wrap { max-width: 1100px; margin: 0 auto; padding: calc(var(--nav-h) + 3rem) 1.5rem 5rem; }
+.blog-header { text-align: center; margin-bottom: 2.5rem; }
+.blog-header .sec-eyebrow { justify-content: center; }
+.blog-search { max-width: 460px; margin: 1.4rem auto; position: relative; }
+.blog-search input {
+  width: 100%; padding: .8rem 1.2rem .8rem 2.8rem;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-full); color: var(--text);
+  font-family: 'Inter',sans-serif; font-size: .9rem; outline: none;
+  transition: all .2s;
+}
+.blog-search input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(100,255,218,.1); }
+.blog-search input::placeholder { color: var(--text-dim); }
+.blog-search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: .9rem; }
+.blog-cats { display: flex; gap: .4rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
+.blog-cat-btn {
+  padding: .3rem .85rem; border-radius: var(--radius-full);
+  font-family: 'DM Mono',monospace; font-size: .68rem; text-transform: uppercase; letter-spacing: .04em;
+  background: rgba(255,255,255,.04); border: 1px solid var(--border);
+  color: var(--text-muted); cursor: pointer; transition: all .2s;
+}
+.blog-cat-btn:hover, .blog-cat-btn.active { background: var(--teal-dim); border-color: rgba(100,255,218,.3); color: var(--teal); }
+
+.blog-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr));
+  gap: 1.3rem; margin-top: 2rem;
+}
+.blog-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; cursor: pointer; transition: all .3s var(--ease);
+  display: flex; flex-direction: column;
+}
+.blog-card:hover { border-color: rgba(100,255,218,.28); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+.blog-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+.blog-tag { font-family: 'DM Mono',monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .07em; color: var(--teal); font-weight: 600; margin-bottom: .5rem; }
+.blog-card-body h3 { font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: .5rem; line-height: 1.4; }
+.blog-card-body p { font-size: .84rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 1rem; flex: 1; }
+.blog-card-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid var(--border); padding-top: .75rem;
+  font-size: .76rem; color: var(--text-dim);
+}
+.blog-read { color: var(--teal); font-weight: 600; }
+.blog-empty { grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted); font-size: .9rem; }
+
+/* Article modal */
+.art-modal {
+  display: none; position: fixed; inset: 0; z-index: 900;
+  background: rgba(8,10,16,.9); backdrop-filter: blur(18px);
+  align-items: flex-start; justify-content: center; padding: 2rem 1.5rem;
+  overflow-y: auto;
+}
+.art-modal.open { display: flex; }
+.art-box {
+  background: rgba(12,16,28,.98); border: 1px solid rgba(100,255,218,.2);
+  border-radius: var(--radius); padding: 2.4rem; max-width: 680px; width: 100%;
+  position: relative; margin: auto;
+  animation: popUp .35s var(--ease) both;
+  box-shadow: 0 30px 70px rgba(0,0,0,.8);
+}
+.art-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--teal), var(--violet)); }
+.art-close {
+  position: absolute; top: 1rem; right: 1rem;
+  background: rgba(255,255,255,.06); border: 1px solid var(--border);
+  color: var(--text-muted); width: 34px; height: 34px; border-radius: 50%;
+  font-size: .95rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.art-close:hover { background: var(--teal-dim); color: var(--teal); transform: rotate(90deg); }
+.art-cat { font-family: 'DM Mono',monospace; font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: .6rem; font-weight: 600; }
+.art-title { font-weight: 700; font-size: 1.4rem; color: #fff; line-height: 1.3; margin-bottom: .6rem; padding-right: 2.5rem; }
+.art-meta { font-family: 'DM Mono',monospace; font-size: .76rem; color: var(--text-dim); margin-bottom: 1.5rem; }
+.art-body { font-size: .92rem; color: var(--text-muted); line-height: 1.85; }
+.art-body h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin: 1.2rem 0 .5rem; }
+.art-body p { margin-bottom: .8rem; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><span class="nav-brand-badge">BC</span>Balaji Chitrarasu</a>
+    <ul>
+      <li><a href="index.html">← Portfolio</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Day/Night Mode" title="Toggle Theme (Light/Dark)"><span class="theme-icon-dark">🌙</span><span class="theme-icon-light">☀️</span></button></li>
+      <li><a href="admin.html" class="nav-pill-v">⚙ Admin</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="blog-wrap">
+  <!-- HEADER -->
+  <div class="blog-header">
+    <p class="sec-eyebrow">Technical Writing</p>
+    <h1 class="sec-title" style="margin-bottom:.6rem">Articles &amp; Guides</h1>
+    <p style="color:var(--text-muted);max-width:500px;margin:0 auto;font-size:.92rem">Practical insights on AWS cloud, PC hardware, office networking, IoT systems, and software engineering.</p>
+
+    <div class="blog-search">
+      <span class="blog-search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search articles...">
+    </div>
+
+    <div class="blog-cats">
+      <button class="blog-cat-btn active" data-cat="all">All Articles</button>
+      <button class="blog-cat-btn" data-cat="aws">AWS &amp; Cloud</button>
+      <button class="blog-cat-btn" data-cat="hardware">Hardware &amp; PC</button>
+      <button class="blog-cat-btn" data-cat="networking">Networking</button>
+      <button class="blog-cat-btn" data-cat="iot">IoT &amp; Embedded</button>
+      <button class="blog-cat-btn" data-cat="software">Software</button>
+    </div>
+  </div>
+
+  <!-- BLOG GRID -->
+  <div class="blog-grid" id="blogGrid"></div>
+</div>
+
+<!-- ARTICLE READER MODAL -->
+<div id="articleModal" class="art-modal" role="dialog" aria-modal="true">
+  <div class="art-box">
+    <button class="art-close" id="artClose">✕</button>
+    <p class="art-cat" id="aCat"></p>
+    <h2 class="art-title" id="aTitle"></h2>
+    <p class="art-meta" id="aMeta"></p>
+    <div class="art-body" id="aBody"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="index.html">Portfolio</a>
+      <a href="index.html#projects">Projects</a>
+      <a href="index.html#certifications">Certs</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="admin.html">Admin</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 <span>Balaji Chitrarasu</span>. Built in Coimbatore, Tamil Nadu, India.</p>
+  </div>
+</footer>
+
+<script>
+var DEFAULT_ARTICLES = [
+  {
+    id: 'aws-vpc-setup',
+    title: 'How I Built a Production Custom VPC on AWS from Scratch',
+    cat: 'aws',
+    time: '8 min',
+    date: 'July 2026',
+    excerpt: 'Real-world walkthrough of setting up a production VPC with public subnets, Internet Gateway, NAT Gateway, Security Groups, and IAM roles during my ZenFuture internship.',
+    body: '<h3>Why a Custom VPC?</h3><p>AWS default VPCs work for demos — but real production apps need isolation, fine-grained routing, and controlled egress. For ZentroShift, I built a full VPC from scratch.</p><h3>Architecture</h3><p>1 VPC (10.0.0.0/16) → 2 public subnets across AZs → Internet Gateway for inbound → NAT Gateway for secure outbound Lambda/EC2 calls → Route Tables per subnet → Security Groups with minimal port exposure (80, 443, 22 restricted by IP).</p><h3>IAM Role Access Control</h3><p>Implemented 4-tier IAM roles: SuperAdmin, Admin, Manager, Employee — each with scoped permissions via JSON policies. All REST API calls validated through Postman before going live.</p><h3>CloudWatch Alarms</h3><p>Set CPU utilization >80% and unhealthy instance alarms with SNS email alerts for server health monitoring.</p>'
+  },
+  {
+    id: 'iot-solar-crossing',
+    title: 'Building a Smart Solar-Powered Pedestrian Crossing Alert System',
+    cat: 'iot',
+    time: '6 min',
+    date: 'March 2026',
+    excerpt: 'How I designed an Arduino-based zebra crossing alert system with IR sensors, LDR light sensing, solar panel, and boost converter battery management.',
+    body: '<h3>Problem Statement</h3><p>Most pedestrian crossings in rural areas lack active warning systems for drivers, especially at night. This IoT system provides automated audio-visual alerts.</p><h3>Hardware Stack</h3><p>Arduino Uno · 2× IR Sensors (pedestrian detection at 1m range) · LDR (ambient light threshold trigger) · Solar panel (6V, 1W) · MT3608 Boost Converter (3.7V → 5V) · Li-ion 18650 Battery · Red/Green LEDs + 5V Buzzer.</p><h3>Logic Flow</h3><p>When the LDR detects low-light (dusk or dark) AND an IR sensor triggers, the Arduino activates the buzzer + red LED for 5 seconds before switching green. The solar panel charges the battery via the boost converter during daylight hours.</p><h3>Key Challenge</h3><p>Managing boost converter noise interference with IR sensor readings — solved by adding 100µF capacitors across the power rails.</p>'
+  },
+  {
+    id: 'pc-assembly-guide',
+    title: 'Step-by-Step Custom PC Assembly & Thermal Optimization Guide',
+    cat: 'hardware',
+    time: '7 min',
+    date: 'Jan 2026',
+    excerpt: 'Comprehensive guide to component selection, anti-static precautions, thermal paste application, and BIOS configuration for maximum system stability.',
+    body: '<h3>1. Component Compatibility</h3><p>Match CPU socket to motherboard (LGA1700 or AM5), verify RAM speed support (XMP/EXPO), ensure PSU wattage headroom of 20%+ above total TDP for stability during peak loads.</p><h3>2. Thermal Paste Application</h3><p>Apply a pea-sized dot of quality compound (e.g. Noctua NT-H1) in the center of the CPU IHS. Mounting pressure spreads it evenly — never smear manually.</p><h3>3. BIOS Configuration</h3><p>Boot into BIOS immediately. Enable XMP/EXPO memory profiles. Set fan curves: 30% at idle, 100% above 80°C CPU temp. Update BIOS firmware before installing OS.</p><h3>4. Cable Management & Airflow</h3><p>Route cables behind the motherboard tray. Maintain positive pressure airflow: more intake fans than exhaust to reduce dust buildup on components.</p>'
+  },
+  {
+    id: 'office-lan-setup',
+    title: 'Designing a High-Performance Office LAN Network',
+    cat: 'networking',
+    time: '6 min',
+    date: 'Dec 2025',
+    excerpt: 'How to plan static IP allocation, VLAN segmentation, switch port management, and shared network printer configuration for a small business office.',
+    body: '<h3>1. IP Planning</h3><p>Use 192.168.1.0/24 with DHCP reservations for static devices (NAS, printers, servers: .100-.150) and dynamic pool for client machines (.151-.250).</p><h3>2. VLAN Segmentation</h3><p>Separate admin/finance traffic (VLAN 10) from general staff (VLAN 20) and guest Wi-Fi (VLAN 30) to prevent lateral movement between network segments.</p><h3>3. Switch Port Configuration</h3><p>Assign access ports per VLAN. Set trunk ports only between managed switches and the router. Disable unused ports to reduce attack surface.</p><h3>4. Shared Printer Setup</h3><p>Assign printers static IPs. Install vendor print server software on a Windows Server VM, then deploy printer to all endpoints via Group Policy.</p>'
+  },
+  {
+    id: 'python-rest-api',
+    title: 'Building REST APIs with Python Flask & MySQL — Lessons from ZentroShift',
+    cat: 'software',
+    time: '5 min',
+    date: 'Aug 2026',
+    excerpt: 'Practical lessons building Postman-tested REST APIs for employee attendance, role-based auth, and location clock-in during my AWS internship project.',
+    body: '<h3>Project Context</h3><p>ZentroShift required REST APIs for: employee login, role-based dashboard data, GPS-based clock-in, and admin overrides — all tested via Postman before integration with the AWS-hosted frontend.</p><h3>Flask Route Structure</h3><p>Organized routes by resource: /auth/login, /employees/, /attendance/clockin, /admin/users — each validating JWT tokens from an IAM-integrated auth layer.</p><h3>MySQL on Amazon RDS</h3><p>Used SQLAlchemy ORM with connection pooling (pool_size=5) against an Amazon RDS MySQL 8.0 instance in the private subnet — only accessible from the EC2 instance\'s security group.</p><h3>Testing with Postman</h3><p>Maintained a Postman collection with environment variables for base URL and auth tokens. Ran automated pre-request scripts to refresh JWT tokens before protected endpoint tests.</p>'
+  }
+];
+
+function getAllArticles() {
+  var stored = localStorage.getItem('custom_blog_posts');
+  if (stored) {
+    try {
+      var parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed.concat(DEFAULT_ARTICLES);
+    } catch(e) {}
+  }
+  return DEFAULT_ARTICLES;
+}
+
+var articles = getAllArticles();
+var currentCat = 'all';
+
+function renderArticles() {
+  var grid = document.getElementById('blogGrid');
+  var query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  
+  var filtered = articles.filter(function(a) {
+    var catMatch = currentCat === 'all' || a.cat === currentCat;
+    var qMatch = !query || a.title.toLowerCase().includes(query) || a.excerpt.toLowerCase().includes(query);
+    return catMatch && qMatch;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="blog-empty">No matching articles found.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(function(a) {
+    return '<article class="blog-card" onclick="openArticle(\'' + a.id + '\')">' +
+      '<div class="blog-card-body">' +
+        '<p class="blog-tag">' + a.cat.toUpperCase() + '</p>' +
+        '<h3>' + a.title + '</h3>' +
+        '<p>' + a.excerpt + '</p>' +
+        '<div class="blog-card-foot">' +
+          '<span class="blog-read">Read Article →</span>' +
+          '<span>' + (a.time || '5 min') + ' read · ' + (a.date || '2026') + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</article>';
+  }).join('');
+}
+
+function openArticle(id) {
+  var a = articles.find(function(x) { return x.id == id; });
+  if (!a) return;
+  document.getElementById('aCat').textContent = a.cat.toUpperCase() + ' · ' + (a.date || '2026');
+  document.getElementById('aTitle').textContent = a.title;
+  document.getElementById('aMeta').textContent = (a.time || '5 min') + ' read';
+  document.getElementById('aBody').innerHTML = a.body;
+  var modal = document.getElementById('articleModal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeArticle() {
+  document.getElementById('articleModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('artClose').onclick = closeArticle;
+document.getElementById('articleModal').addEventListener('click', function(e) { if (e.target === this) closeArticle(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeArticle(); });
+document.getElementById('searchInput').addEventListener('input', renderArticles);
+
+document.querySelectorAll('.blog-cat-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.blog-cat-btn').forEach(function(b) { b.classList.remove('active'); });
+    this.classList.add('active');
+    currentCat = this.getAttribute('data-cat');
+    renderArticles();
+  });
+});
+
+/* Navbar scroll */
+var nav = document.getElementById('navbar'), lastY = 0;
+window.addEventListener('scroll', function() {
+  var y = window.scrollY;
+  nav.classList.toggle('hidden', y > lastY && y > 100);
+  nav.classList.toggle('scrolled', y > 30);
+  lastY = Math.max(y, 0);
+}, { passive: true });
+
+renderArticles();
+
+/* Theme Toggle */
+(function() {
+  var saved = 'dark';
+  try { saved = localStorage.getItem('site_theme') || 'dark'; } catch(e) {}
+  document.documentElement.setAttribute('data-theme', saved);
+
+  var themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function() {
+      var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('site_theme', next); } catch(e) {}
+    });
+  }
+})();
+</script>
+</body>
+</html>

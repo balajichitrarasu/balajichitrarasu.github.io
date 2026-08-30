@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balaji Chitrarasu | AWS Cloud Engineer &amp; ECE Graduate — Coimbatore</title>
+<meta name="description" content="Portfolio of Balaji Chitrarasu — B.E. ECE student at United Institute of Technology, Coimbatore. AWS Cloud Engineer Intern at ZenFuture Technologies. Deployed ZentroShift ERM across 6 AWS services.">
+<meta name="keywords" content="Balaji Chitrarasu, AWS Cloud Engineer, ZentroShift, ZenFuture Technologies, ECE Coimbatore, Embedded Systems, Python, Arduino IoT">
+<meta name="author" content="Balaji Chitrarasu">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://balajichitrarasu.github.io">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://balajichitrarasu.github.io">
+<meta property="og:title" content="Balaji Chitrarasu | AWS Cloud Engineer &amp; ECE Graduate">
+<meta property="og:description" content="AWS Cloud Engineer Intern & ECE Graduate from Coimbatore. Built ZentroShift ERM on 6 AWS services.">
+<meta property="og:image" content="https://balajichitrarasu.github.io/profile.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1117'/%3E%3Ctext x='16' y='22' font-size='18' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%2364ffda'%3EB%3C/text%3E%3C/svg%3E">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Balaji Chitrarasu","jobTitle":"AWS Cloud Engineer Intern","alumniOf":{"@type":"EducationalOrganization","name":"United Institute of Technology, Coimbatore"},"url":"https://balajichitrarasu.github.io","email":"balajichitrarasu07@gmail.com","telephone":"+917639683223","address":{"@type":"PostalAddress","addressLocality":"Coimbatore","addressRegion":"Tamil Nadu","addressCountry":"IN"},"sameAs":["https://www.linkedin.com/in/balajichitrarasu","https://github.com/balajichitrarasu"]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=9.5">
+</head>
+<body>
+
+<a class="skip-link" href="#hero">Skip to content</a>
+<div id="particles-js" aria-hidden="true"></div>
+
+<!-- TECH BACKGROUND OVERLAY — subtle circuit/blueprint drawing -->
+<svg class="tech-bg-overlay" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1200 2400">
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(100,255,218,0.025)" stroke-width="0.5"/>
+    </pattern>
+    <radialGradient id="glow1" cx="30%" cy="20%" r="35%"><stop offset="0%" stop-color="rgba(100,255,218,0.06)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+    <radialGradient id="glow2" cx="70%" cy="60%" r="30%"><stop offset="0%" stop-color="rgba(167,139,250,0.04)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+  </defs>
+  <rect width="1200" height="2400" fill="url(#grid)"/>
+  <rect width="1200" height="2400" fill="url(#glow1)"/>
+  <rect width="1200" height="2400" fill="url(#glow2)"/>
+  <!-- Circuit traces -->
+  <g class="circuit-lines" stroke="rgba(100,255,218,0.04)" stroke-width="1" fill="none">
+    <path d="M0,240 H300 L340,280 H600 L640,240 H900" stroke-dasharray="8 4">
+      <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="6s" repeatCount="indefinite"/>
+    </path>
+    <path d="M1200,480 H900 L860,520 H600 L560,480 H200" stroke-dasharray="8 4">
+      <animate attributeName="stroke-dashoffset" from="0" to="24" dur="8s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0,960 H400 L440,1000 H800" stroke-dasharray="6 6">
+      <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="10s" repeatCount="indefinite"/>
+    </path>
+    <path d="M1200,1440 H700 L660,1400 H300" stroke-dasharray="6 6">
+      <animate attributeName="stroke-dashoffset" from="0" to="24" dur="7s" repeatCount="indefinite"/>
+    </path>
+    <path d="M100,1800 V1600 L140,1560 V1200" stroke-dasharray="4 8">
+      <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="9s" repeatCount="indefinite"/>
+    </path>
+    <path d="M1100,400 V600 L1060,640 V900" stroke-dasharray="4 8">
+      <animate attributeName="stroke-dashoffset" from="0" to="24" dur="11s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  <!-- Circuit nodes -->
+  <g fill="none">
+    <circle cx="300" cy="240" r="4" stroke="rgba(100,255,218,0.06)" stroke-width="1">
+      <animate attributeName="r" values="3;5;3" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="640" cy="240" r="4" stroke="rgba(100,255,218,0.06)" stroke-width="1">
+      <animate attributeName="r" values="3;5;3" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="600" cy="480" r="4" stroke="rgba(167,139,250,0.06)" stroke-width="1">
+      <animate attributeName="r" values="3;5;3" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="440" cy="1000" r="4" stroke="rgba(100,255,218,0.06)" stroke-width="1">
+      <animate attributeName="r" values="3;5;3" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="700" cy="1440" r="4" stroke="rgba(167,139,250,0.06)" stroke-width="1">
+      <animate attributeName="r" values="3;5;3" dur="4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <!-- Floating tech icon outlines -->
+  <g opacity="0.035" stroke="currentColor" stroke-width="1.2" fill="none" color="#64ffda">
+    <!-- AWS icon outline -->
+    <g transform="translate(150,180) scale(1.5)">
+      <path d="M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.063.056.127.056.183 0 .08-.048.16-.152.24l-.503.335a.383.383 0 0 1-.208.072c-.08 0-.16-.04-.239-.112a2.47 2.47 0 0 1-.287-.374 6.18 6.18 0 0 1-.248-.467c-.622.733-1.405 1.1-2.347 1.1-.672 0-1.205-.191-1.596-.574-.391-.384-.59-.894-.59-1.533 0-.678.239-1.23.726-1.644.487-.415 1.133-.623 1.955-.623.272 0 .551.024.846.064.296.04.6.104.918.176v-.583c0-.607-.127-1.03-.375-1.277-.256-.248-.686-.367-1.3-.367-.28 0-.568.032-.863.104-.296.072-.583.16-.863.272a2.287 2.287 0 0 1-.28.104.488.488 0 0 1-.127.023c-.112 0-.168-.08-.168-.247v-.391c0-.128.016-.224.056-.288a.596.596 0 0 1 .224-.167c.279-.144.614-.264 1.005-.36a4.84 4.84 0 0 1 1.246-.152c.95 0 1.644.216 2.091.647.439.43.662 1.085.662 1.963v2.586z"/>
+    </g>
+    <!-- Python icon outline -->
+    <g transform="translate(950,700) scale(1.5)">
+      <path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.68H3.23l-.21-.03-.28-.07-.34-.12-.37-.19-.36-.27-.32-.35-.26-.44-.18-.53-.1-.63L0 11.97v-3.12l.04-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.37.1-.35.07-.32.04-.27.02-.21V.58l.9.22z"/>
+    </g>
+    <!-- Git branches outline -->
+    <g transform="translate(1050,1200) scale(1.5)">
+      <path d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.188 0L8.708 2.627l2.76 2.76c.645-.215 1.379-.07 1.889.441.516.515.658 1.258.438 1.9l2.66 2.66c.645-.222 1.387-.078 1.9.435.721.72.721 1.884 0 2.604-.719.719-1.881.719-2.6 0-.539-.541-.674-1.337-.404-1.996L12.86 8.955v6.525c.176.086.342.203.488.348.713.721.713 1.883 0 2.6-.719.721-1.889.721-2.609 0-.719-.719-.719-1.879 0-2.598.182-.18.387-.316.605-.406V8.835c-.217-.091-.424-.222-.6-.401-.545-.545-.676-1.342-.396-2.009L7.636 3.7.45 10.881c-.6.605-.6 1.584 0 2.189l10.48 10.477c.604.604 1.582.604 2.186 0l10.43-10.43c.605-.603.605-1.582 0-2.187"/>
+    </g>
+    <!-- Database icon outline -->
+    <g transform="translate(100,1100) scale(1.5)">
+      <ellipse cx="12" cy="5" rx="9" ry="3"/>
+      <path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3"/>
+      <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+    </g>
+  </g>
+</svg>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#"><span class="nav-brand-badge">BC</span>Balaji Chitrarasu</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navMenu">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#certifications">Certs</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><button id="cmdBtn" class="cmd-pill" title="Command Palette (Ctrl+K)"><span>⌘K</span> Quick Search</button></li>
+      <li><button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Day/Night Mode" title="Toggle Theme (Light/Dark)"><span class="theme-icon-dark">🌙</span><span class="theme-icon-light">☀️</span></button></li>
+      <li><a href="blog.html" class="nav-pill">✦ Blog</a></li>
+      <li><a href="admin.html" class="nav-pill-v">⚙ Admin</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+  <h1 class="seo-h1">Balaji Chitrarasu — AWS Cloud Engineer &amp; ECE Graduate, Coimbatore India</h1>
+  <div class="hero-inner">
+    <div class="avatar-wrap">
+      <img src="profile.jpg" id="heroAvatarImg" class="profile" alt="Balaji Chitrarasu">
+      <div class="avatar-ring" aria-hidden="true"></div>
+      <div class="avatar-ring r2" aria-hidden="true"></div>
+      <div class="avatar-dot" title="Open to Work"></div>
+    </div>
+    <div class="hero-badge">📍 Coimbatore, Tamil Nadu · Open to Entry-Level Engineering Roles</div>
+    <h2 class="hero-name" id="heroNameEl">Balaji Chitrarasu</h2>
+    <div class="hero-typing-wrap">
+      <span class="hero-type" id="typing">AWS Cloud Engineer Intern</span><span class="hero-type-cursor" aria-hidden="true"></span>
+    </div>
+    <p class="hero-bio">
+      B.E. ECE undergraduate at <strong>United Institute of Technology, Coimbatore</strong> (CGPA 7.13/10) who has actually shipped production AWS infrastructure — not just studied it. During my internship at <strong>ZenFuture Technologies</strong>, I built and deployed <strong>ZentroShift</strong>, a full-stack ERM app, across 6 AWS services from scratch.
+    </p>
+    <div class="hero-btns">
+      <a href="resume.pdf" class="btn btn-primary" target="_blank">📥 Resume</a>
+      <a href="https://www.linkedin.com/in/balajichitrarasu" class="btn btn-ghost" target="_blank">💼 LinkedIn</a>
+      <a href="https://github.com/balajichitrarasu" class="btn btn-ghost" target="_blank">💻 GitHub</a>
+      <a href="#contact" class="btn btn-teal-ghost">✉ Contact</a>
+    </div>
+    <div class="hero-pills">
+      <span class="hpill">AWS Cloud Intern · ZenFuture</span>
+      <span class="hpill">B.E. ECE · CGPA 7.13</span>
+      <span class="hpill">NPTEL Industry 4.0</span>
+      <span class="hpill">Anthropic AI Fluency</span>
+      <span class="hpill">HackerRank SE Cert</span>
+      <span class="hpill">MoE IIC Ambassador</span>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</header>
+
+<!-- AVAILABILITY BANNER -->
+<div class="avail-banner">
+  <div class="avail-inner">
+    <span class="avail-dot"></span>
+    <span class="avail-text">Currently <strong>open to entry-level roles</strong> &amp; freelance projects</span>
+    <a href="#contact" class="avail-cta">Get In Touch →</a>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip" id="stats">
+  <div class="stat-item">
+    <div><span class="stat-num" data-target="6">0</span><span class="stat-suf"> svc</span></div>
+    <p class="stat-label">Production AWS Services</p>
+  </div>
+  <div class="stat-sep"></div>
+  <div class="stat-item">
+    <div><span class="stat-num" data-target="7">0</span><span class="stat-suf">.13</span></div>
+    <p class="stat-label">CGPA · B.E. ECE</p>
+  </div>
+  <div class="stat-sep"></div>
+  <div class="stat-item">
+    <div><span class="stat-num" data-target="3">0</span><span class="stat-suf">+</span></div>
+    <p class="stat-label">Live Projects</p>
+  </div>
+  <div class="stat-sep"></div>
+  <div class="stat-item">
+    <div><span class="stat-num" data-target="4">0</span><span class="stat-suf">+</span></div>
+    <p class="stat-label">Certifications</p>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <p class="sec-eyebrow">About</p>
+  <h2 class="sec-title">Background &amp; Core Skills</h2>
+  <div class="about-grid reveal">
+    <div class="glass about-bio">
+      <p>ECE undergraduate at <strong>United Institute of Technology, Coimbatore</strong> (CGPA 7.13/10). During my internship at <strong>ZenFuture Technologies</strong> (June–July 2026, Cert No. ZF-INTERN-0026), I deployed <strong>ZentroShift</strong> — a full-stack Employee Resource Management app — across EC2, S3, CloudFront, RDS, a custom VPC, and CloudWatch monitoring.</p>
+      <p>I hold certifications from Anthropic, NPTEL/IIT Kharagpur, and HackerRank. Alongside cloud work, I build embedded IoT systems with Arduino and design full-stack web applications.</p>
+      <button class="read-more" onclick="openAbout()">Full Bio →</button>
+    </div>
+    <div class="glass skills-tag-grid">
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/amazonaws/38bdf8" alt="AWS" width="18" height="18">AWS EC2, S3, RDS, VPC</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/amazoncloudwatch/38bdf8" alt="CloudWatch" width="18" height="18">CloudFront &amp; CloudWatch</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/gnuprivacyguard/38bdf8" alt="IAM" width="18" height="18">IAM &amp; NAT Gateway</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/mysql/38bdf8" alt="MySQL" width="18" height="18">MySQL &amp; Amazon RDS</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/python/38bdf8" alt="Python" width="18" height="18">Python &amp; REST APIs</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/arduino/38bdf8" alt="Arduino" width="18" height="18">Arduino &amp; IoT</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/javascript/38bdf8" alt="JS" width="18" height="18">HTML, CSS, JavaScript</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/git/38bdf8" alt="Git" width="18" height="18">Git, Linux, Postman</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/anthropic/818cf8" alt="Anthropic" width="18" height="18">Anthropic AI Fluency</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/ieee/38bdf8" alt="ECE" width="18" height="18">B.E. ECE · 7.13 CGPA</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE TIMELINE -->
+<section id="experience" class="section">
+  <p class="sec-eyebrow">Experience</p>
+  <h2 class="sec-title">Work &amp; Education</h2>
+  <div class="timeline reveal">
+    <div class="tl-item">
+      <p class="tl-date">JUNE 2026 — JULY 2026</p>
+      <h3 class="tl-role">AWS Cloud Engineer Intern</h3>
+      <p class="tl-org">ZenFuture Technologies · Coimbatore, India (Cert No. ZF-INTERN-0026)</p>
+      <p class="tl-desc">Deployed <strong>ZentroShift</strong>, a full-stack ERM app, across 6 AWS services (EC2, S3, CloudFront, RDS, VPC, CloudWatch). Built a custom VPC with public subnets, Internet Gateway, NAT Gateway, security groups, 4-tier IAM role access, and Postman-tested REST APIs for location clock-in and admin features.</p>
+    </div>
+    <div class="tl-item">
+      <p class="tl-date">2023 — PRESENT</p>
+      <h3 class="tl-role">Freelance IT Support &amp; Digital Designer</h3>
+      <p class="tl-org">Self-Employed · Coimbatore, India</p>
+      <p class="tl-desc">Hardware troubleshooting, software setup, and digital design deliverables (posters, infographics, social media) for small business clients. Managed full project lifecycle from requirement to delivery.</p>
+    </div>
+    <div class="tl-item">
+      <p class="tl-date">2023 — 2027</p>
+      <h3 class="tl-role">B.E. Electronics &amp; Communication Engineering</h3>
+      <p class="tl-org">United Institute of Technology · Coimbatore, Tamil Nadu (CGPA: 7.13 / 10)</p>
+      <p class="tl-desc">Awarded the <strong>Exemplary Achiever Award</strong> by the ECE department. Coursework: Data Structures, Embedded Systems, Signal Processing, Computer Networks. Serving as <strong>IIC Innovation Ambassador</strong> for the Ministry of Education.</p>
+    </div>
+    <div class="tl-item">
+      <p class="tl-date">2021 — 2023</p>
+      <h3 class="tl-role">Higher Secondary Certificate (Class XII)</h3>
+      <p class="tl-org">Govt. Hr. Sec. School, Hale Dharmapuri · Tamil Nadu State Board</p>
+      <p class="tl-desc">Completed HSC in Science &amp; Mathematics stream under Tamil Nadu State Board.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+  <p class="sec-eyebrow">Projects</p>
+  <h2 class="sec-title">Featured Work</h2>
+  <div class="filter-row">
+    <button class="fbtn active" onclick="filterProjects('all',event)">All</button>
+    <button class="fbtn" onclick="filterProjects('cloud',event)">Cloud &amp; Full-Stack</button>
+    <button class="fbtn" onclick="filterProjects('embedded',event)">Embedded &amp; IoT</button>
+    <button class="fbtn" onclick="filterProjects('web',event)">Web &amp; Tools</button>
+  </div>
+  <div class="proj-grid" id="projectsContainer">
+    <div class="proj-card reveal" data-category="cloud" onclick="openPopup('ZentroShift — Employee Resource Management on AWS','During my internship at ZenFuture Technologies (June–July 2026), I built and deployed ZentroShift — a full-stack ERM system across 6 AWS services: EC2 (server), S3 (assets), CloudFront (CDN), RDS (MySQL database), custom VPC (with public subnets, Internet Gateway, NAT Gateway, security groups), and CloudWatch (server health alarms). Features: 4-tier IAM role access control, location-based clock-in, attendance management, and REST APIs tested via Postman.')">
+      <div class="proj-thumb">
+        <img src="project2.jpg" alt="ZentroShift ERM on AWS">
+        <div class="proj-thumb-overlay"><span style="font-size:1.6rem">↗</span><p>View Details</p></div>
+      </div>
+      <div class="proj-body">
+        <span class="proj-cat">AWS Cloud · Full-Stack</span>
+        <div class="proj-status-bar">
+          <span class="proj-status-badge status-completed">✓ Completed</span>
+          <div class="proj-progress-track"><div class="proj-progress-fill" style="width:100%"></div></div>
+        </div>
+        <h3 class="proj-title">ZentroShift ERM App</h3>
+        <p class="proj-desc">Full-stack ERM system deployed across 6 AWS services with custom VPC, IAM roles, and CloudWatch monitoring.</p>
+        <div class="proj-tags">
+          <span class="ptag">EC2</span><span class="ptag">S3</span><span class="ptag">RDS</span><span class="ptag">CloudFront</span><span class="ptag">VPC</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal" data-category="embedded" onclick="openPopup('Smart Solar-Powered Pedestrian Crossing System','Designed and built a solar-powered zebra crossing alert system. Hardware: Arduino Uno, IR sensors (pedestrian detection), LDR (ambient light sensing), solar panel, boost converter (battery charge management), Li-ion battery pack, LEDs, and a buzzer. When IR sensors detect an approaching pedestrian in low-light conditions (LDR threshold), the system triggers audio-visual warnings for drivers while the solar boost converter keeps the battery charged.')">
+      <div class="proj-thumb" style="background:#080c16;display:flex;align-items:center;justify-content:center;">
+        <svg viewBox="0 0 380 190" width="380" height="190" xmlns="http://www.w3.org/2000/svg">
+          <rect width="380" height="190" fill="#060a14"/>
+          <circle cx="190" cy="72" r="42" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1.5"/>
+          <circle cx="190" cy="72" r="24" fill="#fbbf24" opacity=".9"/>
+          <line x1="190" y1="20" x2="190" y2="10" stroke="#fbbf24" stroke-width="2" opacity=".5"/>
+          <line x1="230" y1="35" x2="238" y2="27" stroke="#fbbf24" stroke-width="2" opacity=".5"/>
+          <line x1="150" y1="35" x2="142" y2="27" stroke="#fbbf24" stroke-width="2" opacity=".5"/>
+          <rect x="100" y="130" width="180" height="36" rx="6" fill="rgba(100,255,218,.07)" stroke="rgba(100,255,218,.25)" stroke-width="1"/>
+          <text x="190" y="152" font-size="10" fill="#64ffda" font-family="monospace" font-weight="700" text-anchor="middle">SOLAR IoT CROSSING SYSTEM</text>
+          <circle cx="95" cy="148" r="7" fill="none" stroke="#34d399" stroke-width="1.5"/>
+          <circle cx="285" cy="148" r="7" fill="none" stroke="#34d399" stroke-width="1.5"/>
+        </svg>
+        <div class="proj-thumb-overlay"><span style="font-size:1.6rem">↗</span><p>View Details</p></div>
+      </div>
+      <div class="proj-body">
+        <span class="proj-cat">Embedded Systems · IoT</span>
+        <div class="proj-status-bar">
+          <span class="proj-status-badge status-completed">✓ Completed</span>
+          <div class="proj-progress-track"><div class="proj-progress-fill" style="width:100%"></div></div>
+        </div>
+        <h3 class="proj-title">Smart Solar Crossing</h3>
+        <p class="proj-desc">Arduino-powered pedestrian crossing alert system with solar panel, boost converter battery management, IR &amp; LDR sensors.</p>
+        <div class="proj-tags">
+          <span class="ptag">Arduino</span><span class="ptag">IR Sensor</span><span class="ptag">Solar</span><span class="ptag">LDR</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal" data-category="web" onclick="openPopup('Personal Developer Portfolio Website','Built a fully responsive developer portfolio with clean UI, JSON-LD structured data, Open Graph meta tags, GitHub Pages deployment, an admin CMS panel (localStorage-based CRUD for projects, certs, blog posts), and a tech blog. Stack: HTML5, CSS3 (Grid/Flexbox), Vanilla JavaScript, particles.js.')">
+      <div class="proj-thumb">
+        <img src="project1.jpg" alt="Personal Portfolio Website">
+        <div class="proj-thumb-overlay"><span style="font-size:1.6rem">↗</span><p>View Details</p></div>
+      </div>
+      <div class="proj-body">
+        <span class="proj-cat">Web Development</span>
+        <div class="proj-status-bar">
+          <span class="proj-status-badge status-ongoing">◉ Ongoing</span>
+          <div class="proj-progress-track"><div class="proj-progress-fill" style="width:85%"></div></div>
+          <span class="proj-progress-pct">85%</span>
+        </div>
+        <h3 class="proj-title">Developer Portfolio</h3>
+        <p class="proj-desc">Responsive portfolio with full SEO, JSON-LD schema, admin CMS panel, and tech blog.</p>
+        <div class="proj-tags">
+          <span class="ptag">HTML5</span><span class="ptag">CSS3</span><span class="ptag">JavaScript</span><span class="ptag">GitHub Pages</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+  <p class="sec-eyebrow">Skills</p>
+  <h2 class="sec-title">Technical Competencies</h2>
+  <div class="skill-bars" id="skillBarsContainer">
+    <!-- Rendered by script.js from DEFAULT_SKILLS or localStorage custom_skills -->
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications" class="section">
+  <p class="sec-eyebrow">Certifications</p>
+  <h2 class="sec-title">Credentials &amp; Certificates</h2>
+  <div class="cert-grid" id="visualCertGallery">
+    <div class="cert-card reveal" onclick="openCertImg('AWS Cloud Engineer Internship','ZenFuture Technologies','Certificate No. ZF-INTERN-0026 · June–July 2026','Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.','cert1.jpg')">
+      <div class="cert-img-wrap">
+        <img src="cert1.jpg" alt="AWS Certificate">
+        <div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Certificate</p></div>
+      </div>
+      <div class="cert-body">
+        <h4>AWS Cloud Engineer Intern</h4>
+        <p>ZenFuture Technologies · ZF-INTERN-0026</p>
+        <span class="cert-badge badge-teal">☁️ Production Certified</span>
+      </div>
+    </div>
+    <div class="cert-card reveal" onclick="openCertImg('AI Fluency: Framework and Foundations','Anthropic','Certified · 2025','Certified by Anthropic in AI frameworks, LLM system architecture, prompt engineering, and AI safety foundations.','cert1.jpg')">
+      <div class="cert-img-wrap">
+        <img src="cert1.jpg" alt="Anthropic AI Certificate">
+        <div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Certificate</p></div>
+      </div>
+      <div class="cert-body">
+        <h4>AI Fluency Frameworks</h4>
+        <p>Anthropic · 2025</p>
+        <span class="cert-badge badge-violet">🤖 Anthropic Certified</span>
+      </div>
+    </div>
+    <div class="cert-card reveal" onclick="openCertImg('Industry 4.0 and Industrial IoT','NPTEL — IIT Kharagpur','Certified · 2024','Completed 12-week proctored NPTEL course on Industrial IoT funded by the Ministry of Education, Government of India.','cert1.jpg')">
+      <div class="cert-img-wrap">
+        <img src="cert1.jpg" alt="NPTEL Certificate">
+        <div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Certificate</p></div>
+      </div>
+      <div class="cert-body">
+        <h4>Industry 4.0 &amp; IIoT</h4>
+        <p>NPTEL · IIT Kharagpur (2024)</p>
+        <span class="cert-badge badge-teal">✅ Govt. of India Verified</span>
+      </div>
+    </div>
+    <div class="cert-card reveal" onclick="openCertImg('Software Engineer Certificate','HackerRank','Role Certified · 2024','Passed HackerRank Software Engineer role certification — covering algorithms, data structures, and software development.','cert1.jpg')">
+      <div class="cert-img-wrap">
+        <img src="cert1.jpg" alt="HackerRank Certificate">
+        <div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Certificate</p></div>
+      </div>
+      <div class="cert-body">
+        <h4>Software Engineer</h4>
+        <p>HackerRank · Role Certification (2024)</p>
+        <span class="cert-badge badge-amber">⭐ Role Certified</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements" class="section">
+  <p class="sec-eyebrow">Honors</p>
+  <h2 class="sec-title">Achievements &amp; Awards</h2>
+  <div class="ach-list">
+    <div class="ach-item reveal" onclick="openAch('Exemplary Achiever Award','Academic Excellence — ECE Department','United Institute of Technology, Coimbatore','Recognized for outstanding academic performance, leadership, and exemplary contribution in the Department of Electronics and Communication Engineering.','🎖️','gold')">
+      <div class="ach-left">
+        <div class="ach-icon ach-icon-gold">🎖️</div>
+        <div><p class="ach-title">Exemplary Achiever Award</p><p class="ach-sub">United Institute of Technology · Dept. of ECE</p></div>
+      </div>
+      <span class="ach-arrow">↗</span>
+    </div>
+    <div class="ach-item reveal" onclick="openAch('Production AWS Deployment Across 6 Services','Real Infrastructure — Not a Tutorial Project','ZenFuture Technologies · June–July 2026','Deployed a real, production-grade AWS setup across 6 services (EC2, S3, CloudFront, RDS, VPC, CloudWatch) during the ZenFuture Technologies internship — not a simulation or lab exercise.','☁️','teal')">
+      <div class="ach-left">
+        <div class="ach-icon ach-icon-teal">☁️</div>
+        <div><p class="ach-title">Production AWS Setup Across 6 Services</p><p class="ach-sub">ZenFuture Technologies · June–July 2026</p></div>
+      </div>
+      <span class="ach-arrow">↗</span>
+    </div>
+    <div class="ach-item reveal" onclick="openAch('IIC Student Innovation Ambassador','Ministry of Education Innovation Cell','AICTE &amp; MoE, Government of India','Student Innovation Ambassador representing United Institute of Technology at the Institution\'s Innovation Council under the Ministry of Education, Government of India.','💡','violet')">
+      <div class="ach-left">
+        <div class="ach-icon ach-icon-violet">💡</div>
+        <div><p class="ach-title">IIC Innovation Ambassador</p><p class="ach-sub">Ministry of Education · Innovation &amp; Incubation Council</p></div>
+      </div>
+      <span class="ach-arrow">↗</span>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS & RECOMMENDATIONS -->
+<section id="recommendations" class="section">
+  <p class="sec-eyebrow">Endorsements</p>
+  <h2 class="sec-title">Recommendations &amp; Feedback</h2>
+  <div class="testi-grid">
+    <div class="glass testi-card reveal">
+      <div class="testi-header">
+        <div class="testi-avatar">ZF</div>
+        <div>
+          <h4 class="testi-name">Engineering Lead &amp; Internship Mentor</h4>
+          <p class="testi-role">ZenFuture Technologies · Coimbatore</p>
+        </div>
+      </div>
+      <p class="testi-text">
+        "Balaji demonstrated exceptional initiative during his AWS Cloud Internship. He independently designed and deployed the ZentroShift ERM system across 6 AWS services—configuring custom VPC subnets, NAT Gateways, RDS MySQL, and CloudWatch alarms with production-level IAM role security. Highly recommended for cloud engineering roles."
+      </p>
+      <span class="testi-badge">Verified Internship Evaluation</span>
+    </div>
+
+    <div class="glass testi-card reveal">
+      <div class="testi-header">
+        <div class="testi-avatar" style="background:var(--violet-dim);color:var(--violet);border-color:rgba(167,139,250,.3)">UIT</div>
+        <div>
+          <h4 class="testi-name">ECE Senior Faculty &amp; Mentor</h4>
+          <p class="testi-role">United Institute of Technology · Coimbatore</p>
+        </div>
+      </div>
+      <p class="testi-text">
+        "Balaji's academic dedication and leadership earned him the Exemplary Achiever Award in our ECE department. His hands-on work spanning embedded systems (Arduino Solar IoT) and cloud infrastructure makes him a versatile engineer with strong problem-solving skills."
+      </p>
+      <span class="testi-badge" style="color:var(--violet);background:var(--violet-dim);border-color:rgba(167,139,250,.25)">Academic Endorsement</span>
+    </div>
+  </div>
+</section>
+
+<!-- GITHUB & OPEN SOURCE -->
+<section id="github" class="section">
+  <p class="sec-eyebrow">Open Source</p>
+  <h2 class="sec-title">GitHub Activity</h2>
+  <div class="github-card glass reveal">
+    <div class="gh-header">
+      <img src="https://cdn.simpleicons.org/github/e2e8f0" alt="GitHub" width="24" height="24">
+      <div>
+        <h3 class="gh-username">balajichitrarasu</h3>
+        <p class="gh-bio">AWS Cloud Engineer · ECE Student · Building production infrastructure</p>
+      </div>
+      <a href="https://github.com/balajichitrarasu" target="_blank" class="btn btn-ghost" style="margin-left:auto">View Profile →</a>
+    </div>
+    <div class="gh-stats-row">
+      <div class="gh-stat"><span class="gh-stat-num">3+</span><span class="gh-stat-label">Repositories</span></div>
+      <div class="gh-stat"><span class="gh-stat-num">6</span><span class="gh-stat-label">AWS Services</span></div>
+      <div class="gh-stat"><span class="gh-stat-num">2026</span><span class="gh-stat-label">Active Since</span></div>
+    </div>
+    <div class="gh-repos">
+      <a href="https://github.com/balajichitrarasu" target="_blank" class="gh-repo">
+        <div class="gh-repo-top"><span class="gh-repo-dot" style="background:#f1e05a"></span><h4>Portfolio Website</h4></div>
+        <p>Responsive developer portfolio with admin CMS, tech blog, and real SVG tech icons</p>
+        <div class="gh-repo-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+      </a>
+      <a href="https://github.com/balajichitrarasu" target="_blank" class="gh-repo">
+        <div class="gh-repo-top"><span class="gh-repo-dot" style="background:#3572A5"></span><h4>ZentroShift ERM</h4></div>
+        <p>Full-stack ERM system deployed across 6 AWS services with custom VPC architecture</p>
+        <div class="gh-repo-tags"><span>Python</span><span>AWS</span><span>MySQL</span></div>
+      </a>
+      <a href="https://github.com/balajichitrarasu" target="_blank" class="gh-repo">
+        <div class="gh-repo-top"><span class="gh-repo-dot" style="background:#00979D"></span><h4>Smart Solar Crossing</h4></div>
+        <p>Arduino-powered pedestrian crossing alert with solar panel and IoT sensors</p>
+        <div class="gh-repo-tags"><span>Arduino</span><span>C++</span><span>IoT</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <p class="sec-eyebrow">Contact</p>
+  <h2 class="sec-title">Get In Touch</h2>
+  <div class="contact-info-row">
+    <a href="tel:+917639683223" class="cinfo">
+      <div class="cinfo-icon">📱</div>
+      <div><p class="cinfo-label">Phone</p><p class="cinfo-val">+91 76396 83223</p></div>
+    </a>
+    <div id="emailCard" class="cinfo" onclick="copyEmail()" style="cursor:pointer;">
+      <div class="cinfo-icon">✉️</div>
+      <div><p class="cinfo-label">Email — Click to Copy</p><p class="cinfo-val">balajichitrarasu07@gmail.com</p></div>
+    </div>
+    <a href="https://www.linkedin.com/in/balajichitrarasu" target="_blank" class="cinfo">
+      <div class="cinfo-icon">💼</div>
+      <div><p class="cinfo-label">LinkedIn</p><p class="cinfo-val">balajichitrarasu</p></div>
+    </a>
+  </div>
+  <div class="glass msg-box reveal">
+    <h3 class="msg-box-title">Send a Message</h3>
+    <div id="formMsg" class="form-msg"></div>
+    <div class="frow">
+      <div class="ffield"><label for="cName">Your Name</label><input type="text" id="cName" placeholder="Full name" autocomplete="name"></div>
+      <div class="ffield"><label for="cEmail">Your Email</label><input type="email" id="cEmail" placeholder="name@example.com" autocomplete="email"></div>
+    </div>
+    <div class="ffield" style="margin-top:1rem"><label for="cMsg">Message</label><textarea id="cMsg" placeholder="What would you like to discuss?"></textarea></div>
+    <button class="btn-send" id="sendBtn">Send Message →</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="#about">About</a><a href="#experience">Experience</a><a href="#projects">Projects</a>
+      <a href="#skills">Skills</a><a href="#certifications">Certs</a><a href="#achievements">Awards</a>
+      <a href="#recommendations">Endorsements</a><a href="#github">GitHub</a><a href="#contact">Contact</a><a href="blog.html">Blog</a><a href="admin.html">Admin</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 <span>Balaji Chitrarasu</span>. Built with ♥ in Coimbatore, Tamil Nadu, India.</p>
+  </div>
+</footer>
+
+<button id="scrollTop" aria-label="Scroll to top">↑</button>
+<div id="toast"></div>
+
+<!-- MODALS -->
+<div id="aboutPopup" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button class="modal-close" id="aboutClose" onclick="closeAbout()">✕</button>
+    <div class="modal-icon">👤</div>
+    <h3 class="modal-title">About Balaji Chitrarasu</h3>
+    <div class="modal-body">
+      <p>I'm an ECE undergraduate at <strong style="color:var(--text)">United Institute of Technology, Coimbatore</strong> (CGPA 7.13/10) — awarded the <strong style="color:var(--text)">Exemplary Achiever Award</strong> by my department.</p>
+      <br>
+      <p>During my internship at <strong style="color:var(--teal)">ZenFuture Technologies</strong> (Cert ZF-INTERN-0026), I built and deployed <strong style="color:var(--teal)">ZentroShift</strong> — a full production ERM application — across 6 AWS services (EC2, S3, CloudFront, RDS, custom VPC, CloudWatch) with 4-tier IAM role access.</p>
+      <br>
+      <p>I hold certifications in <strong style="color:var(--violet)">Anthropic AI Fluency (2025)</strong>, <strong style="color:var(--teal)">NPTEL Industry 4.0 &amp; IIoT (IIT Kharagpur, 2024)</strong>, <strong style="color:var(--teal)">HackerRank Software Engineer (2024)</strong>, and serve as an <strong style="color:var(--violet)">IIC Innovation Ambassador</strong> for the Ministry of Education, Government of India.</p>
+    </div>
+  </div>
+</div>
+
+<div id="popup" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button class="modal-close" id="popupClose" onclick="closePopup()">✕</button>
+    <div class="modal-icon">💻</div>
+    <h3 class="modal-title" id="ptitle"></h3>
+    <p class="modal-body" id="pbody"></p>
+  </div>
+</div>
+
+<div id="certPopup" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button class="modal-close" id="certClose" onclick="closeCertPopup()">✕</button>
+    <div class="modal-icon">🏆</div>
+    <h3 class="modal-title" id="cTitle"></h3>
+    <span class="modal-issuer" id="cIssuer"></span>
+    <span class="modal-issuer" style="color:#64748b;display:block;margin-bottom:.5rem" id="cStatus"></span>
+    <div class="modal-cert-img" id="certModalImgWrap">
+      <img id="certModalImg" src="" alt="Certificate">
+    </div>
+    <p class="modal-body" id="cBody"></p>
+  </div>
+</div>
+
+<div id="achPopup" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button class="modal-close" id="achClose" onclick="closeAch()">✕</button>
+    <div class="modal-icon" id="achIcon">🎖️</div>
+    <h3 class="modal-title" id="achTitle"></h3>
+    <span class="modal-issuer" id="achSub"></span>
+    <span class="modal-issuer" style="color:#64748b;display:block;margin-bottom:.5rem" id="achWhere"></span>
+    <p class="modal-body" id="achBody"></p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="api.js"></script>
+<script src="script.js?v=9.5"></script>
+
+<!-- COMMAND PALETTE MODAL (CTRL+K) -->
+<div id="cmdPalette" class="cmd-modal" role="dialog" aria-modal="true" style="display:none;">
+  <div class="cmd-box">
+    <div class="cmd-input-wrap">
+      <span class="cmd-icon">🔍</span>
+      <input type="text" id="cmdInput" placeholder="Type a command or search section..." autocomplete="off">
+      <kbd class="cmd-kbd">ESC</kbd>
+    </div>
+    <div class="cmd-results" id="cmdResults">
+      <div class="cmd-group-label">Navigation</div>
+      <a href="#about" class="cmd-item" onclick="closeCmd()"><span class="cmd-item-icon">👤</span>About &amp; Bio<span class="cmd-item-shortcut">Go</span></a>
+      <a href="#experience" class="cmd-item" onclick="closeCmd()"><span class="cmd-item-icon">💼</span>Experience &amp; Education<span class="cmd-item-shortcut">Go</span></a>
+      <a href="#projects" class="cmd-item" onclick="closeCmd()"><span class="cmd-item-icon">💻</span>Projects Showcase<span class="cmd-item-shortcut">Go</span></a>
+      <a href="#skills" class="cmd-item" onclick="closeCmd()"><span class="cmd-item-icon">⚡</span>Technical Skills<span class="cmd-item-shortcut">Go</span></a>
+      <a href="#certifications" class="cmd-item" onclick="closeCmd()"><span class="cmd-item-icon">🏆</span>Certifications<span class="cmd-item-shortcut">Go</span></a>
+      <a href="#github" class="cmd-item" onclick="closeCmd()"><span class="cmd-item-icon">🐙</span>GitHub Repositories<span class="cmd-item-shortcut">Go</span></a>
+      <a href="#contact" class="cmd-item" onclick="closeCmd()"><span class="cmd-item-icon">✉️</span>Contact Form<span class="cmd-item-shortcut">Go</span></a>
+      
+      <div class="cmd-group-label">Quick Actions</div>
+      <button class="cmd-item" onclick="copyEmail();closeCmd();"><span class="cmd-item-icon">📋</span>Copy Email Address<span class="cmd-item-shortcut">Action</span></button>
+      <a href="resume.pdf" target="_blank" class="cmd-item" onclick="closeCmd()"><span class="cmd-item-icon">📄</span>Open Resume (PDF)<span class="cmd-item-shortcut">Link</span></a>
+      <a href="blog.html" class="cmd-item" onclick="closeCmd()"><span class="cmd-item-icon">✦</span>Read Tech Blog<span class="cmd-item-shortcut">Link</span></a>
+      <a href="admin.html" class="cmd-item" onclick="closeCmd()"><span class="cmd-item-icon">⚙️</span>Open Admin CMS<span class="cmd-item-shortcut">Admin</span></a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

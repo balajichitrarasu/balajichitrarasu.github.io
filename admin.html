@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin CMS | Balaji Chitrarasu</title>
+  <link rel="stylesheet" href="style.css?v=9.5">
+  <style>
+    /* Admin Specific CSS */
+    .admin-container {
+      display: flex;
+      min-height: calc(100vh - var(--nav-h));
+      padding-top: var(--nav-h);
+    }
+    .admin-sidebar {
+      width: 250px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1rem;
+      position: fixed;
+      height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+    }
+    .admin-sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .admin-sidebar li {
+      margin-bottom: 0.5rem;
+    }
+    .admin-sidebar a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: all var(--ease);
+      cursor: pointer;
+    }
+    .admin-sidebar a:hover, .admin-sidebar a.active {
+      background: rgba(100, 255, 218, 0.1);
+      color: var(--teal);
+    }
+    .admin-content {
+      flex: 1;
+      margin-left: 250px;
+      padding: 2rem;
+      max-width: 1000px;
+    }
+    .tab-pane {
+      display: none;
+      animation: fadeIn var(--ease) forwards;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: inherit;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--teal);
+    }
+    .btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--ease);
+    }
+    .btn-primary {
+      background: rgba(100, 255, 218, 0.1);
+      color: var(--teal);
+      border-color: var(--teal);
+    }
+    .btn-primary:hover {
+      background: rgba(100, 255, 218, 0.2);
+    }
+    .btn-danger {
+      background: rgba(244, 63, 94, 0.1);
+      color: var(--rose);
+      border-color: var(--rose);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    /* Crop Tool */
+    #crop-container {
+      position: relative;
+      display: inline-block;
+      max-width: 500px;
+      margin-top: 1rem;
+    }
+    #crop-canvas {
+      border: 1px dashed var(--border);
+      max-width: 100%;
+      cursor: crosshair;
+    }
+    #crop-preview {
+      margin-top: 1rem;
+      max-width: 200px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--teal);
+      color: var(--text);
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-sm);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all var(--ease);
+      z-index: 1000;
+    }
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .flex-row { display: flex; gap: 1rem; align-items: center; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html"><span class="nav-brand-badge">BC</span>Balaji Chitrarasu</a>
+      <ul>
+        <li><a href="index.html">← Portfolio</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="admin.html" class="active nav-pill-v">⚙ Admin CMS</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="admin-container">
+    <aside class="admin-sidebar">
+      <ul>
+        <li><a class="tab-link active" data-tab="analytics">📊 Analytics</a></li>
+        <li><a class="tab-link" data-tab="profile">👤 Profile & Avatar</a></li>
+        <li><a class="tab-link" data-tab="certs">🏆 Certifications</a></li>
+        <li><a class="tab-link" data-tab="projects">💻 Projects</a></li>
+        <li><a class="tab-link" data-tab="skills">🎯 Skills</a></li>
+        <li><a class="tab-link" data-tab="blog">📝 Blog</a></li>
+        <li><a class="tab-link" data-tab="database">💾 Database</a></li>
+        <li><a class="tab-link" data-tab="settings">⚙ Settings</a></li>
+      </ul>
+    </aside>
+
+    <main class="admin-content">
+      
+      <!-- Analytics Tab -->
+      <section id="analytics" class="tab-pane active">
+        <h2>Analytics Overview</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Page Views</h3>
+            <p id="stat-views" style="font-size: 2rem; color: var(--teal);">0</p>
+          </div>
+          <div class="card">
+            <h3>Projects</h3>
+            <p id="stat-projects" style="font-size: 2rem; color: var(--violet);">0</p>
+          </div>
+          <div class="card">
+            <h3>Certifications</h3>
+            <p id="stat-certs" style="font-size: 2rem; color: var(--emerald);">0</p>
+          </div>
+          <div class="card">
+            <h3>Blog Posts</h3>
+            <p id="stat-blogs" style="font-size: 2rem; color: var(--amber);">0</p>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 1.5rem;">
+          <h3>System Status</h3>
+          <p>Status: <span style="color: var(--teal)">Healthy</span></p>
+          <p>Last Visit: <span id="stat-last-visit">-</span></p>
+        </div>
+      </section>
+
+      <!-- Profile Tab -->
+      <section id="profile" class="tab-pane">
+        <h2>Profile & Avatar</h2>
+        <div class="card">
+          <form id="profile-form">
+            <div class="form-group">
+              <label>Avatar URL or Base64</label>
+              <input type="text" id="prof-avatar" class="form-control">
+              <img id="prof-avatar-preview" style="max-width: 100px; border-radius: 50%; margin-top: 1rem; display: none;">
+            </div>
+            <div class="form-group">
+              <label>Display Name</label>
+              <input type="text" id="prof-name" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Role</label>
+              <input type="text" id="prof-role" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Location</label>
+              <input type="text" id="prof-location" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Save Profile</button>
+            <button type="button" class="btn" id="prof-reset">Reset</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Certs Tab -->
+      <section id="certs" class="tab-pane">
+        <h2>Certifications Manager</h2>
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3 id="cert-form-title">Add Certification</h3>
+          <form id="cert-form">
+            <input type="hidden" id="cert-id">
+            <div class="form-group">
+              <label>Title *</label>
+              <input type="text" id="cert-title" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Issuing Organization *</label>
+              <input type="text" id="cert-org" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Status / Date</label>
+              <input type="text" id="cert-date" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="cert-desc" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Image Upload (Crop Tool)</label>
+              <input type="file" id="cert-file" class="form-control" accept="image/*">
+              <input type="text" id="cert-image" class="form-control" placeholder="Or enter URL directly" style="margin-top: 0.5rem;">
+              
+              <div id="crop-container" style="display:none;">
+                <canvas id="crop-canvas"></canvas>
+                <br>
+                <button type="button" id="btn-crop" class="btn btn-primary" style="margin-top: 0.5rem;">Apply Crop</button>
+              </div>
+              <div>
+                <img id="crop-preview" style="display:none;">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Certification</button>
+            <button type="button" class="btn" id="cert-cancel" style="display:none;">Cancel</button>
+          </form>
+        </div>
+        <h3>Existing Certifications</h3>
+        <div id="cert-list" class="grid"></div>
+      </section>
+
+      <!-- Projects Tab -->
+      <section id="projects" class="tab-pane">
+        <h2>Projects Manager</h2>
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3 id="proj-form-title">Add Project</h3>
+          <form id="proj-form">
+            <input type="hidden" id="proj-id">
+            <div class="form-group">
+              <label>Title *</label>
+              <input type="text" id="proj-title" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="proj-cat" class="form-control">
+                <option value="cloud">Cloud</option>
+                <option value="embedded">Embedded</option>
+                <option value="web">Web</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Cover Image URL</label>
+              <input type="text" id="proj-image" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Tech Tags (comma separated)</label>
+              <input type="text" id="proj-tags" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Short Summary</label>
+              <textarea id="proj-summary" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Full Details</label>
+              <textarea id="proj-details" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select id="projStatus" class="form-control">
+                <option value="completed">Completed</option>
+                <option value="ongoing" selected>Ongoing</option>
+                <option value="planned">Planned</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Progress Percentage (<span id="projProgressVal">65</span>%)</label>
+              <input type="range" id="projProgress" class="form-control" min="0" max="100" value="65">
+            </div>
+            <div class="form-group">
+              <label>Live Demo URL</label>
+              <input type="text" id="projDemo" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>GitHub Repo URL</label>
+              <input type="text" id="projRepo" class="form-control">
+            </div>
+            <script>
+              document.getElementById('projStatus').addEventListener('change', function(e) {
+                const val = e.target.value;
+                const prog = document.getElementById('projProgress');
+                if (val === 'completed') prog.value = 100;
+                if (val === 'planned') prog.value = 0;
+                document.getElementById('projProgressVal').innerText = prog.value;
+              });
+              document.getElementById('projProgress').addEventListener('input', function(e) {
+                document.getElementById('projProgressVal').innerText = e.target.value;
+              });
+            </script>
+            <button type="submit" class="btn btn-primary">Save Project</button>
+            <button type="button" class="btn" id="proj-cancel" style="display:none;">Cancel</button>
+          </form>
+        </div>
+        <h3>Existing Projects</h3>
+        <div id="proj-list" class="grid"></div>
+      </section>
+
+      <!-- Skills Tab -->
+      <section id="skills" class="tab-pane">
+        <h2>Skills Bar Editor</h2>
+        <div class="card" style="margin-bottom: 2rem;">
+          <form id="skill-form">
+            <input type="hidden" id="skill-index">
+            <div class="flex-row" style="flex-wrap: wrap;">
+              <div class="form-group" style="flex:1;">
+                <label>Name</label>
+                <input type="text" id="skill-name" class="form-control" required>
+              </div>
+              <div class="form-group" style="width: 100px;">
+                <label>Icon</label>
+                <input type="text" id="skill-icon" class="form-control">
+              </div>
+              <div class="form-group" style="width: 150px;">
+                <label>Percentage (0-100)</label>
+                <input type="number" id="skill-pct" class="form-control" min="0" max="100" required>
+              </div>
+              <div class="form-group" style="flex:1;">
+                <label>Category</label>
+                <input type="text" id="skill-cat" class="form-control">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Skill</button>
+            <button type="button" class="btn" id="skill-cancel" style="display:none;">Cancel</button>
+            <button type="button" class="btn btn-danger" id="skill-restore" style="float: right;">Restore Defaults</button>
+          </form>
+        </div>
+        <div class="card">
+          <table>
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Icon</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Pct</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="skill-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Blog Tab -->
+      <section id="blog" class="tab-pane">
+        <h2>Blog Manager</h2>
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3 id="blog-form-title">Write Post</h3>
+          <form id="blog-form">
+            <input type="hidden" id="blog-id">
+            <div class="form-group">
+              <label>Title *</label>
+              <input type="text" id="blog-title" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <input type="text" id="blog-cat" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Excerpt</label>
+              <textarea id="blog-excerpt" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Body</label>
+              <textarea id="blog-body" class="form-control" rows="8"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Publish Post</button>
+            <button type="button" class="btn" id="blog-cancel" style="display:none;">Cancel</button>
+          </form>
+        </div>
+        <h3>Existing Posts</h3>
+        <div id="blog-list" class="grid"></div>
+      </section>
+
+      <!-- Database Tab -->
+      <section id="database" class="tab-pane">
+        <h2>Database Backup</h2>
+        <div class="card">
+          <p>Export all your local storage data as a JSON file, or import an existing one.</p>
+          <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+            <button id="db-export" class="btn btn-primary">Export JSON</button>
+            <label class="btn">
+              Import JSON
+              <input type="file" id="db-import" accept=".json" style="display:none;">
+            </label>
+            <button id="db-reset" class="btn btn-danger">Reset All Data</button>
+          </div>
+          <div style="margin-top: 2rem;">
+            <label>Raw Storage Content:</label>
+            <textarea id="db-preview" class="form-control" rows="10" readonly></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings Tab -->
+      <section id="settings" class="tab-pane">
+        <h2>Site Settings</h2>
+        <div class="card">
+          <form id="settings-form">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="set-email" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="text" id="set-phone" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>GitHub URL</label>
+              <input type="url" id="set-github" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>LinkedIn URL</label>
+              <input type="url" id="set-linkedin" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Resume Filename</label>
+              <input type="text" id="set-resume" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    // Utility functions
+    const $ = id => document.getElementById(id);
+    const getStorage = (key, def) => {
+      try { return JSON.parse(localStorage.getItem(key)) || def; } 
+      catch { return localStorage.getItem(key) || def; }
+    };
+    const setStorage = (key, val) => {
+      localStorage.setItem(key, typeof val === 'object' ? JSON.stringify(val) : val);
+    };
+    const showToast = msg => {
+      const t = $('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    };
+    const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
+
+    // Tab Switching
+    document.querySelectorAll('.tab-link').forEach(link => {
+      link.addEventListener('click', e => {
+        document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        e.target.classList.add('active');
+        $(e.target.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Analytics
+    function loadAnalytics() {
+      $('stat-views').innerText = getStorage('site_page_views', 0);
+      $('stat-projects').innerText = getStorage('custom_projects', []).length;
+      $('stat-certs').innerText = getStorage('custom_certs', []).length;
+      $('stat-blogs').innerText = getStorage('custom_blog_posts', []).length;
+      const lastVisit = localStorage.getItem('last_visit');
+      $('stat-last-visit').innerText = lastVisit ? new Date(parseInt(lastVisit)).toLocaleString() : 'N/A';
+    }
+
+    // Profile
+    function loadProfile() {
+      $('prof-avatar').value = getStorage('custom_profile_avatar', '');
+      if($('prof-avatar').value) {
+        $('prof-avatar-preview').src = $('prof-avatar').value;
+        $('prof-avatar-preview').style.display = 'block';
+      }
+      $('prof-name').value = getStorage('custom_profile_name', '');
+      $('prof-role').value = getStorage('custom_profile_role', '');
+      $('prof-location').value = getStorage('custom_profile_location', '');
+    }
+    $('profile-form').addEventListener('submit', e => {
+      e.preventDefault();
+      setStorage('custom_profile_avatar', $('prof-avatar').value);
+      setStorage('custom_profile_name', $('prof-name').value);
+      setStorage('custom_profile_role', $('prof-role').value);
+      setStorage('custom_profile_location', $('prof-location').value);
+      if($('prof-avatar').value) {
+        $('prof-avatar-preview').src = $('prof-avatar').value;
+        $('prof-avatar-preview').style.display = 'block';
+      }
+      showToast('Profile saved!');
+    });
+    $('prof-reset').addEventListener('click', () => {
+      localStorage.removeItem('custom_profile_avatar');
+      localStorage.removeItem('custom_profile_name');
+      localStorage.removeItem('custom_profile_role');
+      localStorage.removeItem('custom_profile_location');
+      loadProfile();
+      showToast('Profile reset!');
+    });
+
+    // Image Crop Tool for Certs
+    let cropImg = new Image();
+    let cropStart = null;
+    let cropRect = null;
+    const canvas = $('crop-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    $('cert-file').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        cropImg.onload = () => {
+          $('crop-container').style.display = 'inline-block';
+          const maxW = 500;
+          let w = cropImg.width;
+          let h = cropImg.height;
+          if(w > maxW) {
+            h = h * (maxW / w);
+            w = maxW;
+          }
+          canvas.width = w;
+          canvas.height = h;
+          drawCropCanvas();
+        };
+        cropImg.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function drawCropCanvas() {
+      ctx.clearRect(0,0, canvas.width, canvas.height);
+      ctx.drawImage(cropImg, 0, 0, canvas.width, canvas.height);
+      if(cropRect) {
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(0,0, canvas.width, canvas.height);
+        
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(cropRect.x, cropRect.y, cropRect.w, cropRect.h);
+        ctx.clip();
+        ctx.drawImage(cropImg, 0, 0, canvas.width, canvas.height);
+        ctx.restore();
+
+        ctx.strokeStyle = '#64ffda';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(cropRect.x, cropRect.y, cropRect.w, cropRect.h);
+      }
+    }
+
+    canvas.addEventListener('mousedown', e => {
+      const rect = canvas.getBoundingClientRect();
+      cropStart = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      cropRect = { x: cropStart.x, y: cropStart.y, w: 0, h: 0 };
+    });
+    canvas.addEventListener('mousemove', e => {
+      if(!cropStart) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      cropRect.w = x - cropStart.x;
+      cropRect.h = y - cropStart.y;
+      drawCropCanvas();
+    });
+    canvas.addEventListener('mouseup', () => {
+      if(cropRect) {
+        if(cropRect.w < 0) { cropRect.x += cropRect.w; cropRect.w = Math.abs(cropRect.w); }
+        if(cropRect.h < 0) { cropRect.y += cropRect.h; cropRect.h = Math.abs(cropRect.h); }
+      }
+      cropStart = null;
+    });
+
+    $('btn-crop').addEventListener('click', () => {
+      if(!cropRect || cropRect.w === 0 || cropRect.h === 0) return;
+      const scaleX = cropImg.width / canvas.width;
+      const scaleY = cropImg.height / canvas.height;
+      
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = cropRect.w;
+      tempCanvas.height = cropRect.h;
+      const tCtx = tempCanvas.getContext('2d');
+      
+      tCtx.drawImage(cropImg, 
+        cropRect.x * scaleX, cropRect.y * scaleY, cropRect.w * scaleX, cropRect.h * scaleY,
+        0, 0, cropRect.w, cropRect.h
+      );
+      
+      const b64 = tempCanvas.toDataURL('image/jpeg', 0.85);
+      $('cert-image').value = b64;
+      $('crop-preview').src = b64;
+      $('crop-preview').style.display = 'block';
+      $('crop-container').style.display = 'none';
+      cropRect = null;
+    });
+
+    // Certs CRUD
+    let certs = getStorage('custom_certs', []);
+    function renderCerts() {
+      const list = $('cert-list');
+      list.innerHTML = '';
+      certs.forEach(c => {
+        list.innerHTML += `
+          <div class="card">
+            <h4>${c.title}</h4>
+            <p class="text-muted">${c.org} | ${c.date}</p>
+            ${c.image ? `<img src="${c.image}" style="max-width:100%; margin-top:0.5rem;">` : ''}
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="editCert('${c.id}')">Edit</button>
+              <button class="btn btn-danger" onclick="deleteCert('${c.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      });
+      setStorage('custom_certs', certs);
+      loadAnalytics();
+    }
+    
+    $('cert-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const id = $('cert-id').value || generateId();
+      const cert = {
+        id,
+        title: $('cert-title').value,
+        org: $('cert-org').value,
+        date: $('cert-date').value,
+        desc: $('cert-desc').value,
+        image: $('cert-image').value
+      };
+      
+      const idx = certs.findIndex(c => c.id === id);
+      if(idx > -1) certs[idx] = cert;
+      else certs.push(cert);
+      
+      renderCerts();
+      e.target.reset();
+      $('cert-id').value = '';
+      $('crop-container').style.display = 'none';
+      $('crop-preview').style.display = 'none';
+      $('cert-form-title').innerText = 'Add Certification';
+      $('cert-cancel').style.display = 'none';
+      showToast('Certification saved!');
+    });
+
+    window.editCert = id => {
+      const c = certs.find(x => x.id === id);
+      if(!c) return;
+      $('cert-id').value = c.id;
+      $('cert-title').value = c.title;
+      $('cert-org').value = c.org;
+      $('cert-date').value = c.date || '';
+      $('cert-desc').value = c.desc || '';
+      $('cert-image').value = c.image || '';
+      if(c.image) {
+        $('crop-preview').src = c.image;
+        $('crop-preview').style.display = 'block';
+      } else {
+        $('crop-preview').style.display = 'none';
+      }
+      $('cert-form-title').innerText = 'Edit Certification';
+      $('cert-cancel').style.display = 'inline-block';
+      window.scrollTo(0, $('certs').offsetTop);
+    };
+
+    window.deleteCert = id => {
+      if(!confirm('Delete this certification?')) return;
+      certs = certs.filter(c => c.id !== id);
+      renderCerts();
+      showToast('Deleted!');
+    };
+
+    $('cert-cancel').addEventListener('click', () => {
+      $('cert-form').reset();
+      $('cert-id').value = '';
+      $('cert-form-title').innerText = 'Add Certification';
+      $('cert-cancel').style.display = 'none';
+      $('crop-container').style.display = 'none';
+      $('crop-preview').style.display = 'none';
+    });
+
+    // Projects CRUD
+    let projects = getStorage('custom_projects', []);
+    function renderProjects() {
+      const list = $('proj-list');
+      list.innerHTML = '';
+      projects.forEach(p => {
+        list.innerHTML += `
+          <div class="card">
+            <h4>${p.title}</h4>
+            <p class="text-muted">${p.category} | ${p.tags}</p>
+            <div style="margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+              <span class="proj-status-badge status-${p.status || 'ongoing'}">${p.status || 'ongoing'}</span>
+              <span class="proj-progress-pct">${p.progress !== undefined ? p.progress : 0}%</span>
+            </div>
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="editProj('${p.id}')">Edit</button>
+              <button class="btn btn-danger" onclick="deleteProj('${p.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      });
+      setStorage('custom_projects', projects);
+      loadAnalytics();
+    }
+    
+    $('proj-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const id = $('proj-id').value || generateId();
+      const proj = {
+        id,
+        title: $('proj-title').value,
+        category: $('proj-cat').value,
+        image: $('proj-image').value,
+        tags: $('proj-tags').value,
+        summary: $('proj-summary').value,
+        details: $('proj-details').value,
+        status: $('projStatus').value,
+        progress: parseInt($('projProgress').value) || 0,
+        demoUrl: $('projDemo').value,
+        repoUrl: $('projRepo').value
+      };
+      
+      const idx = projects.findIndex(x => x.id === id);
+      if(idx > -1) projects[idx] = proj;
+      else projects.push(proj);
+      
+      renderProjects();
+      e.target.reset();
+      $('proj-id').value = '';
+      $('proj-form-title').innerText = 'Add Project';
+      $('proj-cancel').style.display = 'none';
+      showToast('Project saved!');
+    });
+
+    window.editProj = id => {
+      const p = projects.find(x => x.id === id);
+      if(!p) return;
+      $('proj-id').value = p.id;
+      $('proj-title').value = p.title;
+      $('proj-cat').value = p.category;
+      $('proj-image').value = p.image || '';
+      $('proj-tags').value = p.tags || '';
+      $('proj-summary').value = p.summary || '';
+      $('proj-details').value = p.details || '';
+      $('projStatus').value = p.status || 'ongoing';
+      $('projProgress').value = p.progress !== undefined ? p.progress : 65;
+      if ($('projProgressVal')) $('projProgressVal').innerText = $('projProgress').value;
+      $('projDemo').value = p.demoUrl || '';
+      $('projRepo').value = p.repoUrl || '';
+      
+      $('proj-form-title').innerText = 'Edit Project';
+      $('proj-cancel').style.display = 'inline-block';
+      window.scrollTo(0, $('projects').offsetTop);
+    };
+
+    window.deleteProj = id => {
+      if(!confirm('Delete this project?')) return;
+      projects = projects.filter(x => x.id !== id);
+      renderProjects();
+      showToast('Deleted!');
+    };
+
+    $('proj-cancel').addEventListener('click', () => {
+      $('proj-form').reset();
+      $('proj-id').value = '';
+      if ($('projProgressVal')) $('projProgressVal').innerText = '65';
+      $('proj-form-title').innerText = 'Add Project';
+      $('proj-cancel').style.display = 'none';
+    });
+
+
+    // Skills CRUD
+    const defaultSkills = [
+      { name: 'AWS Cloud (EC2, S3, CloudFront, IAM, RDS, VPC, CloudWatch, CLI)', icon: '☁️', pct: 92, category: 'Cloud' },
+      { name: 'Network Architecture (VPC, Subnets, Route Tables, Security Groups)', icon: '🌐', pct: 88, category: 'Network' },
+      { name: 'Programming (Python, C, Java, JavaScript, REST APIs)', icon: '💻', pct: 85, category: 'Code' },
+      { name: 'Databases & Storage (MySQL, Amazon RDS, SQL)', icon: '🗄️', pct: 84, category: 'Database' },
+      { name: 'Embedded Systems & IoT (Arduino, IR, LDR, Solar)', icon: '🔌', pct: 86, category: 'IoT' },
+      { name: 'Dev Tools (Git, GitHub, Linux Bash, Postman, AWS CLI)', icon: '🛠️', pct: 90, category: 'Tools' }
+    ];
+    let skills = getStorage('custom_skills', defaultSkills);
+    
+    function renderSkills() {
+      const tb = $('skill-tbody');
+      tb.innerHTML = '';
+      skills.forEach((s, i) => {
+        tb.innerHTML += `
+          <tr>
+            <td>
+              <button onclick="moveSkill(${i}, -1)">↑</button>
+              <button onclick="moveSkill(${i}, 1)">↓</button>
+            </td>
+            <td>${s.icon || ''}</td>
+            <td>${s.name}</td>
+            <td>${s.category || ''}</td>
+            <td>${s.pct}%</td>
+            <td>
+              <button class="btn btn-primary" onclick="editSkill(${i})" style="padding:0.2rem 0.5rem;">Edit</button>
+              <button class="btn btn-danger" onclick="deleteSkill(${i})" style="padding:0.2rem 0.5rem;">Del</button>
+            </td>
+          </tr>
+        `;
+      });
+      setStorage('custom_skills', skills);
+    }
+
+    $('skill-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const idx = $('skill-index').value;
+      const skill = {
+        name: $('skill-name').value,
+        icon: $('skill-icon').value,
+        pct: parseInt($('skill-pct').value),
+        category: $('skill-cat').value
+      };
+      if(idx !== '') skills[idx] = skill;
+      else skills.push(skill);
+      renderSkills();
+      e.target.reset();
+      $('skill-index').value = '';
+      $('skill-cancel').style.display = 'none';
+      showToast('Skill saved!');
+    });
+
+    window.editSkill = i => {
+      const s = skills[i];
+      $('skill-index').value = i;
+      $('skill-name').value = s.name;
+      $('skill-icon').value = s.icon || '';
+      $('skill-pct').value = s.pct;
+      $('skill-cat').value = s.category || '';
+      $('skill-cancel').style.display = 'inline-block';
+    };
+    window.deleteSkill = i => {
+      if(confirm('Delete skill?')) {
+        skills.splice(i, 1);
+        renderSkills();
+      }
+    };
+    window.moveSkill = (i, dir) => {
+      if(i + dir < 0 || i + dir >= skills.length) return;
+      const temp = skills[i];
+      skills[i] = skills[i + dir];
+      skills[i + dir] = temp;
+      renderSkills();
+    };
+    $('skill-cancel').addEventListener('click', () => {
+      $('skill-form').reset();
+      $('skill-index').value = '';
+      $('skill-cancel').style.display = 'none';
+    });
+    $('skill-restore').addEventListener('click', () => {
+      if(confirm('Restore default skills? All changes will be lost.')) {
+        skills = [...defaultSkills];
+        renderSkills();
+        showToast('Default skills restored!');
+      }
+    });
+
+    // Blog CRUD
+    let blogs = getStorage('custom_blog_posts', []);
+    function renderBlogs() {
+      const list = $('blog-list');
+      list.innerHTML = '';
+      blogs.forEach(b => {
+        list.innerHTML += `
+          <div class="card">
+            <h4>${b.title}</h4>
+            <p class="text-muted">${b.category}</p>
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="editBlog('${b.id}')">Edit</button>
+              <button class="btn btn-danger" onclick="deleteBlog('${b.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      });
+      setStorage('custom_blog_posts', blogs);
+      loadAnalytics();
+    }
+    
+    $('blog-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const id = $('blog-id').value || generateId();
+      const blog = {
+        id,
+        title: $('blog-title').value,
+        category: $('blog-cat').value,
+        excerpt: $('blog-excerpt').value,
+        body: $('blog-body').value,
+        date: new Date().toISOString()
+      };
+      const idx = blogs.findIndex(x => x.id === id);
+      if(idx > -1) blogs[idx] = blog;
+      else blogs.push(blog);
+      renderBlogs();
+      e.target.reset();
+      $('blog-id').value = '';
+      $('blog-form-title').innerText = 'Write Post';
+      $('blog-cancel').style.display = 'none';
+      showToast('Post published!');
+    });
+
+    window.editBlog = id => {
+      const b = blogs.find(x => x.id === id);
+      if(!b) return;
+      $('blog-id').value = b.id;
+      $('blog-title').value = b.title;
+      $('blog-cat').value = b.category || '';
+      $('blog-excerpt').value = b.excerpt || '';
+      $('blog-body').value = b.body || '';
+      $('blog-form-title').innerText = 'Edit Post';
+      $('blog-cancel').style.display = 'inline-block';
+      window.scrollTo(0, $('blog').offsetTop);
+    };
+
+    window.deleteBlog = id => {
+      if(!confirm('Delete this post?')) return;
+      blogs = blogs.filter(x => x.id !== id);
+      renderBlogs();
+      showToast('Deleted!');
+    };
+
+    $('blog-cancel').addEventListener('click', () => {
+      $('blog-form').reset();
+      $('blog-id').value = '';
+      $('blog-form-title').innerText = 'Write Post';
+      $('blog-cancel').style.display = 'none';
+    });
+
+    // Settings
+    function loadSettings() {
+      $('set-email').value = localStorage.getItem('custom_email') || '';
+      $('set-phone').value = localStorage.getItem('custom_phone') || '';
+      $('set-github').value = localStorage.getItem('custom_github') || '';
+      $('set-linkedin').value = localStorage.getItem('custom_linkedin') || '';
+      $('set-resume').value = localStorage.getItem('custom_resume') || '';
+    }
+    $('settings-form').addEventListener('submit', e => {
+      e.preventDefault();
+      localStorage.setItem('custom_email', $('set-email').value);
+      localStorage.setItem('custom_phone', $('set-phone').value);
+      localStorage.setItem('custom_github', $('set-github').value);
+      localStorage.setItem('custom_linkedin', $('set-linkedin').value);
+      localStorage.setItem('custom_resume', $('set-resume').value);
+      showToast('Settings saved!');
+    });
+
+    // Database Backup
+    function loadDbPreview() {
+      const data = {};
+      for(let i=0; i<localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if(k.startsWith('custom_') || k.startsWith('site_')) {
+          data[k] = getStorage(k, localStorage.getItem(k));
+        }
+      }
+      $('db-preview').value = JSON.stringify(data, null, 2);
+    }
+    
+    $('db-export').addEventListener('click', () => {
+      const data = $('db-preview').value;
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `portfolio_backup_${new Date().getTime()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    $('db-import').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          Object.keys(data).forEach(k => {
+            setStorage(k, data[k]);
+          });
+          initAll();
+          showToast('Data imported successfully!');
+        } catch(err) {
+          alert('Invalid JSON file');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    $('db-reset').addEventListener('click', () => {
+      if(confirm('DANGER! This will delete all custom data. Are you sure?')) {
+        const keys = [];
+        for(let i=0; i<localStorage.length; i++) {
+          if(localStorage.key(i).startsWith('custom_') || localStorage.key(i).startsWith('site_')) {
+            keys.push(localStorage.key(i));
+          }
+        }
+        keys.forEach(k => localStorage.removeItem(k));
+        location.reload();
+      }
+    });
+
+    // Init
+    function initAll() {
+      loadAnalytics();
+      loadProfile();
+      renderCerts();
+      renderProjects();
+      renderSkills();
+      renderBlogs();
+      loadSettings();
+      loadDbPreview();
+    }
+    
+    document.addEventListener('DOMContentLoaded', initAll);
+  </script>
+</body>
+</html>
