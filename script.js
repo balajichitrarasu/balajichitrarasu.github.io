@@ -507,18 +507,18 @@ document.addEventListener('DOMContentLoaded', function () {
       var badgeText = c.badgeText || (issuer.indexOf('AWS') > -1 || title.indexOf('AWS') > -1 ? '☁️ Production Certified' : '🏆 Certified');
       var badgeClass = c.badge || (issuer.indexOf('Anthropic') > -1 ? 'badge-violet' : 'badge-teal');
 
-      var escTitle = title.replace(/'/g, "\\'");
-      var escIssuer = issuer.replace(/'/g, "\\'");
-      var escStatus = statusDate.replace(/'/g, "\\'");
-      var escDesc = desc.replace(/'/g, "\\'");
-      var escImg = image.replace(/'/g, "\\'");
+      var escTitle = title.replace(/'/g, "\\'").replace(/[\r\n]+/g, ' ');
+      var escIssuer = issuer.replace(/'/g, "\\'").replace(/[\r\n]+/g, ' ');
+      var escStatus = statusDate.replace(/'/g, "\\'").replace(/[\r\n]+/g, ' ');
+      var escDesc = desc.replace(/'/g, "\\'").replace(/[\r\n]+/g, ' ');
+      var escImg = image.replace(/'/g, "\\'").replace(/[\r\n]+/g, ' ');
 
-      var isPdf = image.toLowerCase().endsWith('.pdf');
+      var isPdf = (image.indexOf('data:application/pdf') === 0 || image.toLowerCase().endsWith('.pdf'));
       var imgHtml = isPdf 
         ? '<div style="height:160px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); color:var(--teal); font-weight:700; flex-direction:column; gap:0.5rem;"><span style="font-size:2.5rem;">📄</span><span>PDF Certificate Document</span></div>'
         : '<img src="' + image + '" alt="' + title + '">';
 
-      return '<div class="cert-card reveal" onclick="openCertImg(\'' + escTitle + '\',\'' + escIssuer + '\',\'' + escStatus + '\',\'' + escDesc + '\',\'' + escImg + '\')">' +
+      return '<div class="cert-card reveal visible" onclick="openCertImg(\'' + escTitle + '\',\'' + escIssuer + '\',\'' + escStatus + '\',\'' + escDesc + '\',\'' + escImg + '\')">' +
         '<div class="cert-img-wrap">' +
           imgHtml +
           '<div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Certificate</p></div>' +

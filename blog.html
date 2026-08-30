@@ -224,8 +224,11 @@ function renderArticles() {
   var query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
   
   var filtered = articles.filter(function(a) {
-    var catMatch = currentCat === 'all' || a.cat === currentCat;
-    var qMatch = !query || a.title.toLowerCase().includes(query) || a.excerpt.toLowerCase().includes(query);
+    var itemCat = (a.cat || a.category || '').toLowerCase();
+    var catMatch = currentCat === 'all' || itemCat === currentCat.toLowerCase() || itemCat.includes(currentCat.toLowerCase());
+    var titleStr = (a.title || '').toLowerCase();
+    var excStr = (a.excerpt || a.summary || a.body || '').toLowerCase();
+    var qMatch = !query || titleStr.includes(query) || excStr.includes(query);
     return catMatch && qMatch;
   });
 
@@ -235,11 +238,12 @@ function renderArticles() {
   }
 
   grid.innerHTML = filtered.map(function(a) {
+    var catTag = (a.category || a.cat || 'TECH').toUpperCase();
     return '<article class="blog-card" onclick="openArticle(\'' + a.id + '\')">' +
       '<div class="blog-card-body">' +
-        '<p class="blog-tag">' + a.cat.toUpperCase() + '</p>' +
+        '<p class="blog-tag">' + catTag + '</p>' +
         '<h3>' + a.title + '</h3>' +
-        '<p>' + a.excerpt + '</p>' +
+        '<p>' + (a.excerpt || a.summary || '') + '</p>' +
         '<div class="blog-card-foot">' +
           '<span class="blog-read">Read Article →</span>' +
           '<span>' + (a.time || '5 min') + ' read · ' + (a.date || '2026') + '</span>' +
