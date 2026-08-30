@@ -300,7 +300,10 @@
             <button type="button" class="btn" id="cert-cancel" style="display:none;">Cancel</button>
           </form>
         </div>
-        <h3>Existing Certifications</h3>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <h3 style="margin:0;">Existing Certifications</h3>
+          <button type="button" class="btn btn-primary" onclick="restoreCerts()" style="padding:0.3rem 0.8rem; font-size:0.8rem;">↻ Restore Default Certifications</button>
+        </div>
         <div id="cert-list" class="grid"></div>
       </section>
 
@@ -376,7 +379,10 @@
             <button type="button" class="btn" id="proj-cancel" style="display:none;">Cancel</button>
           </form>
         </div>
-        <h3>Existing Projects</h3>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <h3 style="margin:0;">Existing Projects</h3>
+          <button type="button" class="btn btn-primary" onclick="restoreProjects()" style="padding:0.3rem 0.8rem; font-size:0.8rem;">↻ Restore Default Projects</button>
+        </div>
         <div id="proj-list" class="grid"></div>
       </section>
 
@@ -542,10 +548,23 @@
     // Tab Switching
     document.querySelectorAll('.tab-link').forEach(link => {
       link.addEventListener('click', e => {
+        const btn = e.currentTarget || e.target.closest('.tab-link');
+        if (!btn) return;
+        const tabId = btn.dataset.tab;
+        if (!tabId) return;
+
         document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
         document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-        e.target.classList.add('active');
-        $(e.target.dataset.tab).classList.add('active');
+        btn.classList.add('active');
+        const pane = $(tabId);
+        if (pane) pane.classList.add('active');
+
+        // Re-render tab content on switch
+        if (tabId === 'certs') renderCerts();
+        if (tabId === 'projects') renderProjects();
+        if (tabId === 'skills') renderSkills();
+        if (tabId === 'blog') renderBlogs();
+        if (tabId === 'analytics') loadAnalytics();
       });
     });
 
@@ -839,6 +858,13 @@
       showToast('Deleted!');
     };
 
+    window.restoreCerts = () => {
+      certs = JSON.parse(JSON.stringify(defaultCerts));
+      setStorage('custom_certs', certs);
+      renderCerts();
+      showToast('Default certifications restored!');
+    };
+
     $('cert-cancel').addEventListener('click', () => {
       $('cert-form').reset();
       $('cert-id').value = '';
@@ -931,6 +957,13 @@
       projects = projects.filter(x => String(x.id) !== String(id));
       renderProjects();
       showToast('Deleted!');
+    };
+
+    window.restoreProjects = () => {
+      projects = JSON.parse(JSON.stringify(defaultProjects));
+      setStorage('custom_projects', projects);
+      renderProjects();
+      showToast('Default projects restored!');
     };
 
     $('proj-cancel').addEventListener('click', () => {
@@ -1031,18 +1064,39 @@
     });
 
     // Blog CRUD
-    let blogs = getStorage('custom_blog_posts', []);
+    const defaultBlogs = [
+      {
+        id: 'blog_1',
+        title: 'Building ZentroShift: Deploying ERM App Across 6 AWS Services',
+        category: 'AWS Cloud',
+        excerpt: 'Deep dive into VPC architecture, EC2 instance sizing, CloudFront CDN edge distribution, RDS MySQL setup, and CloudWatch alarm triggers built during my AWS Cloud internship at ZenFuture Technologies.',
+        body: 'During my AWS Cloud Internship at ZenFuture Technologies (June-July 2026), I architected and deployed ZentroShift — an enterprise resource management application across 6 production AWS services.',
+        date: '2026-07-28'
+      },
+      {
+        id: 'blog_2',
+        title: 'Designing Smart Solar Zebra Crossing with Arduino & IoT Sensors',
+        category: 'Embedded & IoT',
+        excerpt: 'Hardware engineering walkthrough: Combining IR sensors, LDR ambient light thresholding, solar boost converters, and Li-ion battery charging circuits for intelligent pedestrian safety.',
+        body: 'Road safety at unlit zebra crossings can be significantly improved with automated solar-powered sensing system.',
+        date: '2026-05-14'
+      }
+    ];
+
+    let blogs = getStorage('custom_blog_posts', defaultBlogs);
     function renderBlogs() {
+      if (!Array.isArray(blogs) || blogs.length === 0) blogs = defaultBlogs;
       const list = $('blog-list');
+      if (!list) return;
       list.innerHTML = '';
       blogs.forEach(b => {
         list.innerHTML += `
-          <div class="card">
-            <h4>${b.title}</h4>
-            <p class="text-muted">${b.category}</p>
-            <div class="card-actions">
-              <button class="btn btn-primary" onclick="editBlog('${b.id}')">Edit</button>
-              <button class="btn btn-danger" onclick="deleteBlog('${b.id}')">Delete</button>
+          <div class="card" style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1rem; margin-bottom:0.75rem;">
+            <h4 style="color:var(--text); font-weight:700; margin-bottom:0.2rem;">${b.title}</h4>
+            <p class="text-muted" style="font-size:0.8rem; color:var(--text-muted);">${b.category || 'Tech'} | ${b.date || ''}</p>
+            <div class="card-actions" style="display:flex; gap:0.5rem; margin-top:0.75rem;">
+              <button class="btn btn-primary" onclick="editBlog('${b.id}')" style="padding:0.3rem 0.8rem; font-size:0.8rem;">Edit</button>
+              <button class="btn btn-danger" onclick="deleteBlog('${b.id}')" style="padding:0.3rem 0.8rem; font-size:0.8rem;">Delete</button>
             </div>
           </div>
         `;
@@ -1060,9 +1114,9 @@
         category: $('blog-cat').value,
         excerpt: $('blog-excerpt').value,
         body: $('blog-body').value,
-        date: new Date().toISOString()
+        date: new Date().toISOString().split('T')[0]
       };
-      const idx = blogs.findIndex(x => x.id === id);
+      const idx = blogs.findIndex(x => String(x.id) === String(id));
       if(idx > -1) blogs[idx] = blog;
       else blogs.push(blog);
       renderBlogs();
@@ -1074,10 +1128,10 @@
     });
 
     window.editBlog = id => {
-      const b = blogs.find(x => x.id === id);
+      const b = blogs.find(x => String(x.id) === String(id));
       if(!b) return;
       $('blog-id').value = b.id;
-      $('blog-title').value = b.title;
+      $('blog-title').value = b.title || '';
       $('blog-cat').value = b.category || '';
       $('blog-excerpt').value = b.excerpt || '';
       $('blog-body').value = b.body || '';
@@ -1087,8 +1141,8 @@
     };
 
     window.deleteBlog = id => {
-      if(!confirm('Delete this post?')) return;
-      blogs = blogs.filter(x => x.id !== id);
+      if(!confirm('Delete this blog post?')) return;
+      blogs = blogs.filter(b => String(b.id) !== String(id));
       renderBlogs();
       showToast('Deleted!');
     };
