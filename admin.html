@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=59.0">
+  <link rel="stylesheet" href="style.css?v=60.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -2282,25 +2282,8 @@
         $(cropperTargetPreview).style.display = 'block';
       }
 
-      // AUTOMATIC FILE DOWNLOAD FOR DATABASE & REPOSITORY PLACEMENT
-      let downloadName = 'cropped_image.jpg';
-      if (cropperTargetInput === 'prof-avatar') downloadName = 'profile.jpg';
-      else if (cropperTargetInput === 'cert-image') downloadName = 'cert3.jpg';
-      else if (cropperTargetInput === 'proj-image') downloadName = 'project.jpg';
-      else if (cropperTargetInput === 'blog-image') downloadName = 'blog_cover.jpg';
-      else if (cropperTargetInput === 'set-logo-url') downloadName = 'logo.png';
-
-      try {
-        const dlLink = document.createElement('a');
-        dlLink.href = base64Cropped;
-        dlLink.download = downloadName;
-        document.body.appendChild(dlLink);
-        dlLink.click();
-        document.body.removeChild(dlLink);
-      } catch(err) {}
-
       closeCropperModal();
-      showToast('⚡ Cropped image applied & downloaded (' + downloadName + ') — ready for database & G:\\Portfolio\\!');
+      showToast('✨ Cropped image applied to form! Click "Save Certification" (or Save Form) to complete download & database sync.');
     };
 
     // Image Crop Tool for Certs
@@ -2322,32 +2305,21 @@
           reader.onload = ev => {
             if ($('cert-image')) $('cert-image').value = safeFileName;
             if ($('pdf-preview')) $('pdf-preview').style.display = 'block';
-
-            // Auto-download for repo
-            const a = document.createElement('a');
-            a.href = ev.target.result;
-            a.download = safeFileName;
-            a.click();
-
-            showToast('⚡ Method 1 Automated! Downloaded ' + safeFileName + ' — copy to G:\\Portfolio\\!');
+            showToast('📄 Attached PDF document: ' + safeFileName);
           };
           reader.readAsDataURL(file);
         } else {
           const reader = new FileReader();
           reader.onload = ev => {
-            if ($('cert-image')) $('cert-image').value = safeFileName;
+            if ($('cert-image')) {
+              $('cert-image').value = ev.target.result;
+              $('cert-image').dataset.dataUrl = ev.target.result;
+            }
             if ($('crop-preview')) {
               $('crop-preview').src = ev.target.result;
               $('crop-preview').style.display = 'block';
             }
-
-            // Auto-download for repo
-            const a = document.createElement('a');
-            a.href = ev.target.result;
-            a.download = safeFileName;
-            a.click();
-
-            showToast('⚡ Method 1 Automated! Downloaded ' + safeFileName + ' — copy to G:\\Portfolio\\!');
+            showToast('📸 Image loaded into preview! Click "✂️ Crop Certificate Image" to edit.');
           };
           reader.readAsDataURL(file);
         }
@@ -2408,13 +2380,15 @@
 
       setTimeout(() => {
         const id = $('cert-id').value || generateId();
+        const certImageVal = $('cert-image') ? $('cert-image').value : '';
+
         const cert = {
           id,
           title: $('cert-title').value,
           org: $('cert-org').value,
           date: $('cert-date').value,
           desc: $('cert-desc').value,
-          image: $('cert-image').value
+          image: certImageVal
         };
         
         const idx = certs.findIndex(c => String(c.id) === String(id));
@@ -2423,10 +2397,25 @@
         
         renderCerts();
         if (window.PortfolioAPI) PortfolioAPI.saveCert(cert);
+
+        // AUTO-DOWNLOAD CROPPED IMAGE ON SAVE FORM CLICK
+        if (certImageVal && certImageVal.indexOf('data:image') === 0) {
+          try {
+            const dlName = (id === 'cert_1') ? 'cert1.jpg' : (id === 'cert_2' ? 'cert3.jpg' : (id === 'cert_3' ? 'cert2.jpg' : (id === 'cert_4' ? 'cert4.jpg' : 'cert3.jpg')));
+            const a = document.createElement('a');
+            a.href = certImageVal;
+            a.download = dlName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast('📥 Downloaded cropped certificate (' + dlName + ') — copy to G:\\Portfolio\\!');
+          } catch(err) {}
+        }
+
         e.target.reset();
         $('cert-id').value = '';
-        $('crop-container').style.display = 'none';
-        $('crop-preview').style.display = 'none';
+        if ($('crop-container')) $('crop-container').style.display = 'none';
+        if ($('crop-preview')) $('crop-preview').style.display = 'none';
         $('cert-form-title').innerText = 'Add Certification';
         $('cert-cancel').style.display = 'none';
 
@@ -2435,7 +2424,7 @@
           setTimeout(() => { submitBtn.innerText = origText; }, 2000);
         }
 
-        showToast('🏆 Certification Saved & Live on Portfolio!');
+        showToast('🏆 Certification Saved & Synced Across All Devices!');
       }, 500);
     });
 
