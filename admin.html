@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=53.0">
+  <link rel="stylesheet" href="style.css?v=54.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1855,12 +1855,45 @@
       cropperContrast = 0;
 
       const urlEl = $(inputId);
-      const imgVal = urlEl ? urlEl.value : '';
-      if (!imgVal || imgVal.trim() === '') {
-        showToast('Please select an image file or enter an image URL first!');
+      let imgVal = urlEl ? urlEl.value : '';
+
+      // Check corresponding file input element
+      let fileInputId = inputId;
+      if (inputId === 'cert-image') fileInputId = 'cert-file';
+      else if (inputId === 'proj-image') fileInputId = 'proj-file';
+      else if (inputId === 'blog-image') fileInputId = 'blog-image-file';
+      else if (inputId === 'prof-avatar') fileInputId = 'prof-avatar-file';
+      else if (inputId === 'set-logo-url') fileInputId = 'set-logo-file';
+
+      const fileEl = $(fileInputId);
+      const previewEl = previewId ? $(previewId) : null;
+
+      // 1. If a local file object was picked in <input type="file">, read via FileReader
+      if (fileEl && fileEl.files && fileEl.files[0]) {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          loadCropperImgSrc(ev.target.result);
+        };
+        reader.readAsDataURL(fileEl.files[0]);
         return;
       }
 
+      // 2. If preview element has a Data URL or loaded HTTP src
+      if (previewEl && previewEl.src && (previewEl.src.indexOf('data:image') === 0 || previewEl.src.indexOf('http') === 0)) {
+        imgVal = previewEl.src;
+      } else if (urlEl && urlEl.dataset && urlEl.dataset.dataUrl) {
+        imgVal = urlEl.dataset.dataUrl;
+      }
+
+      if (!imgVal || imgVal.trim() === '') {
+        showToast('Please select an image file using "Choose File" or enter a URL first!');
+        return;
+      }
+
+      loadCropperImgSrc(imgVal);
+    };
+
+    function loadCropperImgSrc(src) {
       if ($('crop-brightness')) $('crop-brightness').value = 0;
       if ($('crop-contrast')) $('crop-contrast').value = 0;
       if ($('crop-zoom-level')) $('crop-zoom-level').innerText = '100%';
@@ -1878,10 +1911,10 @@
         setupCropperCanvas();
       };
       cropperImg.onerror = () => {
-        showToast('Unable to load image for cropping.');
+        showToast('Unable to load image for cropping. Please pick an image file using "Choose File"!');
       };
-      cropperImg.src = imgVal;
-    };
+      cropperImg.src = src;
+    }
 
     function setupCropperCanvas() {
       const maxW = 720;
@@ -2240,14 +2273,34 @@
       outCtx.restore();
 
       const base64Cropped = outCanvas.toDataURL('image/jpeg', 0.92);
-      if ($(cropperTargetInput)) $(cropperTargetInput).value = base64Cropped;
+      if ($(cropperTargetInput)) {
+        $(cropperTargetInput).value = base64Cropped;
+        $(cropperTargetInput).dataset.dataUrl = base64Cropped;
+      }
       if (cropperTargetPreview && $(cropperTargetPreview)) {
         $(cropperTargetPreview).src = base64Cropped;
         $(cropperTargetPreview).style.display = 'block';
       }
 
+      // AUTOMATIC FILE DOWNLOAD FOR DATABASE & REPOSITORY PLACEMENT
+      let downloadName = 'cropped_image.jpg';
+      if (cropperTargetInput === 'prof-avatar') downloadName = 'profile.jpg';
+      else if (cropperTargetInput === 'cert-image') downloadName = 'cert3.jpg';
+      else if (cropperTargetInput === 'proj-image') downloadName = 'project.jpg';
+      else if (cropperTargetInput === 'blog-image') downloadName = 'blog_cover.jpg';
+      else if (cropperTargetInput === 'set-logo-url') downloadName = 'logo.png';
+
+      try {
+        const dlLink = document.createElement('a');
+        dlLink.href = base64Cropped;
+        dlLink.download = downloadName;
+        document.body.appendChild(dlLink);
+        dlLink.click();
+        document.body.removeChild(dlLink);
+      } catch(err) {}
+
       closeCropperModal();
-      showToast('✨ Studio Cropped & Enhanced Image Applied!');
+      showToast('⚡ Cropped image applied & downloaded (' + downloadName + ') — ready for database & G:\\Portfolio\\!');
     };
 
     // Image Crop Tool for Certs
