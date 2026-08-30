@@ -6,6 +6,23 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.glass, .card, .proj-card, .cert-card, .blog-card, .event-card, .tl-item {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
 :root {
   --bg: #090d16;
   --bg-card: rgba(30, 41, 59, 0.45);
@@ -268,6 +285,10 @@ body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, 
   z-index: 0;
   overflow: hidden;
   opacity: 0.85;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: strict;
 }
 
 .aurora-wave {
@@ -278,7 +299,9 @@ body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, 
   left: -50%;
   background: repeat-x url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C150,90 350,-40 500,40 C650,120 900,10 1200,50 L1200,120 L0,120 Z' fill='url(%23waveGrad1)'/%3E%3Cdefs%3E%3ClinearGradient id='waveGrad1' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='rgba(100,255,218,0.04)'/%3E%3Cstop offset='50%25' stop-color='rgba(167,139,250,0.05)'/%3E%3Cstop offset='100%25' stop-color='rgba(52,211,153,0.03)'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E");
   animation: waveDriftSlow 32s ease-in-out infinite alternate;
-  filter: blur(10px);
+  filter: blur(4px);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
 .aurora-wave.w2 {
@@ -287,19 +310,21 @@ body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, 
   background: repeat-x url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C200,-30 450,80 700,20 C950,-40 1100,60 1200,10 L1200,120 L0,120 Z' fill='url(%23waveGrad2)'/%3E%3Cdefs%3E%3ClinearGradient id='waveGrad2' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='rgba(167,139,250,0.04)'/%3E%3Cstop offset='50%25' stop-color='rgba(100,255,218,0.03)'/%3E%3Cstop offset='100%25' stop-color='rgba(56,189,248,0.05)'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E");
   animation: waveDriftFast 25s ease-in-out infinite alternate;
   animation-delay: -5s;
-  filter: blur(16px);
+  filter: blur(6px);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
 @keyframes waveDriftSlow {
-  0% { transform: translateX(0) scaleY(1); }
-  50% { transform: translateX(-150px) scaleY(1.18); }
-  100% { transform: translateX(100px) scaleY(0.92); }
+  0% { transform: translate3d(0, 0, 0) scaleY(1); }
+  50% { transform: translate3d(-150px, 0, 0) scaleY(1.18); }
+  100% { transform: translate3d(100px, 0, 0) scaleY(0.92); }
 }
 
 @keyframes waveDriftFast {
-  0% { transform: translateX(0) rotate(0deg); }
-  50% { transform: translateX(180px) rotate(1.2deg); }
-  100% { transform: translateX(-120px) rotate(-1.2deg); }
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(180px, 0, 0) rotate(1.2deg); }
+  100% { transform: translate3d(-120px, 0, 0) rotate(-1.2deg); }
 }
 
 .bg-glow-orb {
@@ -308,6 +333,10 @@ body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, 
   pointer-events: none;
   z-index: 0;
   animation: floatGlowOrb 24s ease-in-out infinite alternate;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: layout paint;
 }
 
 .bg-glow-orb.orb-1 {
@@ -316,7 +345,7 @@ body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, 
   width: 550px;
   height: 550px;
   background: radial-gradient(circle, rgba(100, 255, 218, 0.05) 0%, rgba(100, 255, 218, 0) 70%);
-  filter: blur(120px);
+  filter: blur(40px);
 }
 
 .bg-glow-orb.orb-2 {
@@ -325,7 +354,7 @@ body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, 
   width: 650px;
   height: 650px;
   background: radial-gradient(circle, rgba(167, 139, 250, 0.045) 0%, rgba(167, 139, 250, 0) 70%);
-  filter: blur(140px);
+  filter: blur(45px);
   animation-delay: -8s;
 }
 
@@ -335,19 +364,19 @@ body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, 
   width: 600px;
   height: 600px;
   background: radial-gradient(circle, rgba(52, 211, 153, 0.04) 0%, rgba(52, 211, 153, 0) 70%);
-  filter: blur(130px);
+  filter: blur(42px);
   animation-delay: -16s;
 }
 
 @keyframes floatGlowOrb {
   0% {
-    transform: translate(0, 0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
   50% {
-    transform: translate(45px, -55px) scale(1.1);
+    transform: translate3d(45px, -55px, 0) scale(1.1);
   }
   100% {
-    transform: translate(-35px, 40px) scale(0.92);
+    transform: translate3d(-35px, 40px, 0) scale(0.92);
   }
 }
 
