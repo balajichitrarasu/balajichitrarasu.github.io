@@ -582,18 +582,18 @@ body::before {
 /* ── AVATAR ── */
 .avatar-wrap {
   position: relative;
-  width: 160px; height: 160px;
+  width: 175px; height: 175px;
   isolation: isolate;
   flex-shrink: 0;
-  margin-bottom: .6rem;
+  margin-bottom: .8rem;
 }
 .profile {
   display: block;
-  width: 160px; height: 160px;
+  width: 175px; height: 175px;
   border-radius: 50%;
   object-fit: cover; object-position: top center;
-  border: 2.5px solid rgba(100,255,218,.5);
-  box-shadow: 0 0 0 6px rgba(100,255,218,.07), 0 12px 36px rgba(0,0,0,.65);
+  border: 3px solid rgba(100,255,218,.55);
+  box-shadow: 0 0 0 7px rgba(100,255,218,.08), 0 14px 40px rgba(0,0,0,.7);
   position: relative; z-index: 2;
   mix-blend-mode: normal;
   background-color: rgba(100,255,218,0.08); /* fallback if image fails */
@@ -601,28 +601,28 @@ body::before {
 }
 .avatar-wrap:hover .profile {
   transform: scale(1.04);
-  box-shadow: 0 0 0 8px rgba(100,255,218,.12), 0 16px 40px rgba(0,0,0,.7);
+  box-shadow: 0 0 0 9px rgba(100,255,218,.15), 0 18px 48px rgba(0,0,0,.8);
 }
 .avatar-ring {
-  position: absolute; inset: -14px;
+  position: absolute; inset: -15px;
   border-radius: 50%;
-  border: 1.5px dashed rgba(100,255,218,.2);
+  border: 1.5px dashed rgba(100,255,218,.25);
   animation: spin 22s linear infinite;
   z-index: 1; pointer-events: none;
 }
 .avatar-ring.r2 {
-  inset: -26px;
-  border-color: rgba(167,139,250,.15);
+  inset: -28px;
+  border-color: rgba(167,139,250,.18);
   animation-duration: 34s;
   animation-direction: reverse;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .avatar-dot {
-  position: absolute; bottom: 9px; right: 9px;
-  width: 18px; height: 18px; border-radius: 50%;
+  position: absolute; bottom: 12px; right: 12px;
+  width: 20px; height: 20px; border-radius: 50%;
   background: var(--emerald);
-  border: 2.5px solid var(--bg);
-  box-shadow: 0 0 10px rgba(52,211,153,.7);
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 12px rgba(52,211,153,.8);
   z-index: 3;
   animation: pulse-dot 2.5s ease-in-out infinite;
 }
@@ -633,7 +633,7 @@ body::before {
 
 @media (max-width: 480px) {
   .avatar-wrap, .profile {
-    width: 140px; height: 140px;
+    width: 150px; height: 150px;
   }
 }
 
