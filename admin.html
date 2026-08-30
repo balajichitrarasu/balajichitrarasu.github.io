@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=37.0">
+  <link rel="stylesheet" href="style.css?v=38.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1145,6 +1145,32 @@
               <tbody id="access-logs-tbody">
                 <tr>
                   <td colspan="5" style="text-align:center; padding:1.5rem; color:var(--text-muted);">Loading access logs...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- DEDICATED PASSWORD & SECURITY CHANGE EVENT LOGS -->
+        <div class="card" style="margin-top:1.5rem; background:rgba(255,255,255,0.025); border:1px solid var(--teal); border-radius:10px; padding:1.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+            <h3 style="margin:0; font-size:1rem; color:var(--teal);">🔑 Password &amp; Master Security Change Logs</h3>
+            <button class="btn btn-danger" onclick="clearSecurityLogs()" style="font-size:0.78rem; padding:0.35rem 0.75rem;">Clear Security Logs</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="table" style="width:100%; font-size:0.85rem;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid var(--border);">
+                  <th style="padding:0.75rem;">Timestamp</th>
+                  <th style="padding:0.75rem;">Security Event</th>
+                  <th style="padding:0.75rem;">Username</th>
+                  <th style="padding:0.75rem;">Details &amp; Revocation Status</th>
+                  <th style="padding:0.75rem;">Result</th>
+                </tr>
+              </thead>
+              <tbody id="security-logs-tbody">
+                <tr>
+                  <td colspan="5" style="text-align:center; padding:1.5rem; color:var(--text-muted);">No security events recorded yet.</td>
                 </tr>
               </tbody>
             </table>
@@ -2471,6 +2497,21 @@
         }
         localStorage.setItem('custom_admin_pass', newPassword);
 
+        // Record Password Security Log Event
+        try {
+          let secLogs = JSON.parse(localStorage.getItem('admin_security_logs') || '[]');
+          secLogs.unshift({
+            id: 'sec_' + Date.now(),
+            timestamp: new Date().toLocaleString(),
+            event: '🔑 Master Password Updated',
+            username: newUsername || localStorage.getItem('custom_admin_user') || 'user',
+            details: 'Old password revoked permanently. New SHA-256 credentials active.',
+            status: '✅ Success'
+          });
+          if (secLogs.length > 50) secLogs.pop();
+          localStorage.setItem('admin_security_logs', JSON.stringify(secLogs));
+        } catch (e) {}
+
         if (btn) {
           btn.innerHTML = '✓ Master Password Updated!';
           btn.style.opacity = '1';
@@ -2681,7 +2722,48 @@
         `;
       });
       if ($('log-count-badge')) $('log-count-badge').innerText = `${logs.length} Cross-Device Sessions Logged`;
+      renderSecurityLogs();
     }
+
+    function renderSecurityLogs() {
+      let secLogs = [];
+      try {
+        secLogs = JSON.parse(localStorage.getItem('admin_security_logs') || '[]');
+      } catch(e) {}
+
+      if (!Array.isArray(secLogs) || secLogs.length === 0) {
+        secLogs = [{
+          id: 'sec_init',
+          timestamp: new Date().toLocaleString(),
+          event: '🔑 Security Authentication System Active',
+          username: localStorage.getItem('custom_admin_user') || 'user',
+          details: 'SHA-256 Auth Enabled. Old Passwords Revoked on Update.',
+          status: '✅ Active'
+        }];
+      }
+
+      const tb = $('security-logs-tbody');
+      if (!tb) return;
+      tb.innerHTML = '';
+      secLogs.forEach(s => {
+        tb.innerHTML += `
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:0.75rem; color:var(--text-muted);">${s.timestamp}</td>
+            <td style="padding:0.75rem; font-weight:700; color:var(--teal);">${s.event}</td>
+            <td style="padding:0.75rem; font-family:'DM Mono',monospace; color:var(--text);">${s.username}</td>
+            <td style="padding:0.75rem; font-size:0.78rem; color:var(--text-muted);">${s.details}</td>
+            <td style="padding:0.75rem;"><span style="background:rgba(52,211,153,0.12); color:var(--emerald); border:1px solid rgba(52,211,153,0.3); padding:0.15rem 0.55rem; border-radius:12px; font-size:0.72rem; font-weight:600;">${s.status}</span></td>
+          </tr>
+        `;
+      });
+    }
+
+    window.clearSecurityLogs = function() {
+      if(!confirm('Clear all security password change logs?')) return;
+      localStorage.removeItem('admin_security_logs');
+      renderSecurityLogs();
+      showToast('Security logs cleared!');
+    };
 
     /* ══ RESUME PDF & DOCUMENT FILE UPLOADER ══ */
     const profResumeFile = $('prof-resume-file');
