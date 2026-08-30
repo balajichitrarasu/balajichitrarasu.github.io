@@ -51,24 +51,23 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ────────────────────────────────────────
      LIGHT / DARK THEME TOGGLE (Sun / Moon)
   ─────────────────────────────────────────── */
-  var themeBtn = document.getElementById('themeToggle');
-  function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    try { localStorage.setItem('site_theme', theme); } catch(e) {}
+  window.toggleTheme = function() {
+    var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('site_theme', next); } catch(e) {}
+    var themeBtn = document.getElementById('themeToggle');
     if (themeBtn) {
-      themeBtn.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode (☀️)' : 'Switch to Dark Mode (🌙)');
+      themeBtn.setAttribute('title', next === 'dark' ? 'Switch to Light Mode (☀️)' : 'Switch to Dark Mode (🌙)');
     }
-  }
+    if (typeof showToast === 'function') {
+      showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
+    }
+  };
 
+  var themeBtn = document.getElementById('themeToggle');
   if (themeBtn) {
-    themeBtn.addEventListener('click', function () {
-      var cur = document.documentElement.getAttribute('data-theme') || 'dark';
-      var next = cur === 'dark' ? 'light' : 'dark';
-      applyTheme(next);
-      if (typeof showToast === 'function') {
-        showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
-      }
-    });
+    themeBtn.addEventListener('click', window.toggleTheme);
   }
 
   /* ────────────────────────────────────────

@@ -121,7 +121,7 @@
       <li><a href="#events">Events</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><button id="cmdBtn" class="cmd-pill" title="Command Palette (Ctrl+K)"><span>⌘K</span> Quick Search</button></li>
-      <li><button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Day/Night Mode" title="Toggle Theme (Light/Dark)"><span class="theme-icon-dark">🌙</span><span class="theme-icon-light">☀️</span></button></li>
+      <li><button id="themeToggle" onclick="toggleTheme()" class="theme-toggle-btn" aria-label="Toggle Day/Night Mode" title="Toggle Theme (Light/Dark)"><span class="theme-icon-dark">🌙</span><span class="theme-icon-light">☀️</span></button></li>
       <li><a href="blog.html" class="nav-pill">✦ Blog</a></li>
       <li><a href="admin.html" class="nav-pill-v">⚙ Admin</a></li>
     </ul>
@@ -213,27 +213,25 @@
       <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/amazonaws/38bdf8" alt="AWS" width="18" height="18">AWS EC2, S3, RDS, VPC</div>
       <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/amazoncloudwatch/38bdf8" alt="CloudWatch" width="18" height="18">CloudFront &amp; CloudWatch</div>
       <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/gnuprivacyguard/38bdf8" alt="IAM" width="18" height="18">IAM &amp; NAT Gateway</div>
-      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/mysql/38bdf8" alt="MySQL" width="18" height="18">MySQL &amp; Amazon RDS</div>
       <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/python/38bdf8" alt="Python" width="18" height="18">Python &amp; REST APIs</div>
-      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/arduino/38bdf8" alt="Arduino" width="18" height="18">Arduino &amp; IoT</div>
-      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/javascript/38bdf8" alt="JS" width="18" height="18">HTML, CSS, JavaScript</div>
-      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/git/38bdf8" alt="Git" width="18" height="18">Git, Linux, Postman</div>
-      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/anthropic/818cf8" alt="Anthropic" width="18" height="18">Anthropic AI Fluency</div>
-      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/ieee/38bdf8" alt="ECE" width="18" height="18">B.E. ECE · 7.13 CGPA</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/mysql/38bdf8" alt="MySQL" width="18" height="18">MySQL &amp; SQL Queries</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/arduino/38bdf8" alt="Arduino" width="18" height="18">Arduino &amp; IoT Hardware</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/git/38bdf8" alt="Git" width="18" height="18">Git &amp; AWS CLI</div>
+      <div class="stag"><img class="stag-icon" src="https://cdn.simpleicons.org/linux/38bdf8" alt="Linux" width="18" height="18">Linux System Admin</div>
     </div>
   </div>
 </section>
 
 <!-- EXPERIENCE TIMELINE -->
 <section id="experience" class="section">
-  <p class="sec-eyebrow">Experience</p>
-  <h2 class="sec-title">Work &amp; Education</h2>
+  <p class="sec-eyebrow">Career Journey</p>
+  <h2 class="sec-title">Experience &amp; Education</h2>
   <div class="timeline reveal">
     <div class="tl-item">
       <p class="tl-date">JUNE 2026 — JULY 2026</p>
       <h3 class="tl-role">AWS Cloud Engineer Intern</h3>
       <p class="tl-org">ZenFuture Technologies · Coimbatore, India (Cert No. ZF-INTERN-0026)</p>
-      <p class="tl-desc">Deployed <strong>ZentroShift</strong>, a full-stack ERM app, across 6 AWS services (EC2, S3, CloudFront, RDS, VPC, CloudWatch). Built a custom VPC with public subnets, Internet Gateway, NAT Gateway, security groups, 4-tier IAM role access, and Postman-tested REST APIs for location clock-in and admin features.</p>
+      <p class="tl-desc">Built and deployed <strong>ZentroShift ERM</strong> across 6 AWS services: EC2, S3, CloudFront, RDS, VPC (custom subnets, Internet Gateway, NAT Gateway), and CloudWatch alarms. Configured 4-tier IAM role access control and tested REST APIs with Postman.</p>
     </div>
     <div class="tl-item">
       <p class="tl-date">2023 — PRESENT</p>
@@ -374,7 +372,54 @@
   </div>
 
   <div class="skill-bars" id="skillBarsContainer">
-    <!-- Rendered by script.js from DEFAULT_SKILLS or localStorage custom_skills -->
+    <div class="skill-bar-item reveal visible">
+      <div class="skill-top">
+        <img class="skill-icon" src="https://cdn.simpleicons.org/amazonaws/38bdf8" alt="AWS" width="20" height="20" style="object-fit:contain;">
+        <span class="skill-name">AWS Cloud (EC2, S3, CloudFront, IAM, RDS, VPC, CloudWatch, CLI)</span>
+        <span class="skill-pct">92%</span>
+      </div>
+      <div class="sbar-track"><div class="sbar-fill" style="width: 92%;" data-w="92"></div></div>
+    </div>
+    <div class="skill-bar-item reveal visible">
+      <div class="skill-top">
+        <img class="skill-icon" src="https://cdn.simpleicons.org/cisco/38bdf8" alt="Networking" width="20" height="20" style="object-fit:contain;">
+        <span class="skill-name">Network Architecture (VPC, Subnets, Route Tables, Security Groups)</span>
+        <span class="skill-pct">88%</span>
+      </div>
+      <div class="sbar-track"><div class="sbar-fill" style="width: 88%;" data-w="88"></div></div>
+    </div>
+    <div class="skill-bar-item reveal visible">
+      <div class="skill-top">
+        <img class="skill-icon" src="https://cdn.simpleicons.org/python/38bdf8" alt="Python" width="20" height="20" style="object-fit:contain;">
+        <span class="skill-name">Programming (Python, C, Java, JavaScript, REST APIs)</span>
+        <span class="skill-pct">85%</span>
+      </div>
+      <div class="sbar-track"><div class="sbar-fill" style="width: 85%;" data-w="85"></div></div>
+    </div>
+    <div class="skill-bar-item reveal visible">
+      <div class="skill-top">
+        <img class="skill-icon" src="https://cdn.simpleicons.org/mysql/38bdf8" alt="MySQL" width="20" height="20" style="object-fit:contain;">
+        <span class="skill-name">Databases &amp; Storage (MySQL, Amazon RDS, SQL queries)</span>
+        <span class="skill-pct">84%</span>
+      </div>
+      <div class="sbar-track"><div class="sbar-fill" style="width: 84%;" data-w="84"></div></div>
+    </div>
+    <div class="skill-bar-item reveal visible">
+      <div class="skill-top">
+        <img class="skill-icon" src="https://cdn.simpleicons.org/arduino/38bdf8" alt="Arduino" width="20" height="20" style="object-fit:contain;">
+        <span class="skill-name">Embedded Systems &amp; IoT (Arduino, IR, LDR, Solar, Boost Converter)</span>
+        <span class="skill-pct">86%</span>
+      </div>
+      <div class="sbar-track"><div class="sbar-fill" style="width: 86%;" data-w="86"></div></div>
+    </div>
+    <div class="skill-bar-item reveal visible">
+      <div class="skill-top">
+        <img class="skill-icon" src="https://cdn.simpleicons.org/git/38bdf8" alt="Git" width="20" height="20" style="object-fit:contain;">
+        <span class="skill-name">Dev Tools (Git, GitHub, Linux Bash, Postman, AWS CLI)</span>
+        <span class="skill-pct">90%</span>
+      </div>
+      <div class="sbar-track"><div class="sbar-fill" style="width: 90%;" data-w="90"></div></div>
+    </div>
   </div>
 </section>
 
