@@ -565,38 +565,59 @@ document.addEventListener('DOMContentLoaded', function () {
       if (saved) saved = JSON.parse(saved);
     } catch (e) {}
 
-    // ALWAYS MERGE WITH DEFAULT 4 CERTIFICATES TO ENSURE ALL 4 CARDS ARE SHOWN 100% OF THE TIME
-    var certMap = {
-      'cert_1': DEFAULT_CERTS[0],
-      'cert_2': DEFAULT_CERTS[1],
-      'cert_3': DEFAULT_CERTS[2],
-      'cert_4': DEFAULT_CERTS[3]
-    };
+    // Baseline master list of 4 default certificates
+    var masterList = DEFAULT_CERTS.map(function(c) {
+      return {
+        id: c.id,
+        title: c.title,
+        org: c.org,
+        date: c.date,
+        desc: c.desc,
+        image: c.image,
+        badgeText: c.badgeText,
+        badgeClass: c.badgeClass
+      };
+    });
 
     if (Array.isArray(saved) && saved.length > 0) {
-      saved.forEach(function(c, i) {
-        var key = c.id || ('cert_' + (i + 1));
-        if (certMap[key]) {
-          var userImg = (c.image || c.img || '').trim();
-          if (userImg && userImg.indexOf('WhatsApp_Image_') === -1) {
-            certMap[key].image = userImg;
-          }
-          if (c.title) certMap[key].title = c.title;
-          if (c.org || c.issuer) certMap[key].org = c.org || c.issuer;
-          if (c.date || c.status) certMap[key].date = c.date || c.status;
-          if (c.desc || c.description) certMap[key].desc = c.desc || c.description;
+      // Merge updates for default 4 certificates
+      masterList.forEach(function(m) {
+        var userVer = saved.find(function(s) { return String(s.id) === String(m.id); });
+        if (userVer) {
+          if (userVer.title) m.title = userVer.title;
+          if (userVer.org || userVer.issuer) m.org = userVer.org || userVer.issuer;
+          if (userVer.date || userVer.status) m.date = userVer.date || userVer.status;
+          if (userVer.desc || userVer.description) m.desc = userVer.desc || userVer.description;
+          if (userVer.image && userVer.image.indexOf('WhatsApp_Image_') === -1) m.image = userVer.image;
+        }
+      });
+
+      // Append any newly added custom certificates beyond the master 4
+      saved.forEach(function(s) {
+        var isMaster = masterList.some(function(m) { return String(m.id) === String(s.id); });
+        if (!isMaster) {
+          if (s.image && s.image.indexOf('WhatsApp_Image_') > -1 && s.image.indexOf('data:') !== 0) return;
+          masterList.push(s);
         }
       });
     }
 
-    var cleanCerts = [certMap['cert_1'], certMap['cert_2'], certMap['cert_3'], certMap['cert_4']];
-
-    container.innerHTML = cleanCerts.map(function (c, idx) {
+    container.innerHTML = masterList.map(function (c, idx) {
       var title = c.title || 'Certification';
       var issuer = c.org || c.issuer || 'Issuer';
       var statusDate = c.date || c.status || '';
       var desc = c.desc || c.description || '';
-      var image = c.image || (idx === 0 ? 'cert1.jpg' : (idx === 1 ? 'cert3.jpg' : (idx === 2 ? 'cert2.jpg' : 'cert4.jpg')));
+      var image = (c.image !== undefined && c.image !== null) ? String(c.image).trim() : (c.img ? String(c.img).trim() : '');
+
+      var defaultMap = {
+        'cert_1': 'cert1.jpg',
+        'cert_2': 'cert3.jpg',
+        'cert_3': 'cert2.jpg',
+        'cert_4': 'cert4.jpg'
+      };
+      if (!image || image.trim() === '' || image.indexOf('WhatsApp_Image_') > -1 || (c.id === 'cert_3' && image === 'cert1.jpg')) {
+        image = defaultMap[c.id] || (idx === 0 ? 'cert1.jpg' : (idx === 1 ? 'cert3.jpg' : (idx === 2 ? 'cert2.jpg' : (idx === 3 ? 'cert4.jpg' : ''))));
+      }
 
       var badgeText = c.badgeText || (issuer.indexOf('AWS') > -1 || title.indexOf('AWS') > -1 ? '☁️ Production Certified' : '🏆 Certified');
       var badgeClass = c.badge || (issuer.indexOf('Anthropic') > -1 ? 'badge-violet' : 'badge-teal');
