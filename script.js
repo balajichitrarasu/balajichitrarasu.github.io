@@ -77,39 +77,41 @@ document.addEventListener('DOMContentLoaded', function () {
      a corrupt localStorage value was hiding the photo
   ─────────────────────────────────────────── */
   (function applyCMS() {
-    var imgEl = document.getElementById('heroAvatarImg');
-    if (imgEl) {
-      var savedAvatar = '';
-      try { savedAvatar = localStorage.getItem('custom_profile_avatar') || ''; } catch (e) {}
-
-      if (savedAvatar && savedAvatar.trim() !== '' && savedAvatar !== 'profile.jpg') {
-        /* Test the saved URL before applying it */
-        var testImg = new Image();
-        testImg.onload = function () { imgEl.src = savedAvatar; };
-        testImg.onerror = function () {
-          /* Bad saved URL — clear it and keep the real profile.jpg */
-          try { localStorage.removeItem('custom_profile_avatar'); } catch (e) {}
+    function loadLocal() {
+      var imgEl = document.getElementById('heroAvatarImg');
+      if (imgEl) {
+        var savedAvatar = '';
+        try { savedAvatar = localStorage.getItem('custom_profile_avatar') || ''; } catch (e) {}
+        if (savedAvatar && savedAvatar.trim() !== '') {
+          imgEl.src = savedAvatar;
+        } else {
           imgEl.src = 'profile.jpg';
+        }
+        imgEl.onerror = function () {
+          this.onerror = null;
+          this.src = 'profile.jpg';
         };
-        testImg.src = savedAvatar;
-      } else {
-        imgEl.src = 'profile.jpg';
       }
 
-      /* Always add an onerror fallback on the hero image itself */
-      imgEl.onerror = function () {
-        this.onerror = null;
-        this.style.background = 'rgba(100,255,218,0.1)';
-        this.style.border = '2px solid rgba(100,255,218,0.4)';
-      };
+      var nm = '';
+      try { nm = localStorage.getItem('custom_profile_name') || ''; } catch (e) {}
+      if (nm) {
+        var ni = document.getElementById('heroNameEl');
+        if (ni) ni.textContent = nm;
+      }
     }
 
-    /* Custom name */
-    var nm = '';
-    try { nm = localStorage.getItem('custom_profile_name') || ''; } catch (e) {}
-    if (nm) {
-      var ni = document.getElementById('heroNameEl');
-      if (ni) ni.textContent = nm;
+    loadLocal();
+
+    if (window.PortfolioAPI && window.PortfolioAPI.fetchGlobalCMSData) {
+      window.PortfolioAPI.fetchGlobalCMSData().then(function(cloudData) {
+        if (cloudData) {
+          loadLocal();
+          if (typeof renderCerts === 'function') renderCerts();
+          if (typeof renderProjects === 'function') renderProjects();
+          if (typeof renderSkills === 'function') renderSkills();
+        }
+      });
     }
   })();
 

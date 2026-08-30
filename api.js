@@ -201,6 +201,58 @@ window.PortfolioAPI = {
       }
     } catch (e) {}
     return JSON.parse(localStorage.getItem('admin_access_logs') || '[]');
+  },
+
+  /* ══ GLOBAL CLOUD BACKEND DATABASE SYNC ══ */
+  async syncGlobalCMSData() {
+    try {
+      const db = {
+        avatar: localStorage.getItem('custom_profile_avatar') || 'profile.jpg',
+        name: localStorage.getItem('custom_profile_name') || 'Balaji Chitrarasu',
+        role: localStorage.getItem('custom_profile_role') || 'AWS Cloud Engineer Intern & B.E. ECE Student',
+        location: localStorage.getItem('custom_profile_location') || 'Coimbatore, Tamil Nadu, India',
+        certs: JSON.parse(localStorage.getItem('custom_certs') || '[]'),
+        projects: JSON.parse(localStorage.getItem('custom_projects') || '[]'),
+        skills: JSON.parse(localStorage.getItem('custom_skills') || '[]'),
+        updatedAt: new Date().toISOString()
+      };
+      
+      const key = 'balaji_cms_global_db_v2';
+      await fetch(`https://keyvalue.imsky.org/set/${key}/${encodeURIComponent(JSON.stringify(db))}`, { method: 'POST' });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  async fetchGlobalCMSData() {
+    try {
+      const key = 'balaji_cms_global_db_v2';
+      const res = await fetch(`https://keyvalue.imsky.org/get/${key}`);
+      if (res.ok) {
+        const text = await res.text();
+        if (text && text !== 'null') {
+          const cloudData = JSON.parse(text);
+          if (cloudData && typeof cloudData === 'object') {
+            if (cloudData.avatar) localStorage.setItem('custom_profile_avatar', cloudData.avatar);
+            if (cloudData.name) localStorage.setItem('custom_profile_name', cloudData.name);
+            if (cloudData.role) localStorage.setItem('custom_profile_role', cloudData.role);
+            if (cloudData.location) localStorage.setItem('custom_profile_location', cloudData.location);
+            if (Array.isArray(cloudData.certs) && cloudData.certs.length > 0) {
+              localStorage.setItem('custom_certs', JSON.stringify(cloudData.certs));
+            }
+            if (Array.isArray(cloudData.projects) && cloudData.projects.length > 0) {
+              localStorage.setItem('custom_projects', JSON.stringify(cloudData.projects));
+            }
+            if (Array.isArray(cloudData.skills) && cloudData.skills.length > 0) {
+              localStorage.setItem('custom_skills', JSON.stringify(cloudData.skills));
+            }
+            return cloudData;
+          }
+        }
+      }
+    } catch (e) {}
+    return null;
   }
 };
 

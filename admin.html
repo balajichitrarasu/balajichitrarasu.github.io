@@ -1169,6 +1169,10 @@
           $('prof-avatar-preview').style.display = 'block';
         }
 
+        if (window.PortfolioAPI && window.PortfolioAPI.syncGlobalCMSData) {
+          window.PortfolioAPI.syncGlobalCMSData();
+        }
+
         if (submitBtn) {
           submitBtn.innerHTML = '✓ Profile & Avatar Saved Live!';
           submitBtn.style.opacity = '1';
