@@ -440,27 +440,27 @@ document.addEventListener('DOMContentLoaded', function () {
       org: 'ZenFuture Technologies',
       date: 'ZF-INTERN-0026 · June–July 2026',
       desc: 'Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.',
-      image: '',
+      image: 'cert1.jpg',
       badgeText: '☁️ Production Certified',
       badgeClass: 'badge-teal'
     },
     {
       id: 'cert_2',
-      title: 'Anthropic AI Fluency 2025',
+      title: 'AI Fluency Frameworks',
       org: 'Anthropic',
-      date: 'Earned 2025',
-      desc: 'Certified in prompt engineering, LLM application architecture, and AI tool integration.',
-      image: '',
+      date: 'Certified · 2025',
+      desc: 'Certified by Anthropic in AI frameworks, LLM system architecture, prompt engineering, and AI safety foundations.',
+      image: 'cert3.jpg',
       badgeText: '🤖 AI Certified',
       badgeClass: 'badge-violet'
     },
     {
       id: 'cert_3',
-      title: 'NPTEL Industry 4.0',
-      org: 'IIT Kharagpur',
+      title: 'Industry 4.0 & IIoT',
+      org: 'NPTEL · IIT Kharagpur',
       date: 'NPTEL24CS112 · 2024',
-      desc: '12-week course on Industrial IoT, Cyber-Physical Systems, Sensors, and Smart Manufacturing.',
-      image: 'cert1.jpg',
+      desc: 'Completed 12-week proctored NPTEL course on Industrial IoT funded by the Ministry of Education, Government of India.',
+      image: 'cert2.jpg',
       badgeText: '🏭 IoT Certified',
       badgeClass: 'badge-teal'
     },
@@ -468,9 +468,9 @@ document.addEventListener('DOMContentLoaded', function () {
       id: 'cert_4',
       title: 'Software Engineer Certificate',
       org: 'HackerRank',
-      date: 'Earned 2024',
+      date: 'Role Certification (2024)',
       desc: 'Verified proficiency in data structures, algorithms, problem solving, and software design.',
-      image: '',
+      image: 'cert4.jpg',
       badgeText: '💻 Verified',
       badgeClass: 'badge-teal'
     }
@@ -569,12 +569,24 @@ document.addEventListener('DOMContentLoaded', function () {
       saved = DEFAULT_CERTS;
     }
 
-    container.innerHTML = saved.map(function (c) {
+    container.innerHTML = saved.map(function (c, idx) {
       var title = c.title || 'Certification';
       var issuer = c.org || c.issuer || 'Issuer';
       var statusDate = c.date || c.status || '';
       var desc = c.desc || c.description || '';
       var image = (c.image !== undefined && c.image !== null) ? String(c.image).trim() : (c.img ? String(c.img).trim() : '');
+
+      // AUTO-HYDRATE MISSING OR CORRUPTED CERTIFICATE IMAGES ON SECONDARY DEVICES/PHONES
+      var defaultMap = {
+        'cert_1': 'cert1.jpg',
+        'cert_2': 'cert3.jpg',
+        'cert_3': 'cert2.jpg',
+        'cert_4': 'cert4.jpg'
+      };
+      if (!image || image.trim() === '' || (c.id === 'cert_3' && image === 'cert1.jpg')) {
+        image = defaultMap[c.id] || (idx === 0 ? 'cert1.jpg' : (idx === 1 ? 'cert3.jpg' : (idx === 2 ? 'cert2.jpg' : 'cert4.jpg')));
+      }
+
       var badgeText = c.badgeText || (issuer.indexOf('AWS') > -1 || title.indexOf('AWS') > -1 ? '☁️ Production Certified' : '🏆 Certified');
       var badgeClass = c.badge || (issuer.indexOf('Anthropic') > -1 ? 'badge-violet' : 'badge-teal');
 
