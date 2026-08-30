@@ -656,9 +656,100 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       container.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
     }
+
+    setTimeout(renderCertSliderDots, 200);
   }
 
   renderCerts();
+
+  /* ────────────────────────────────────────
+     INTERACTIVE CERTIFICATE SLIDER CAROUSEL
+  ─────────────────────────────────────────── */
+  var certAutoSlideTimer = null;
+
+  window.scrollCertSlider = function(direction) {
+    var wrapper = document.getElementById('certSliderWrapper');
+    if (!wrapper) return;
+    var cardWidth = 315;
+    wrapper.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+    updateCertSliderDots();
+  };
+
+  window.startCertAutoSlide = function() {
+    if (certAutoSlideTimer) clearInterval(certAutoSlideTimer);
+    var statusBadge = document.getElementById('certAutoSlideStatus');
+    if (statusBadge) {
+      statusBadge.innerText = '⚡ Auto-Slide Active';
+      statusBadge.style.color = 'var(--teal)';
+      statusBadge.style.borderColor = 'rgba(100,255,218,0.25)';
+    }
+
+    certAutoSlideTimer = setInterval(function() {
+      var wrapper = document.getElementById('certSliderWrapper');
+      if (!wrapper) return;
+      var maxScrollLeft = wrapper.scrollWidth - wrapper.clientWidth;
+      if (wrapper.scrollLeft >= maxScrollLeft - 10) {
+        wrapper.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        wrapper.scrollBy({ left: 315, behavior: 'smooth' });
+      }
+      updateCertSliderDots();
+    }, 4000);
+  };
+
+  window.stopCertAutoSlide = function() {
+    if (certAutoSlideTimer) clearInterval(certAutoSlideTimer);
+    var statusBadge = document.getElementById('certAutoSlideStatus');
+    if (statusBadge) {
+      statusBadge.innerText = '⏸️ Paused (Interactive)';
+      statusBadge.style.color = 'var(--amber)';
+      statusBadge.style.borderColor = 'rgba(251,191,36,0.3)';
+    }
+  };
+
+  function updateCertSliderDots() {
+    var wrapper = document.getElementById('certSliderWrapper');
+    var dotsContainer = document.getElementById('certSliderDots');
+    var gallery = document.getElementById('visualCertGallery');
+    if (!wrapper || !dotsContainer || !gallery) return;
+
+    var cards = gallery.querySelectorAll('.cert-card');
+    if (cards.length <= 1) {
+      dotsContainer.innerHTML = '';
+      return;
+    }
+
+    var cardWidth = 315;
+    var activeIdx = Math.round(wrapper.scrollLeft / cardWidth);
+
+    dotsContainer.innerHTML = Array.from(cards).map(function(_, idx) {
+      var isActive = (idx === activeIdx || (idx === cards.length - 1 && wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 10));
+      return '<span class="cert-dot ' + (isActive ? 'active' : '') + '" onclick="jumpToCertSlide(' + idx + ')"></span>';
+    }).join('');
+  }
+
+  window.jumpToCertSlide = function(index) {
+    var wrapper = document.getElementById('certSliderWrapper');
+    if (!wrapper) return;
+    wrapper.scrollTo({ left: index * 315, behavior: 'smooth' });
+    setTimeout(updateCertSliderDots, 350);
+  };
+
+  function renderCertSliderDots() {
+    updateCertSliderDots();
+  }
+
+  setTimeout(function() {
+    renderCertSliderDots();
+    startCertAutoSlide();
+
+    var wrapper = document.getElementById('certSliderWrapper');
+    if (wrapper) {
+      wrapper.addEventListener('scroll', function() {
+        updateCertSliderDots();
+      }, { passive: true });
+    }
+  }, 400);
 
   /* ────────────────────────────────────────
      SKILL BAR ANIMATION
