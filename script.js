@@ -842,14 +842,15 @@ document.addEventListener('DOMContentLoaded', function () {
   ─────────────────────────────────────────── */
   function renderBio() {
     var resumeUrl = localStorage.getItem('custom_resume_pdf');
-    if (resumeUrl && resumeUrl.trim() !== '') {
-      document.querySelectorAll('a[href*="resume"], a[href$=".pdf"], .btn-resume').forEach(function(a) {
-        if (a.getAttribute('href') !== '#contact') {
-          a.href = resumeUrl;
-          a.setAttribute('target', '_blank');
-        }
-      });
+    if (!resumeUrl || resumeUrl.trim() === '' || resumeUrl.indexOf('blob:') === 0 || resumeUrl.indexOf('data:') === 0) {
+      resumeUrl = 'Resume.pdf?v=57.0';
     }
+    document.querySelectorAll('a[href*="resume"], a[href*="Resume"], a[href$=".pdf"], .btn-resume').forEach(function(a) {
+      if (a.getAttribute('href') !== '#contact') {
+        a.href = resumeUrl;
+        a.setAttribute('target', '_blank');
+      }
+    });
 
     var customCopy = localStorage.getItem('custom_footer_copy');
     if (customCopy && customCopy.trim() !== '') {
