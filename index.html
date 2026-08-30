@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20.0">
+<link rel="stylesheet" href="style.css?v=25.0">
 <script>
 var themeToggleLock = false;
 window.toggleTheme = function(e) {
@@ -467,10 +467,10 @@ window.toggleTheme = function(e) {
   <p class="sec-eyebrow">Certifications</p>
   <h2 class="sec-title">Credentials &amp; Certificates</h2>
   <div class="cert-grid" id="visualCertGallery">
-    <div class="cert-card reveal" onclick="openCertImg('AWS Cloud Engineer Internship','ZenFuture Technologies','Certificate No. ZF-INTERN-0026 · June–July 2026','Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.','cert1.jpg')">
+    <div class="cert-card reveal" onclick="openCertImg('AWS Cloud Engineer Internship','ZenFuture Technologies','Certificate No. ZF-INTERN-0026 · June–July 2026','Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.','')">
       <div class="cert-img-wrap">
-        <img src="cert1.jpg" alt="AWS Certificate">
-        <div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Certificate</p></div>
+        <div class="cert-no-img"><span class="cert-no-img-icon">📜</span><span class="cert-no-img-text">No Image Uploaded</span></div>
+        <div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Details</p></div>
       </div>
       <div class="cert-body">
         <h4>AWS Cloud Engineer Intern</h4>
@@ -478,10 +478,10 @@ window.toggleTheme = function(e) {
         <span class="cert-badge badge-teal">☁️ Production Certified</span>
       </div>
     </div>
-    <div class="cert-card reveal" onclick="openCertImg('AI Fluency: Framework and Foundations','Anthropic','Certified · 2025','Certified by Anthropic in AI frameworks, LLM system architecture, prompt engineering, and AI safety foundations.','cert1.jpg')">
+    <div class="cert-card reveal" onclick="openCertImg('AI Fluency: Framework and Foundations','Anthropic','Certified · 2025','Certified by Anthropic in AI frameworks, LLM system architecture, prompt engineering, and AI safety foundations.','')">
       <div class="cert-img-wrap">
-        <img src="cert1.jpg" alt="Anthropic AI Certificate">
-        <div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Certificate</p></div>
+        <div class="cert-no-img"><span class="cert-no-img-icon">📜</span><span class="cert-no-img-text">No Image Uploaded</span></div>
+        <div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Details</p></div>
       </div>
       <div class="cert-body">
         <h4>AI Fluency Frameworks</h4>
@@ -500,10 +500,10 @@ window.toggleTheme = function(e) {
         <span class="cert-badge badge-teal">✅ Govt. of India Verified</span>
       </div>
     </div>
-    <div class="cert-card reveal" onclick="openCertImg('Software Engineer Certificate','HackerRank','Role Certified · 2024','Passed HackerRank Software Engineer role certification — covering algorithms, data structures, and software development.','cert1.jpg')">
+    <div class="cert-card reveal" onclick="openCertImg('Software Engineer Certificate','HackerRank','Role Certified · 2024','Passed HackerRank Software Engineer role certification — covering algorithms, data structures, and software development.','')">
       <div class="cert-img-wrap">
-        <img src="cert1.jpg" alt="HackerRank Certificate">
-        <div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Certificate</p></div>
+        <div class="cert-no-img"><span class="cert-no-img-icon">📜</span><span class="cert-no-img-text">No Image Uploaded</span></div>
+        <div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Details</p></div>
       </div>
       <div class="cert-body">
         <h4>Software Engineer</h4>
@@ -690,7 +690,7 @@ window.toggleTheme = function(e) {
 <!-- MODALS -->
 <div id="aboutPopup" class="modal" role="dialog" aria-modal="true">
   <div class="modal-box">
-    <button class="modal-close" id="aboutClose" onclick="closeAbout()">✕</button>
+    <button class="modal-close" id="aboutClose" type="button" onclick="closeAbout()" aria-label="Close modal">✕</button>
     <div class="modal-icon">👤</div>
     <h3 class="modal-title">About Balaji Chitrarasu</h3>
     <div class="modal-body">
@@ -705,7 +705,7 @@ window.toggleTheme = function(e) {
 
 <div id="popup" class="modal" role="dialog" aria-modal="true">
   <div class="modal-box">
-    <button class="modal-close" id="popupClose" onclick="closePopup()">✕</button>
+    <button class="modal-close" id="popupClose" type="button" onclick="closePopup()" aria-label="Close modal">✕</button>
     <div class="modal-icon">💻</div>
     <h3 class="modal-title" id="ptitle"></h3>
     <p class="modal-body" id="pbody"></p>
@@ -714,7 +714,7 @@ window.toggleTheme = function(e) {
 
 <div id="certPopup" class="modal" role="dialog" aria-modal="true">
   <div class="modal-box">
-    <button class="modal-close" id="certClose" onclick="closeCertPopup()">✕</button>
+    <button class="modal-close" id="certClose" type="button" onclick="closeCertPopup()" aria-label="Close modal">✕</button>
     <div class="modal-icon">🏆</div>
     <h3 class="modal-title" id="cTitle"></h3>
     <span class="modal-issuer" id="cIssuer"></span>
@@ -728,7 +728,7 @@ window.toggleTheme = function(e) {
 
 <div id="achPopup" class="modal" role="dialog" aria-modal="true">
   <div class="modal-box">
-    <button class="modal-close" id="achClose" onclick="closeAch()">✕</button>
+    <button class="modal-close" id="achClose" type="button" onclick="closeAch()" aria-label="Close modal">✕</button>
     <div class="modal-icon" id="achIcon">🎖️</div>
     <h3 class="modal-title" id="achTitle"></h3>
     <span class="modal-issuer" id="achSub"></span>
@@ -741,8 +741,8 @@ window.toggleTheme = function(e) {
 <script>
   window.PORTFOLIO_API_URL = "https://balaji-portfolio-backend.onrender.com";
 </script>
-<script src="api.js?v=20.0"></script>
-<script src="script.js?v=20.0"></script>
+<script src="api.js?v=25.0"></script>
+<script src="script.js?v=25.0"></script>
 
 <!-- COMMAND PALETTE MODAL (CTRL+K) -->
 <div id="cmdPalette" class="cmd-modal" role="dialog" aria-modal="true" style="display:none;">

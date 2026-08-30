@@ -10,7 +10,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1117'/%3E%3Ctext x='16' y='22' font-size='18' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%2364ffda'%3EB%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20.0">
+<link rel="stylesheet" href="style.css?v=25.0">
 <script>
 var themeToggleLock = false;
 window.toggleTheme = function(e) {
@@ -167,7 +167,7 @@ window.toggleTheme = function(e) {
 <!-- ARTICLE READER MODAL -->
 <div id="articleModal" class="art-modal" role="dialog" aria-modal="true">
   <div class="art-box">
-    <button class="art-close" id="artClose">✕</button>
+    <button class="art-close" id="artClose" type="button" onclick="closeArticle()" aria-label="Close article">✕</button>
     <p class="art-cat" id="aCat"></p>
     <h2 class="art-title" id="aTitle"></h2>
     <p class="art-meta" id="aMeta"></p>
@@ -191,7 +191,7 @@ window.toggleTheme = function(e) {
 
 <div id="toast"></div>
 
-<script src="script.js?v=15.0"></script>
+<script src="script.js?v=25.0"></script>
 
 <script>
 var DEFAULT_ARTICLES = [
@@ -328,18 +328,28 @@ function openArticle(id) {
 
   document.getElementById('aBody').innerHTML = bodyHtml;
   var modal = document.getElementById('articleModal');
-  modal.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
 }
 
 function closeArticle() {
-  document.getElementById('articleModal').classList.remove('open');
-  document.body.style.overflow = '';
+  var modal = document.getElementById('articleModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
 }
 
-document.getElementById('artClose').onclick = closeArticle;
-document.getElementById('articleModal').addEventListener('click', function(e) { if (e.target === this) closeArticle(); });
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeArticle(); });
+window.openArticle = openArticle;
+window.closeArticle = closeArticle;
+
+var artCloseBtn = document.getElementById('artClose');
+if (artCloseBtn) artCloseBtn.onclick = closeArticle;
+var artModalEl = document.getElementById('articleModal');
+if (artModalEl) artModalEl.addEventListener('click', function(e) { if (e.target === this) closeArticle(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' || e.keyCode === 27) closeArticle(); });
 document.getElementById('searchInput').addEventListener('input', renderArticles);
 
 document.querySelectorAll('.blog-cat-btn').forEach(function(btn) {

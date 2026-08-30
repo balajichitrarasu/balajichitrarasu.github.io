@@ -87,7 +87,7 @@
       "badge": "badge-teal",
       "badgeText": "☁️ Production Certified",
       "desc": "Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.",
-      "image": "cert1.jpg"
+      "image": ""
     },
     {
       "id": 2,
@@ -97,7 +97,7 @@
       "badge": "badge-violet",
       "badgeText": "🤖 Anthropic Certified",
       "desc": "Certified by Anthropic in AI frameworks, LLM system architecture, prompt engineering, and AI safety foundations.",
-      "image": "cert1.jpg"
+      "image": ""
     },
     {
       "id": 3,
@@ -117,7 +117,7 @@
       "badge": "badge-amber",
       "badgeText": "⭐ Role Certified",
       "desc": "Passed HackerRank Software Engineer role certification — covering algorithms, data structures, and software development.",
-      "image": "cert1.jpg"
+      "image": ""
     }
   ],
   "blog": [],

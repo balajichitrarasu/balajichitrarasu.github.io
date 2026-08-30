@@ -222,6 +222,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }, { threshold: 0.4 }).observe(s);
     });
+  }
+
   /* ────────────────────────────────────────
      PROFESSIONAL NAVBAR CLICK SECTION BLINK & PULSE REVEAL
   ─────────────────────────────────────────── */
@@ -390,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function () {
       org: 'ZenFuture Technologies',
       date: 'ZF-INTERN-0026 · June–July 2026',
       desc: 'Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.',
-      image: 'cert1.jpg',
+      image: '',
       badgeText: '☁️ Production Certified',
       badgeClass: 'badge-teal'
     },
@@ -400,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function () {
       org: 'Anthropic',
       date: 'Earned 2025',
       desc: 'Certified in prompt engineering, LLM application architecture, and AI tool integration.',
-      image: 'cert1.jpg',
+      image: '',
       badgeText: '🤖 AI Certified',
       badgeClass: 'badge-violet'
     },
@@ -420,7 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
       org: 'HackerRank',
       date: 'Earned 2024',
       desc: 'Verified proficiency in data structures, algorithms, problem solving, and software design.',
-      image: 'cert1.jpg',
+      image: '',
       badgeText: '💻 Verified',
       badgeClass: 'badge-teal'
     }
@@ -524,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var issuer = c.org || c.issuer || 'Issuer';
       var statusDate = c.date || c.status || '';
       var desc = c.desc || c.description || '';
-      var image = c.image || c.img || 'cert1.jpg';
+      var image = (c.image !== undefined && c.image !== null) ? String(c.image).trim() : (c.img ? String(c.img).trim() : '');
       var badgeText = c.badgeText || (issuer.indexOf('AWS') > -1 || title.indexOf('AWS') > -1 ? '☁️ Production Certified' : '🏆 Certified');
       var badgeClass = c.badge || (issuer.indexOf('Anthropic') > -1 ? 'badge-violet' : 'badge-teal');
 
@@ -535,14 +537,19 @@ document.addEventListener('DOMContentLoaded', function () {
       var escImg = image.replace(/'/g, "\\'").replace(/[\r\n]+/g, ' ');
 
       var isPdf = (image.indexOf('data:application/pdf') === 0 || image.toLowerCase().endsWith('.pdf'));
-      var imgHtml = isPdf 
-        ? '<div style="height:160px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); color:var(--teal); font-weight:700; flex-direction:column; gap:0.5rem;"><span style="font-size:2.5rem;">📄</span><span>PDF Certificate Document</span></div>'
-        : '<img src="' + image + '" alt="' + title + '">';
+      var imgHtml = '';
+      if (!image) {
+        imgHtml = '<div class="cert-no-img"><span class="cert-no-img-icon">📜</span><span class="cert-no-img-text">No Image Uploaded</span></div>';
+      } else if (isPdf) {
+        imgHtml = '<div style="height:150px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); color:var(--teal); font-weight:700; flex-direction:column; gap:0.5rem;"><span style="font-size:2.5rem;">📄</span><span style="font-size:0.8rem; font-family:\'DM Mono\',monospace;">PDF Certificate Document</span></div>';
+      } else {
+        imgHtml = '<img src="' + image + '" alt="' + title + '">';
+      }
 
       return '<div class="cert-card reveal visible" onclick="openCertImg(\'' + escTitle + '\',\'' + escIssuer + '\',\'' + escStatus + '\',\'' + escDesc + '\',\'' + escImg + '\')">' +
         '<div class="cert-img-wrap">' +
           imgHtml +
-          '<div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>View Certificate</p></div>' +
+          '<div class="cert-hover-overlay"><span style="font-size:1.5rem">🔍</span><p>' + (image ? 'View Certificate' : 'View Details') + '</p></div>' +
         '</div>' +
         '<div class="cert-body">' +
           '<h4>' + title + '</h4>' +
@@ -670,13 +677,42 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ────────────────────────────────────────
-     CLOSE MODALS on backdrop click / ESC
+     CLOSE MODALS on backdrop click / ESC / close buttons
   ─────────────────────────────────────────── */
-  ['aboutPopup', 'popup', 'certPopup', 'achPopup'].forEach(function (id) {
+  ['aboutPopup', 'popup', 'certPopup', 'achPopup', 'cmdPalette'].forEach(function (id) {
     var el = document.getElementById(id);
-    if (el) el.addEventListener('click', function (e) { if (e.target === el) closeAll(); });
+    if (el) {
+      el.addEventListener('click', function (e) {
+        if (e.target === el) closeAll();
+      });
+    }
   });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+
+  document.querySelectorAll('.modal-close, #aboutClose, #popupClose, #certClose, #achClose').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeAll();
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    var closeBtn = e.target.closest('.modal-close, #popupClose, #aboutClose, #certClose, #achClose, .art-close');
+    if (closeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeAll();
+      if (typeof closeArticle === 'function') closeArticle();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.keyCode === 27) {
+      closeAll();
+      if (typeof closeArticle === 'function') closeArticle();
+      if (typeof closeCmd === 'function') closeCmd();
+    }
+  });
 
   /* ────────────────────────────────────────
      CONTACT FORM
@@ -760,7 +796,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
           openCmd();
         }
-      } else if (e.key === 'Escape' && cmdModal.style.display === 'flex') {
+      } else if ((e.key === 'Escape' || e.keyCode === 27) && cmdModal.style.display === 'flex') {
         closeCmd();
       }
     });
@@ -778,25 +814,24 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   }
-}
 
 }); /* end DOMContentLoaded */
 
 /* ══════════════════════════════════════
    GLOBAL HELPER FUNCTIONS
-   (called from HTML onclick attributes)
+   (called from HTML onclick attributes and scripts)
    ══════════════════════════════════════ */
 
-function showToast(txt) {
+window.showToast = function(txt) {
   var t = document.getElementById('toast');
   if (!t) return;
   t.textContent = txt;
   t.classList.add('show');
   clearTimeout(t._timer);
   t._timer = setTimeout(function () { t.classList.remove('show'); }, 3200);
-}
+};
 
-function copyEmail() {
+window.copyEmail = function() {
   var email = 'balajichitrarasu07@gmail.com';
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(email).then(function () {
@@ -805,38 +840,42 @@ function copyEmail() {
   } else {
     showToast('Email: ' + email);
   }
-}
+};
 
-function filterProjects(cat, e) {
+window.filterProjects = function(cat, e) {
   if (e && e.target) {
+    var btn = e.target.closest('.fbtn') || e.target;
     document.querySelectorAll('.fbtn').forEach(function (b) { b.classList.remove('active'); });
-    e.target.classList.add('active');
+    if (btn && btn.classList) btn.classList.add('active');
   }
   document.querySelectorAll('.proj-card').forEach(function (c) {
     var catAttr = c.getAttribute('data-category') || '';
     var show = (cat === 'all' || catAttr === cat || catAttr.includes(cat));
     c.style.display = show ? 'flex' : 'none';
   });
-}
+};
 
-function closeAll() {
-  ['aboutPopup', 'popup', 'certPopup', 'achPopup'].forEach(function (id) {
+window.closeAll = function() {
+  ['aboutPopup', 'popup', 'certPopup', 'achPopup', 'cmdPalette', 'articleModal'].forEach(function (id) {
     var el = document.getElementById(id);
-    if (el) el.classList.remove('open');
+    if (el) {
+      el.classList.remove('open');
+      if (id === 'cmdPalette') el.style.display = 'none';
+    }
   });
   document.body.style.overflow = '';
-}
+};
 
 /* About modal */
-function openAbout() {
+window.openAbout = function() {
   var el = document.getElementById('aboutPopup');
   if (el) { el.classList.add('open'); document.body.style.overflow = 'hidden'; }
-}
-function closeAbout() {
+};
+window.closeAbout = function() {
   var el = document.getElementById('aboutPopup');
   if (el) el.classList.remove('open');
   document.body.style.overflow = '';
-}
+};
 
 /* Section Visibility Controls */
 (function initVisibility() {
@@ -862,75 +901,103 @@ function closeAbout() {
 })();
 
 /* Project modal with multi-image gallery support */
-function openPopup(title, body, galleryImagesStr) {
+window.openPopup = function(title, body, galleryImagesStr) {
   var el = document.getElementById('popup'); if (!el) return;
-  document.getElementById('ptitle').textContent = title;
-  document.getElementById('pbody').textContent  = body;
+  var pTitle = document.getElementById('ptitle');
+  var pBody = document.getElementById('pbody');
+  if (pTitle) pTitle.textContent = title || '';
+  if (pBody) pBody.textContent = body || '';
   
   var oldGallery = document.getElementById('projModalGallery');
   if (oldGallery) oldGallery.remove();
 
   if (galleryImagesStr && galleryImagesStr.trim() !== '') {
     var imgs = galleryImagesStr.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
-    if (imgs.length > 0) {
+    if (imgs.length > 0 && pBody) {
       var gDiv = document.createElement('div');
       gDiv.id = 'projModalGallery';
       gDiv.style.cssText = 'display:flex; gap:0.5rem; overflow-x:auto; margin:1rem 0; padding-bottom:0.5rem;';
       gDiv.innerHTML = imgs.map(function(src) {
         return '<img src="' + src + '" style="height:140px; border-radius:6px; object-fit:cover; border:1px solid var(--border); cursor:pointer;" onclick="window.open(\'' + src + '\',\'_blank\')">';
       }).join('');
-      document.getElementById('pbody').insertAdjacentElement('beforebegin', gDiv);
+      pBody.insertAdjacentElement('beforebegin', gDiv);
     }
   }
 
   el.classList.add('open'); document.body.style.overflow = 'hidden';
-}
-function closePopup() {
-  var el = document.getElementById('popup'); if (el) el.classList.remove('open');
+};
+
+window.closePopup = function() {
+  var el = document.getElementById('popup');
+  if (el) el.classList.remove('open');
   document.body.style.overflow = '';
-}
+};
 
 /* Certificate modal */
-function openCertImg(title, issuer, status, desc, imgUrl) {
+window.openCertImg = function(title, issuer, status, desc, imgUrl) {
   var el = document.getElementById('certPopup'); if (!el) return;
-  document.getElementById('cTitle').textContent  = title;
-  document.getElementById('cIssuer').textContent = issuer;
-  document.getElementById('cStatus').textContent = status || '';
-  document.getElementById('cBody').textContent   = desc;
+  var cTitle = document.getElementById('cTitle');
+  var cIssuer = document.getElementById('cIssuer');
+  var cStatus = document.getElementById('cStatus');
+  var cBody = document.getElementById('cBody');
+  if (cTitle) cTitle.textContent  = title || '';
+  if (cIssuer) cIssuer.textContent = issuer || '';
+  if (cStatus) cStatus.textContent = status || '';
+  if (cBody) cBody.textContent   = desc || '';
   var wrap = document.getElementById('certModalImgWrap');
 
-  if (imgUrl && wrap) {
+  if (imgUrl && imgUrl.trim() !== '' && wrap) {
     var isPdf = (imgUrl.indexOf('data:application/pdf') === 0 || imgUrl.toLowerCase().endsWith('.pdf'));
     if (isPdf) {
       wrap.innerHTML = '<iframe src="' + imgUrl + '" style="width:100%; height:400px; border:1px solid var(--border); border-radius:6px; margin-top:1rem;"></iframe>' +
                        '<div style="text-align:center; margin-top:0.5rem;"><a href="' + imgUrl + '" target="_blank" download class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">📥 Download PDF Certificate</a></div>';
       wrap.style.display = 'block';
     } else {
-      wrap.innerHTML = '<img id="certModalImg" src="' + imgUrl + '" style="max-width:100%; border-radius:6px; margin-top:1rem;" alt="' + title + '">';
+      wrap.innerHTML = '<img id="certModalImg" src="' + imgUrl + '" style="max-width:100%; border-radius:6px; margin-top:1rem;" alt="' + (title || 'Certificate') + '">';
       wrap.style.display = 'block';
     }
   } else if (wrap) {
-    wrap.style.display = 'none';
+    wrap.innerHTML = '<div style="padding:1.2rem; text-align:center; background:rgba(255,255,255,0.02); border:1px dashed var(--border); border-radius:6px; margin:1rem 0; color:var(--text-muted); font-size:0.84rem;"><span style="font-size:1.8rem; display:block; margin-bottom:0.3rem; opacity:0.8;">📜</span><span>Verified Credential Record (No image uploaded)</span></div>';
+    wrap.style.display = 'block';
   }
   el.classList.add('open'); document.body.style.overflow = 'hidden';
-}
-function closeCertPopup() {
-  var el = document.getElementById('certPopup'); if (el) el.classList.remove('open');
+};
+
+window.closeCertPopup = function() {
+  var el = document.getElementById('certPopup');
+  if (el) el.classList.remove('open');
   document.body.style.overflow = '';
-}
+};
 
 /* Achievement modal */
-function openAch(title, sub, where, desc, icon) {
+window.openAch = function(title, sub, where, desc, icon, color) {
   var el = document.getElementById('achPopup'); if (!el) return;
   var ic = document.getElementById('achIcon');
-  if (ic) ic.textContent = icon || '🏆';
-  document.getElementById('achTitle').textContent = title;
-  document.getElementById('achSub').innerHTML   = sub;
-  document.getElementById('achWhere').innerHTML = where;
-  document.getElementById('achBody').textContent = desc;
+  if (ic) {
+    ic.textContent = icon || '🏆';
+    if (color) {
+      ic.className = 'modal-icon ach-icon-' + color;
+    }
+  }
+  var aTitle = document.getElementById('achTitle');
+  var aSub = document.getElementById('achSub');
+  var aWhere = document.getElementById('achWhere');
+  var aBody = document.getElementById('achBody');
+  if (aTitle) aTitle.textContent = title || '';
+  if (aSub) aSub.innerHTML   = sub || '';
+  if (aWhere) aWhere.innerHTML = where || '';
+  if (aBody) aBody.textContent = desc || '';
   el.classList.add('open'); document.body.style.overflow = 'hidden';
-}
-function openCmd() {
+};
+
+window.closeAch = function() {
+  var el = document.getElementById('achPopup');
+  if (el) el.classList.remove('open');
+  document.body.style.overflow = '';
+};
+
+/* Command Palette Helpers */
+window.openCmd = function() {
   var modal = document.getElementById('cmdPalette');
   var input = document.getElementById('cmdInput');
   if (modal && input) {
@@ -941,12 +1008,12 @@ function openCmd() {
     var items = document.querySelectorAll('#cmdResults .cmd-item');
     items.forEach(function (item) { item.style.display = 'flex'; });
   }
-}
+};
 
-function closeCmd() {
+window.closeCmd = function() {
   var modal = document.getElementById('cmdPalette');
   if (modal) {
     modal.style.display = 'none';
     document.body.style.overflow = '';
   }
-}
+};

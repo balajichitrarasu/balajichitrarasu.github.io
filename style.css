@@ -582,18 +582,18 @@ body::before {
 /* ── AVATAR ── */
 .avatar-wrap {
   position: relative;
-  width: 132px; height: 132px;
+  width: 160px; height: 160px;
   isolation: isolate;
   flex-shrink: 0;
-  margin-bottom: .4rem;
+  margin-bottom: .6rem;
 }
 .profile {
   display: block;
-  width: 132px; height: 132px;
+  width: 160px; height: 160px;
   border-radius: 50%;
   object-fit: cover; object-position: top center;
   border: 2.5px solid rgba(100,255,218,.5);
-  box-shadow: 0 0 0 6px rgba(100,255,218,.07), 0 10px 32px rgba(0,0,0,.65);
+  box-shadow: 0 0 0 6px rgba(100,255,218,.07), 0 12px 36px rgba(0,0,0,.65);
   position: relative; z-index: 2;
   mix-blend-mode: normal;
   background-color: rgba(100,255,218,0.08); /* fallback if image fails */
@@ -601,25 +601,25 @@ body::before {
 }
 .avatar-wrap:hover .profile {
   transform: scale(1.04);
-  box-shadow: 0 0 0 8px rgba(100,255,218,.12), 0 14px 36px rgba(0,0,0,.7);
+  box-shadow: 0 0 0 8px rgba(100,255,218,.12), 0 16px 40px rgba(0,0,0,.7);
 }
 .avatar-ring {
-  position: absolute; inset: -12px;
+  position: absolute; inset: -14px;
   border-radius: 50%;
   border: 1.5px dashed rgba(100,255,218,.2);
   animation: spin 22s linear infinite;
   z-index: 1; pointer-events: none;
 }
 .avatar-ring.r2 {
-  inset: -22px;
+  inset: -26px;
   border-color: rgba(167,139,250,.15);
   animation-duration: 34s;
   animation-direction: reverse;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .avatar-dot {
-  position: absolute; bottom: 7px; right: 7px;
-  width: 16px; height: 16px; border-radius: 50%;
+  position: absolute; bottom: 9px; right: 9px;
+  width: 18px; height: 18px; border-radius: 50%;
   background: var(--emerald);
   border: 2.5px solid var(--bg);
   box-shadow: 0 0 10px rgba(52,211,153,.7);
@@ -629,6 +629,12 @@ body::before {
 @keyframes pulse-dot {
   0%, 100% { box-shadow: 0 0 8px rgba(52,211,153,.6); }
   50% { box-shadow: 0 0 16px rgba(52,211,153,.9), 0 0 24px rgba(52,211,153,.3); }
+}
+
+@media (max-width: 480px) {
+  .avatar-wrap, .profile {
+    width: 140px; height: 140px;
+  }
 }
 
 /* ── HERO TEXT ELEMENTS ── */
@@ -944,6 +950,24 @@ body::before {
 .badge-violet { background: var(--violet-dim); color: var(--violet); border: 1px solid rgba(167,139,250,.28); }
 .badge-amber { background: rgba(251,191,36,.12); color: var(--amber); border: 1px solid rgba(251,191,36,.28); }
 
+.cert-no-img {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(100,255,218,0.05) 100%);
+  gap: 0.4rem; border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.cert-no-img-icon { font-size: 2.4rem; opacity: 0.75; }
+.cert-no-img-text {
+  font-family: 'DM Mono', monospace; font-size: 0.72rem;
+  color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em;
+}
+[data-theme="light"] .cert-no-img {
+  background: linear-gradient(135deg, rgba(15,23,42,0.02) 0%, rgba(2,132,199,0.05) 100%);
+  border-bottom-color: #cbd5e1;
+}
+
 /* ══════════════════════════════════════
    ACHIEVEMENTS
    ══════════════════════════════════════ */
@@ -1072,10 +1096,23 @@ footer {
   position: absolute; top: 1rem; right: 1rem;
   background: rgba(255,255,255,.07); border: 1px solid var(--border);
   color: var(--text-muted); width: 34px; height: 34px; border-radius: 50%;
-  font-size: .9rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: .95rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: all .2s; line-height: 1;
+  z-index: 100;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .modal-close:hover { background: var(--teal-dim); color: var(--teal); transform: rotate(90deg); }
+[data-theme="light"] .modal-close {
+  background: rgba(15,23,42,0.06);
+  border-color: rgba(15,23,42,0.15);
+  color: #0f172a;
+}
+[data-theme="light"] .modal-close:hover {
+  background: rgba(13,148,136,0.15);
+  color: var(--teal);
+}
 .modal-icon { font-size: 1.8rem; margin-bottom: .8rem; }
 .modal-title { font-weight: 700; font-size: 1.2rem; color: #fff; margin-bottom: .6rem; padding-right: 2.5rem; line-height: 1.3; }
 .modal-issuer { font-family: 'DM Mono',monospace; font-size: .78rem; color: var(--violet); margin-bottom: .4rem; display: block; }
