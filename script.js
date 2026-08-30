@@ -1,4 +1,17 @@
-/* ── Theme Initialization (Immediate to prevent flash) ── */
+/* ── Global Theme Toggle (Immediate & Always Available) ── */
+window.toggleTheme = function() {
+  var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('site_theme', next); } catch(e) {}
+  document.querySelectorAll('#themeToggle, .theme-toggle-btn, .glossy-theme-btn').forEach(function(btn) {
+    btn.setAttribute('title', next === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+  });
+  if (typeof showToast === 'function') {
+    showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
+  }
+};
+
 (function () {
   try {
     var saved = localStorage.getItem('site_theme') || 'dark';
@@ -48,27 +61,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   })();
 
-  /* ────────────────────────────────────────
-     LIGHT / DARK THEME TOGGLE (Sun / Moon)
-  ─────────────────────────────────────────── */
-  window.toggleTheme = function() {
-    var cur = document.documentElement.getAttribute('data-theme') || 'dark';
-    var next = cur === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    try { localStorage.setItem('site_theme', next); } catch(e) {}
-    var themeBtn = document.getElementById('themeToggle');
-    if (themeBtn) {
-      themeBtn.setAttribute('title', next === 'dark' ? 'Switch to Light Mode (☀️)' : 'Switch to Dark Mode (🌙)');
-    }
-    if (typeof showToast === 'function') {
-      showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
-    }
-  };
-
-  var themeBtn = document.getElementById('themeToggle');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', window.toggleTheme);
-  }
+  document.querySelectorAll('#themeToggle, .theme-toggle-btn, .glossy-theme-btn').forEach(function(btn) {
+    btn.addEventListener('click', window.toggleTheme);
+  });
 
   /* ────────────────────────────────────────
      CMS: Profile avatar / name from admin

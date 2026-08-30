@@ -266,7 +266,30 @@
       color: var(--text-muted);
       font-weight: 500;
     }
-    .flex-row { display: flex; gap: 1rem; align-items: center; }
+    /* Glossy Day/Night Button */
+    .glossy-theme-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0.95rem; border-radius: 99px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.22);
+      color: var(--teal); font-weight: 700; font-size: 0.78rem;
+      cursor: pointer; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-left: 0.4rem;
+    }
+    .glossy-theme-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      background: linear-gradient(135deg, rgba(100,255,218,0.25), rgba(167,139,250,0.25));
+      border-color: var(--teal);
+      box-shadow: 0 8px 25px rgba(100,255,218,0.3), inset 0 1px 2px rgba(255,255,255,0.5);
+      color: #fff;
+    }
+    [data-theme="light"] .glossy-theme-btn {
+      background: linear-gradient(135deg, rgba(13,148,136,0.12), rgba(13,148,136,0.04));
+      border-color: rgba(13,148,136,0.3);
+      color: #0d9488;
+    }
   </style>
 </head>
 <body>
@@ -278,6 +301,7 @@
         <li><a href="index.html">← Portfolio</a></li>
         <li><a href="blog.html">Blog</a></li>
         <li><a href="admin.html" class="active nav-pill-v">⚙ Admin CMS</a></li>
+        <li><button id="themeToggle" onclick="toggleTheme()" class="glossy-theme-btn" title="Toggle Day/Night Mode"><span class="theme-icon-dark">🌙</span><span class="theme-icon-light">☀️</span> Mode</button></li>
         <li><button id="nav-logout-btn" onclick="adminLogout()" class="btn" style="display:none; padding:0.3rem 0.8rem; font-size:0.78rem; background:rgba(244,63,94,0.12); color:var(--rose); border:1px solid rgba(244,63,94,0.3); border-radius:12px; margin-left:0.5rem; cursor:pointer;">🔒 Logout</button></li>
       </ul>
     </div>
