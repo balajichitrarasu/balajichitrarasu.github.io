@@ -386,7 +386,7 @@
       <section id="profile" class="tab-pane">
         <h2 style="color:var(--text); font-weight:700; margin-bottom:1.5rem;">Profile &amp; Avatar</h2>
         <div class="card" style="background:rgba(255,255,255,0.025); border:1px solid var(--border); border-radius:10px; padding:1.8rem;">
-          <form id="profile-form">
+          <form id="profile-form" action="javascript:void(0);" onsubmit="event.preventDefault(); return false;" autocomplete="off">
             <div class="form-group">
               <label style="font-weight:600;">Avatar Image File Upload &amp; Cropper</label>
               <input type="file" id="prof-avatar-file" class="form-control" accept="image/*">
@@ -421,7 +421,7 @@
         <h2>Certifications Manager</h2>
         <div class="card" style="margin-bottom: 2rem;">
           <h3 id="cert-form-title">Add Certification</h3>
-          <form id="cert-form">
+          <form id="cert-form" action="javascript:void(0);" onsubmit="event.preventDefault(); return false;" autocomplete="off">
             <input type="hidden" id="cert-id">
             <div class="form-group">
               <label>Title *</label>
@@ -466,7 +466,7 @@
         <h2>Projects Manager</h2>
         <div class="card" style="margin-bottom: 2rem;">
           <h3 id="proj-form-title">Add Project</h3>
-          <form id="proj-form">
+          <form id="proj-form" action="javascript:void(0);" onsubmit="event.preventDefault(); return false;" autocomplete="off">
             <input type="hidden" id="proj-id">
             <div class="form-group">
               <label>Title *</label>
@@ -550,7 +550,7 @@
       <section id="skills" class="tab-pane">
         <h2>Skills Bar Editor</h2>
         <div class="card" style="margin-bottom: 2rem;">
-          <form id="skill-form">
+          <form id="skill-form" action="javascript:void(0);" onsubmit="event.preventDefault(); return false;" autocomplete="off">
             <input type="hidden" id="skill-index">
             <div class="flex-row" style="flex-wrap: wrap;">
               <div class="form-group" style="flex:1;">
@@ -597,7 +597,7 @@
         <h2>Blog Manager</h2>
         <div class="card" style="margin-bottom: 2rem;">
           <h3 id="blog-form-title">Write Post</h3>
-          <form id="blog-form">
+          <form id="blog-form" action="javascript:void(0);" onsubmit="event.preventDefault(); return false;" autocomplete="off">
             <input type="hidden" id="blog-id">
             <div class="form-group">
               <label>Title *</label>
@@ -663,7 +663,7 @@
       <section id="settings" class="tab-pane">
         <h2>Site Settings</h2>
         <div class="card">
-          <form id="settings-form">
+          <form id="settings-form" action="javascript:void(0);" onsubmit="event.preventDefault(); return false;" autocomplete="off">
             <div class="form-group">
               <label>Email</label>
               <input type="email" id="set-email" class="form-control">
@@ -1832,6 +1832,7 @@
 
     $('blog-form').addEventListener('submit', e => {
       e.preventDefault();
+      e.stopPropagation();
       const id = $('blog-id').value || generateId();
       const blog = {
         id,
@@ -1848,12 +1849,17 @@
       if(idx > -1) blogs[idx] = blog;
       else blogs.push(blog);
       renderBlogs();
+      setStorage('custom_blog_posts', blogs);
+      if (window.PortfolioAPI && typeof PortfolioAPI.syncGlobalCMSData === 'function') {
+        PortfolioAPI.syncGlobalCMSData();
+      }
       e.target.reset();
       $('blog-id').value = '';
       $('blog-form-title').innerText = 'Write Post';
       $('blog-cancel').style.display = 'none';
       if ($('blog-pdf-status')) $('blog-pdf-status').innerText = '';
-      showToast('Post published!');
+      showToast(' Post published & synced live!');
+      return false;
     });
 
     window.editBlog = id => {
@@ -1876,6 +1882,10 @@
       if(!confirm('Delete this blog post?')) return;
       blogs = blogs.filter(b => String(b.id) !== String(id));
       renderBlogs();
+      setStorage('custom_blog_posts', blogs);
+      if (window.PortfolioAPI && typeof PortfolioAPI.syncGlobalCMSData === 'function') {
+        PortfolioAPI.syncGlobalCMSData();
+      }
       showToast('Deleted!');
     };
 
@@ -1923,6 +1933,7 @@
     }
     $('settings-form').addEventListener('submit', e => {
       e.preventDefault();
+      e.stopPropagation();
       localStorage.setItem('custom_email', $('set-email').value);
       localStorage.setItem('custom_phone', $('set-phone').value);
       localStorage.setItem('custom_github', $('set-github').value);
@@ -1940,7 +1951,12 @@
       localStorage.setItem('hide_github', $('toggle-github').checked ? 'false' : 'true');
       localStorage.setItem('hide_achievements', $('toggle-achievements').checked ? 'false' : 'true');
 
+      if (window.PortfolioAPI && typeof PortfolioAPI.syncGlobalCMSData === 'function') {
+        PortfolioAPI.syncGlobalCMSData();
+      }
+
       showToast('Settings & Security Credentials saved!');
+      return false;
     });
 
     // Database Backup
