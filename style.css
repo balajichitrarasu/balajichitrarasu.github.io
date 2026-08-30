@@ -259,24 +259,47 @@ body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, 
 }
 
 /* ══════════════════════════════════════
-   MINIMAL FLOATING AMBIENT BACKGROUND ANIMATION
+   UNIQUE CYBER AURORA WAVE STREAMS
    ══════════════════════════════════════ */
-.bg-animated-grid {
+.aurora-wave-wrap {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: bgGridDrift 45s linear infinite;
-  opacity: 0.7;
+  overflow: hidden;
+  opacity: 0.85;
 }
 
-@keyframes bgGridDrift {
-  0% { background-position: 0 0; }
-  100% { background-position: 50px 50px; }
+.aurora-wave {
+  position: absolute;
+  width: 200%;
+  height: 380px;
+  bottom: -50px;
+  left: -50%;
+  background: repeat-x url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C150,90 350,-40 500,40 C650,120 900,10 1200,50 L1200,120 L0,120 Z' fill='url(%23waveGrad1)'/%3E%3Cdefs%3E%3ClinearGradient id='waveGrad1' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='rgba(100,255,218,0.04)'/%3E%3Cstop offset='50%25' stop-color='rgba(167,139,250,0.05)'/%3E%3Cstop offset='100%25' stop-color='rgba(52,211,153,0.03)'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E");
+  animation: waveDriftSlow 32s ease-in-out infinite alternate;
+  filter: blur(10px);
+}
+
+.aurora-wave.w2 {
+  top: 18%;
+  height: 480px;
+  background: repeat-x url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C200,-30 450,80 700,20 C950,-40 1100,60 1200,10 L1200,120 L0,120 Z' fill='url(%23waveGrad2)'/%3E%3Cdefs%3E%3ClinearGradient id='waveGrad2' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='rgba(167,139,250,0.04)'/%3E%3Cstop offset='50%25' stop-color='rgba(100,255,218,0.03)'/%3E%3Cstop offset='100%25' stop-color='rgba(56,189,248,0.05)'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E");
+  animation: waveDriftFast 25s ease-in-out infinite alternate;
+  animation-delay: -5s;
+  filter: blur(16px);
+}
+
+@keyframes waveDriftSlow {
+  0% { transform: translateX(0) scaleY(1); }
+  50% { transform: translateX(-150px) scaleY(1.18); }
+  100% { transform: translateX(100px) scaleY(0.92); }
+}
+
+@keyframes waveDriftFast {
+  0% { transform: translateX(0) rotate(0deg); }
+  50% { transform: translateX(180px) rotate(1.2deg); }
+  100% { transform: translateX(-120px) rotate(-1.2deg); }
 }
 
 .bg-glow-orb {
@@ -328,11 +351,8 @@ body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, 
   }
 }
 
-[data-theme="light"] .bg-animated-grid {
-  background-image: 
-    linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
-  opacity: 0.5;
+[data-theme="light"] .aurora-wave-wrap {
+  opacity: 0.4;
 }
 
 [data-theme="light"] .bg-glow-orb.orb-1 {
