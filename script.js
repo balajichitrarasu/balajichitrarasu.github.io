@@ -569,7 +569,24 @@ document.addEventListener('DOMContentLoaded', function () {
       saved = DEFAULT_CERTS;
     }
 
-    container.innerHTML = saved.map(function (c, idx) {
+    // DEDUPLICATE & FILTER OUT BROKEN WhatsApp_ TEMPORARY ENTRIES
+    var cleanCerts = [];
+    var seenTitles = {};
+    saved.forEach(function(c) {
+      var normTitle = (c.title || '').toLowerCase().trim();
+      // Skip broken temporary upload records with 404 filenames
+      if (c.image && c.image.indexOf('WhatsApp_Image_') > -1 && c.image.indexOf('data:') !== 0) {
+        return;
+      }
+      if (!seenTitles[normTitle] || c.id === 'cert_1' || c.id === 'cert_2' || c.id === 'cert_3' || c.id === 'cert_4') {
+        seenTitles[normTitle] = true;
+        cleanCerts.push(c);
+      }
+    });
+
+    if (cleanCerts.length === 0) cleanCerts = DEFAULT_CERTS;
+
+    container.innerHTML = cleanCerts.map(function (c, idx) {
       var title = c.title || 'Certification';
       var issuer = c.org || c.issuer || 'Issuer';
       var statusDate = c.date || c.status || '';
@@ -583,7 +600,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'cert_3': 'cert2.jpg',
         'cert_4': 'cert4.jpg'
       };
-      if (!image || image.trim() === '' || (c.id === 'cert_3' && image === 'cert1.jpg')) {
+      if (!image || image.trim() === '' || image.indexOf('WhatsApp_Image_') > -1 || (c.id === 'cert_3' && image === 'cert1.jpg')) {
         image = defaultMap[c.id] || (idx === 0 ? 'cert1.jpg' : (idx === 1 ? 'cert3.jpg' : (idx === 2 ? 'cert2.jpg' : 'cert4.jpg')));
       }
 
