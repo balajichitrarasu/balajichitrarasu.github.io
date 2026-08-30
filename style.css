@@ -1451,6 +1451,93 @@ footer {
 }
 
 /* ══════════════════════════════════════
+   HIGH-TECH GLOSSY TOGGLE SWITCHES
+   ══════════════════════════════════════ */
+.toggle-switch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.toggle-switch-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.1rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+.toggle-switch-group:hover {
+  border-color: rgba(100, 255, 218, 0.3);
+  background: rgba(255, 255, 255, 0.045);
+}
+.toggle-label-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.toggle-status-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.status-on { background: rgba(52,211,153,0.15); color: var(--emerald); border: 1px solid rgba(52,211,153,0.3); }
+.status-off { background: rgba(244,63,94,0.12); color: var(--rose); border: 1px solid rgba(244,63,94,0.25); }
+
+/* Switch Controls */
+.switch-control {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 25px;
+  flex-shrink: 0;
+}
+.switch-control input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 34px;
+}
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 17px;
+  width: 17px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+.switch-control input:checked + .switch-slider {
+  background-color: rgba(52, 211, 153, 0.25);
+  border-color: var(--emerald);
+  box-shadow: 0 0 12px rgba(52, 211, 153, 0.35);
+}
+.switch-control input:checked + .switch-slider:before {
+  transform: translateX(21px);
+  background-color: var(--emerald);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
+}
+
+/* ══════════════════════════════════════
    ADMIN PANEL
    ══════════════════════════════════════ */
 .admin-wrap {

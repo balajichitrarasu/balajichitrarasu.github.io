@@ -130,6 +130,54 @@ document.addEventListener('DOMContentLoaded', function () {
   })();
 
   /* ────────────────────────────────────────
+     DYNAMIC SECTION VISIBILITY CONTROLLER
+     Controls all 13 portfolio sections via ON/OFF switches
+  ─────────────────────────────────────────── */
+  function applySectionVisibilities() {
+    var map = [
+      { key: 'hide_avail', sel: '.avail-banner' },
+      { key: 'hide_stats', sel: '#stats' },
+      { key: 'hide_about', sel: '#about' },
+      { key: 'hide_ticker', sel: '.logo-ticker-wrap' },
+      { key: 'hide_experience', sel: '#experience' },
+      { key: 'hide_projects', sel: '#projects' },
+      { key: 'hide_skills', sel: '#skills' },
+      { key: 'hide_certifications', sel: '#certifications' },
+      { key: 'hide_events', sel: '#events' },
+      { key: 'hide_achievements', sel: '#achievements' },
+      { key: 'hide_recommendations', sel: '#recommendations', defaultHide: true },
+      { key: 'hide_github', sel: '#github' },
+      { key: 'hide_contact', sel: '#contact' }
+    ];
+
+    map.forEach(function(item) {
+      var val = localStorage.getItem(item.key);
+      var isHidden = false;
+
+      if (val === 'true') {
+        isHidden = true;
+      } else if (val === 'false') {
+        isHidden = false;
+      } else if (item.defaultHide) {
+        isHidden = true;
+      }
+
+      document.querySelectorAll(item.sel).forEach(function(el) {
+        el.style.display = isHidden ? 'none' : '';
+      });
+
+      if (item.sel.indexOf('#') === 0) {
+        var navLink = document.querySelector('.navbar a[href="' + item.sel + '"]');
+        if (navLink) {
+          navLink.style.display = isHidden ? 'none' : '';
+        }
+      }
+    });
+  }
+
+  applySectionVisibilities();
+
+  /* ────────────────────────────────────────
      TYPING ANIMATION
      Uses a dedicated cursor <span> so there's
      no clash with ::after pseudo-elements

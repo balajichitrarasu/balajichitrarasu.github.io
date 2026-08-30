@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=26.0">
+  <link rel="stylesheet" href="style.css?v=27.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -952,22 +952,113 @@
               <div id="resume-status" style="margin-top:0.4rem; font-size:0.78rem; color:var(--teal);"></div>
             </div>
             <hr style="border-color:var(--border); margin:1.5rem 0;">
-            <h3 style="margin-bottom:1rem; color:var(--teal);">Section Visibility Control (Toggle ON/OFF)</h3>
-            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;">
-              <input type="checkbox" id="toggle-recs" style="width:20px; height:20px; cursor:pointer;">
-              <label for="toggle-recs" style="margin:0; cursor:pointer; font-weight:600;">Show Endorsements / Recommendations Section</label>
-            </div>
-            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;">
-              <input type="checkbox" id="toggle-events" style="width:20px; height:20px; cursor:pointer;">
-              <label for="toggle-events" style="margin:0; cursor:pointer; font-weight:600;">Show Industrial Exposure &amp; Events Section</label>
-            </div>
-            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;">
-              <input type="checkbox" id="toggle-github" style="width:20px; height:20px; cursor:pointer;">
-              <label for="toggle-github" style="margin:0; cursor:pointer; font-weight:600;">Show GitHub Open Source Section</label>
-            </div>
-            <div class="form-group" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1.5rem;">
-              <input type="checkbox" id="toggle-achievements" style="width:20px; height:20px; cursor:pointer;">
-              <label for="toggle-achievements" style="margin:0; cursor:pointer; font-weight:600;">Show Achievements &amp; Awards Section</label>
+            <h3 style="margin-bottom:0.4rem; color:var(--teal); font-weight:700;">🎛️ Section Visibility Control (Toggle ON/OFF)</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1.2rem;">Enable or disable visibility of any section on your live portfolio homepage instantly with slick ON/OFF toggle switches.</p>
+
+            <div class="toggle-switch-grid">
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">⚡ Availability Banner</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-avail" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">📊 Live Stats Counters</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-stats" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">👤 Background &amp; Core Bio</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-about" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🌐 Tooling Ticker Bar</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-ticker" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">💼 Experience &amp; Timeline</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-experience" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">💻 Selected Projects</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-projects" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🎯 Technical Skills Bars</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-skills" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🏆 Verified Certifications</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-certifications" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🎉 Industrial Exposure &amp; Events</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-events" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🎖️ Achievements &amp; Awards</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-achievements" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">💬 Endorsements / Feedback</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-recs" onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">🐙 GitHub &amp; Open Source</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-github" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-switch-group">
+                <span class="toggle-label-text">📬 Get In Touch &amp; Contact</span>
+                <label class="switch-control">
+                  <input type="checkbox" id="toggle-contact" checked onchange="updateToggleBadge(this)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
             </div>
             <hr style="border-color:var(--border); margin:1.5rem 0;">
             <h3 style="margin-bottom:1rem; color:var(--teal);">🔐 Admin Password &amp; Master Credentials</h3>
@@ -2233,11 +2324,21 @@
       const resData = localStorage.getItem('custom_resume_data');
       if (resData && $('resume-status')) $('resume-status').innerText = '📄 Resume Document Attached & Saved';
 
-      $('toggle-recs').checked = localStorage.getItem('hide_recommendations') !== 'true';
-      $('toggle-events').checked = localStorage.getItem('hide_events') !== 'true';
-      $('toggle-github').checked = localStorage.getItem('hide_github') !== 'true';
-      $('toggle-achievements').checked = localStorage.getItem('hide_achievements') !== 'true';
+      const keys = ['avail', 'stats', 'about', 'ticker', 'experience', 'projects', 'skills', 'certifications', 'events', 'achievements', 'recs', 'github', 'contact'];
+      keys.forEach(k => {
+        const storageKey = (k === 'recs') ? 'hide_recommendations' : ('hide_' + k);
+        const el = $('toggle-' + k);
+        if (el) {
+          // Default recs is hidden unless enabled; others default to shown
+          if (k === 'recs') {
+            el.checked = localStorage.getItem(storageKey) === 'false';
+          } else {
+            el.checked = localStorage.getItem(storageKey) !== 'true';
+          }
+        }
+      });
     }
+
     $('settings-form').addEventListener('submit', e => {
       e.preventDefault();
       e.stopPropagation();
@@ -2259,10 +2360,14 @@
           localStorage.setItem('custom_admin_pass', $('set-admin-pass').value.trim());
         }
 
-        localStorage.setItem('hide_recommendations', $('toggle-recs').checked ? 'false' : 'true');
-        localStorage.setItem('hide_events', $('toggle-events').checked ? 'false' : 'true');
-        localStorage.setItem('hide_github', $('toggle-github').checked ? 'false' : 'true');
-        localStorage.setItem('hide_achievements', $('toggle-achievements').checked ? 'false' : 'true');
+        const keys = ['avail', 'stats', 'about', 'ticker', 'experience', 'projects', 'skills', 'certifications', 'events', 'achievements', 'recs', 'github', 'contact'];
+        keys.forEach(k => {
+          const storageKey = (k === 'recs') ? 'hide_recommendations' : ('hide_' + k);
+          const el = $('toggle-' + k);
+          if (el) {
+            localStorage.setItem(storageKey, el.checked ? 'false' : 'true');
+          }
+        });
 
         if (window.PortfolioAPI && typeof PortfolioAPI.syncGlobalCMSData === 'function') {
           PortfolioAPI.syncGlobalCMSData();
