@@ -36,32 +36,35 @@
   --ease-fast: cubic-bezier(0.4,0,0.2,1);
 }
 
+:root[data-theme="light"],
 html[data-theme="light"],
 html[data-theme="light"] body {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
   color-scheme: light !important;
+  background-color: #f8fafc !important;
+  background: #f8fafc !important;
+  color: #0f172a !important;
 }
 
+:root[data-theme="light"],
 [data-theme="light"] {
   color-scheme: light;
-  --bg: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-card-hover: #ffffff;
-  --border: #cbd5e1;
-  --border-hover: rgba(2, 132, 199, 0.4);
+  --bg: #f8fafc !important;
+  --bg-card: #ffffff !important;
+  --bg-card-hover: #f1f5f9 !important;
+  --border: #cbd5e1 !important;
+  --border-hover: rgba(2, 132, 199, 0.4) !important;
 
-  --teal: #0284c7;
-  --teal-dim: rgba(2, 132, 199, 0.08);
-  --violet: #4f46e5;
-  --violet-dim: rgba(79, 70, 229, 0.08);
-  --emerald: #059669;
-  --amber: #d97706;
-  --rose: #dc2626;
+  --teal: #0284c7 !important;
+  --teal-dim: rgba(2, 132, 199, 0.08) !important;
+  --violet: #4f46e5 !important;
+  --violet-dim: rgba(79, 70, 229, 0.08) !important;
+  --emerald: #059669 !important;
+  --amber: #d97706 !important;
+  --rose: #dc2626 !important;
 
-  --text: #0f172a;
-  --text-muted: #475569;
-  --text-dim: #64748b;
+  --text: #0f172a !important;
+  --text-muted: #475569 !important;
+  --text-dim: #64748b !important;
 }
 
 [data-theme="light"] .navbar {
