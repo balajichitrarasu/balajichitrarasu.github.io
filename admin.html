@@ -1019,19 +1019,15 @@
     const setStorage = (key, val) => {
       localStorage.setItem(key, typeof val === 'object' ? JSON.stringify(val) : val);
     };
-    const showToast = (msg, showLink = true) => {
+    const showToast = (msg) => {
       const t = $('toast');
       if (!t) return;
-      let html = `<div style="display:flex; align-items:center; gap:0.5rem; flex:1;"><span>${msg}</span></div>`;
-      if (showLink) {
-        html += `<a href="index.html" target="_blank" class="toast-live-btn">View Portfolio →</a>`;
-      }
-      t.innerHTML = html;
+      t.innerHTML = `<div style="display:flex; align-items:center; gap:0.5rem; flex:1;"><span>${msg}</span></div>`;
       t.classList.add('show');
       if (window.toastTimer) clearTimeout(window.toastTimer);
       window.toastTimer = setTimeout(() => {
         t.classList.remove('show');
-      }, 5000);
+      }, 4000);
     };
     const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
 
@@ -2277,6 +2273,6 @@
     });
   </script>
   <div id="toast"></div>
-  <script src="script.js?v=13.0"></script>
+  <script src="script.js?v=14.0"></script>
 </body>
 </html>
