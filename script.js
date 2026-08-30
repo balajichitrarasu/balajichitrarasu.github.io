@@ -567,24 +567,42 @@ document.addEventListener('DOMContentLoaded', function () {
      STATS COUNTER — Fixed: fires on load
      AND on scroll, whichever comes first
   ─────────────────────────────────────────── */
-  var counted = false;
+  /* ────────────────────────────────────────
+     LIVE DYNAMIC STATS COUNTER SYNC WITH DATABASE
+  ─────────────────────────────────────────── */
+  function updateDynamicStatTargets() {
+    var projNumEl = document.getElementById('statProjNum');
+    if (projNumEl) {
+      var savedProjs = null;
+      try { savedProjs = JSON.parse(localStorage.getItem('custom_projects')); } catch (e) {}
+      var projCount = (Array.isArray(savedProjs) && savedProjs.length > 0) ? savedProjs.length : 3;
+      projNumEl.setAttribute('data-target', String(projCount));
+    }
+
+    var certNumEl = document.getElementById('statCertNum');
+    if (certNumEl) {
+      var savedCerts = null;
+      try { savedCerts = JSON.parse(localStorage.getItem('custom_certs')); } catch (e) {}
+      var certCount = (Array.isArray(savedCerts) && savedCerts.length > 0) ? savedCerts.length : 4;
+      certNumEl.setAttribute('data-target', String(certCount));
+    }
+  }
 
   function runCounters() {
-    if (counted) return;
-    counted = true;
+    updateDynamicStatTargets();
+
     document.querySelectorAll('.stat-num[data-target]').forEach(function (el) {
       var target = parseInt(el.getAttribute('data-target'), 10);
       if (isNaN(target)) return;
       var start = null;
-      var duration = 1800;
+      var duration = 1200;
 
       function step(ts) {
         if (!start) start = ts;
         var elapsed = ts - start;
         var progress = Math.min(elapsed / duration, 1);
-        /* ease-out cubic */
         var ease = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.round(ease * target);
+        el.textContent = Math.floor(ease * target);
         if (progress < 1) {
           requestAnimationFrame(step);
         } else {
@@ -595,7 +613,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* Try IntersectionObserver with a very low threshold */
   var statsEl = document.getElementById('stats');
   runCounters();
 
