@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=46.0">
+  <link rel="stylesheet" href="style.css?v=47.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1234,34 +1234,72 @@
     </main>
   </div>
 
-  <!-- GLOBAL INTERACTIVE IMAGE CROPPER MODAL -->
-  <div id="cropperModal" class="cropper-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(8,10,16,0.92); backdrop-filter:blur(16px); align-items:center; justify-content:center; padding:1.5rem;">
-    <div class="cropper-box" style="background:#0e1322; border:1px solid var(--border); border-radius:12px; max-width:650px; width:100%; padding:1.5rem; color:#fff; position:relative; box-shadow:0 25px 60px rgba(0,0,0,0.8);">
+  <!-- PRO-GRADE INTERACTIVE IMAGE CROPPER & STUDIO EDITOR MODAL -->
+  <div id="cropperModal" class="cropper-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(8,10,16,0.94); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); align-items:center; justify-content:center; padding:1.5rem;">
+    <div class="cropper-box" style="background:#0e1322; border:1px solid var(--teal); border-radius:16px; max-width:840px; width:100%; padding:1.6rem; color:#fff; position:relative; box-shadow:0 30px 80px rgba(0,0,0,0.85);">
+      
+      <!-- HEADER -->
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
-        <h3 style="margin:0; font-size:1.1rem; color:var(--teal);">✂️ Enhanced Image Cropper &amp; Resizer</h3>
-        <button type="button" onclick="closeCropperModal()" style="background:rgba(255,255,255,0.08); border:none; color:#fff; width:30px; height:30px; border-radius:50%; cursor:pointer; font-weight:700;">✕</button>
+        <div>
+          <h3 style="margin:0; font-size:1.15rem; color:var(--teal); font-weight:800;">✂️ Studio Image Cropper &amp; Enhancement Editor</h3>
+          <span style="font-size:0.75rem; color:var(--text-muted);">Drag corners to resize crop, drag inside box to move selection, scroll mouse wheel to zoom in/out.</span>
+        </div>
+        <button type="button" onclick="closeCropperModal()" style="background:rgba(255,255,255,0.08); border:none; color:#fff; width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:700; font-size:1rem;">✕</button>
       </div>
       
-      <div style="display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; align-items:center;">
-        <span style="font-size:0.78rem; color:var(--text-muted); font-weight:600;">Aspect Ratio:</span>
-        <button type="button" class="crop-aspect-btn active" data-ratio="1" onclick="setCropRatio(1, this)" style="padding:0.25rem 0.6rem; font-size:0.75rem; border-radius:4px; background:var(--teal-dim); border:1px solid var(--teal); color:var(--teal); cursor:pointer;">1:1 (Square Avatar)</button>
-        <button type="button" class="crop-aspect-btn" data-ratio="1.777" onclick="setCropRatio(1.777, this)" style="padding:0.25rem 0.6rem; font-size:0.75rem; border-radius:4px; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-muted); cursor:pointer;">16:9 (Banner)</button>
-        <button type="button" class="crop-aspect-btn" data-ratio="1.333" onclick="setCropRatio(1.333, this)" style="padding:0.25rem 0.6rem; font-size:0.75rem; border-radius:4px; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-muted); cursor:pointer;">4:3 (Card)</button>
-        <button type="button" class="crop-aspect-btn" data-ratio="0" onclick="setCropRatio(0, this)" style="padding:0.25rem 0.6rem; font-size:0.75rem; border-radius:4px; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-muted); cursor:pointer;">Free</button>
-      </div>
-
-      <div style="text-align:center; background:#070911; border:1px solid var(--border); border-radius:8px; padding:1rem; overflow:hidden; position:relative; min-height:280px; max-height:400px; display:flex; align-items:center; justify-content:center;">
-        <canvas id="modal-crop-canvas" style="max-width:100%; max-height:360px; cursor:crosshair; border:1px dashed var(--teal);"></canvas>
-      </div>
-
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.2rem; gap:1rem; flex-wrap:wrap;">
-        <div style="display:flex; gap:0.5rem;">
-          <button type="button" onclick="rotateCropImage(-90)" class="btn" style="padding:0.4rem 0.8rem; font-size:0.8rem;">↺ Rotate Left</button>
-          <button type="button" onclick="rotateCropImage(90)" class="btn" style="padding:0.4rem 0.8rem; font-size:0.8rem;">↻ Rotate Right</button>
+      <!-- TOOLBAR ROW 1: ASPECT RATIOS & ZOOM CONTROLS -->
+      <div style="display:flex; gap:0.6rem; margin-bottom:0.8rem; flex-wrap:wrap; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.025); border:1px solid var(--border); border-radius:10px; padding:0.6rem 0.8rem;">
+        <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+          <span style="font-size:0.76rem; color:var(--text-muted); font-weight:600; margin-right:0.2rem;">Aspect Ratio:</span>
+          <button type="button" class="crop-aspect-btn active" data-ratio="0" onclick="setCropRatio(0, this)" style="padding:0.25rem 0.65rem; font-size:0.75rem; border-radius:6px; background:var(--teal-dim); border:1px solid var(--teal); color:var(--teal); cursor:pointer; font-weight:600;">🔓 Free Crop</button>
+          <button type="button" class="crop-aspect-btn" data-ratio="1" onclick="setCropRatio(1, this)" style="padding:0.25rem 0.65rem; font-size:0.75rem; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-muted); cursor:pointer; font-weight:600;">1:1 (Square)</button>
+          <button type="button" class="crop-aspect-btn" data-ratio="1.414" onclick="setCropRatio(1.414, this)" style="padding:0.25rem 0.65rem; font-size:0.75rem; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-muted); cursor:pointer; font-weight:600;">📜 Cert (A4 Document)</button>
+          <button type="button" class="crop-aspect-btn" data-ratio="1.777" onclick="setCropRatio(1.777, this)" style="padding:0.25rem 0.65rem; font-size:0.75rem; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-muted); cursor:pointer; font-weight:600;">16:9 (Banner)</button>
+          <button type="button" class="crop-aspect-btn" data-ratio="1.333" onclick="setCropRatio(1.333, this)" style="padding:0.25rem 0.65rem; font-size:0.75rem; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-muted); cursor:pointer; font-weight:600;">4:3 (Card)</button>
         </div>
-        <div style="display:flex; gap:0.5rem;">
-          <button type="button" onclick="closeCropperModal()" class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;">Cancel</button>
-          <button type="button" onclick="applyModalCrop()" class="btn btn-primary" style="padding:0.4rem 1.2rem; font-size:0.85rem; font-weight:700;">✂️ Apply Crop &amp; Save</button>
+
+        <div style="display:flex; gap:0.4rem; align-items:center;">
+          <span style="font-size:0.76rem; color:var(--text-muted); font-weight:600;">Zoom:</span>
+          <button type="button" onclick="adjustCropZoom(-0.15)" style="padding:0.25rem 0.6rem; font-size:0.75rem; border-radius:6px; background:rgba(255,255,255,0.06); border:1px solid var(--border); color:#fff; cursor:pointer;">🔍- Out</button>
+          <span id="crop-zoom-level" style="font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--teal); min-width:38px; text-align:center;">100%</span>
+          <button type="button" onclick="adjustCropZoom(0.15)" style="padding:0.25rem 0.6rem; font-size:0.75rem; border-radius:6px; background:rgba(255,255,255,0.06); border:1px solid var(--border); color:#fff; cursor:pointer;">🔍+ In</button>
+          <button type="button" onclick="resetCropZoom()" style="padding:0.25rem 0.5rem; font-size:0.72rem; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-muted); cursor:pointer;">100% Reset</button>
+        </div>
+      </div>
+
+      <!-- CANVAS DISPLAY AREA -->
+      <div style="text-align:center; background:#070911; border:1px solid var(--border); border-radius:10px; padding:0.8rem; overflow:hidden; position:relative; min-height:300px; max-height:440px; display:flex; align-items:center; justify-content:center; user-select:none;">
+        <canvas id="modal-crop-canvas" style="max-width:100%; max-height:400px; cursor:default; touch-action:none;"></canvas>
+      </div>
+
+      <!-- TOOLBAR ROW 2: ROTATE, FLIP, BRIGHTNESS & CONTRAST -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; gap:1rem; flex-wrap:wrap; background:rgba(255,255,255,0.025); border:1px solid var(--border); border-radius:10px; padding:0.6rem 0.8rem;">
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; align-items:center;">
+          <button type="button" onclick="rotateCropImage(-90)" class="btn" style="padding:0.35rem 0.75rem; font-size:0.78rem;">↺ Rotate Left</button>
+          <button type="button" onclick="rotateCropImage(90)" class="btn" style="padding:0.35rem 0.75rem; font-size:0.78rem;">↻ Rotate Right</button>
+          <button type="button" onclick="flipCropImage('h')" class="btn" style="padding:0.35rem 0.75rem; font-size:0.78rem;">↔ Flip Horiz</button>
+          <button type="button" onclick="flipCropImage('v')" class="btn" style="padding:0.35rem 0.75rem; font-size:0.78rem;">↕ Flip Vert</button>
+        </div>
+
+        <div style="display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap;">
+          <label style="font-size:0.75rem; color:var(--text-muted); font-weight:600; display:flex; align-items:center; gap:0.4rem;">
+            ☀️ Brightness:
+            <input type="range" id="crop-brightness" min="-50" max="50" value="0" oninput="updateCropFilters()" style="width:75px; accent-color:var(--teal);">
+          </label>
+          <label style="font-size:0.75rem; color:var(--text-muted); font-weight:600; display:flex; align-items:center; gap:0.4rem;">
+            🌓 Contrast:
+            <input type="range" id="crop-contrast" min="-50" max="50" value="0" oninput="updateCropFilters()" style="width:75px; accent-color:var(--teal);">
+          </label>
+          <button type="button" onclick="resetCropFilters()" style="padding:0.25rem 0.5rem; font-size:0.72rem; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-muted); cursor:pointer;">🔄 Reset Filters</button>
+        </div>
+      </div>
+
+      <!-- FOOTER ACTIONS -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.2rem; gap:1rem; flex-wrap:wrap;">
+        <span style="font-size:0.75rem; color:var(--emerald); font-weight:600; font-family:'DM Mono',monospace;">✓ Interactive 8-Handle Resizing Active</span>
+        <div style="display:flex; gap:0.6rem;">
+          <button type="button" onclick="closeCropperModal()" class="btn" style="padding:0.5rem 1.1rem; font-size:0.85rem;">Cancel</button>
+          <button type="button" onclick="applyModalCrop()" class="btn btn-primary" style="padding:0.5rem 1.4rem; font-size:0.85rem; font-weight:700;">✂️ Apply Crop &amp; Save Image</button>
         </div>
       </div>
     </div>
@@ -1787,33 +1825,55 @@
     /* ══ REUSABLE INTERACTIVE IMAGE CROPPER MODAL LOGIC ══ */
     let cropperTargetInput = null;
     let cropperTargetPreview = null;
-    let cropperAspect = 1;
+    let cropperAspect = 0;
     let cropperImg = new Image();
     let cropperCanvas = null;
     let cropperCtx = null;
     let cropperRotation = 0;
+    let cropperFlipH = false;
+    let cropperFlipV = false;
+    let cropperZoom = 1.0;
+    let cropperBrightness = 0;
+    let cropperContrast = 0;
     let cropperRect = null;
+    let isDraggingBox = false;
+    let isResizingHandle = null;
+    let isPanningImage = false;
+    let dragStartPos = { x: 0, y: 0 };
+    let rectStartPos = { x: 0, y: 0, w: 0, h: 0 };
 
-    window.openCropperForTarget = (inputId, previewId, defaultAspect = 1) => {
+    window.openCropperForTarget = (inputId, previewId, defaultAspect = 0) => {
       cropperTargetInput = inputId;
       cropperTargetPreview = previewId;
       cropperAspect = defaultAspect;
       cropperRotation = 0;
-      
-      const imgVal = $(inputId) ? $(inputId).value : '';
-      if (!imgVal) {
+      cropperFlipH = false;
+      cropperFlipV = false;
+      cropperZoom = 1.0;
+      cropperBrightness = 0;
+      cropperContrast = 0;
+
+      const urlEl = $(inputId);
+      const imgVal = urlEl ? urlEl.value : '';
+      if (!imgVal || imgVal.trim() === '') {
         showToast('Please select an image file or enter an image URL first!');
         return;
       }
+
+      if ($('crop-brightness')) $('crop-brightness').value = 0;
+      if ($('crop-contrast')) $('crop-contrast').value = 0;
+      if ($('crop-zoom-level')) $('crop-zoom-level').innerText = '100%';
 
       cropperImg = new Image();
       cropperImg.crossOrigin = 'anonymous';
       cropperImg.onload = () => {
         const modal = $('cropperModal');
         cropperCanvas = $('modal-crop-canvas');
+        if (!cropperCanvas) return;
         cropperCtx = cropperCanvas.getContext('2d');
         
         modal.style.display = 'flex';
+        initCropperEvents();
         setupCropperCanvas();
       };
       cropperImg.onerror = () => {
@@ -1823,7 +1883,7 @@
     };
 
     function setupCropperCanvas() {
-      const maxW = 520;
+      const maxW = 720;
       let w = cropperImg.width;
       let h = cropperImg.height;
       if (w > maxW) {
@@ -1833,8 +1893,8 @@
       cropperCanvas.width = w;
       cropperCanvas.height = h;
 
-      let rw = w * 0.8;
-      let rh = h * 0.8;
+      let rw = w * 0.75;
+      let rh = h * 0.75;
       if (cropperAspect > 0) {
         if (rw / rh > cropperAspect) {
           rw = rh * cropperAspect;
@@ -1842,54 +1902,293 @@
           rh = rw / cropperAspect;
         }
       }
+
       cropperRect = {
-        x: (w - rw) / 2,
-        y: (h - rh) / 2,
-        w: rw,
-        h: rh
+        x: Math.round((w - rw) / 2),
+        y: Math.round((h - rh) / 2),
+        w: Math.round(rw),
+        h: Math.round(rh)
       };
 
       drawModalCropCanvas();
     }
 
     function drawModalCropCanvas() {
-      if (!cropperCtx) return;
+      if (!cropperCtx || !cropperCanvas) return;
       cropperCtx.clearRect(0, 0, cropperCanvas.width, cropperCanvas.height);
 
+      // Draw Main Filtered Image
       cropperCtx.save();
-      if (cropperRotation !== 0) {
-        cropperCtx.translate(cropperCanvas.width / 2, cropperCanvas.height / 2);
-        cropperCtx.rotate((cropperRotation * Math.PI) / 180);
-        cropperCtx.translate(-cropperCanvas.width / 2, -cropperCanvas.height / 2);
-      }
+      applyCanvasTransforms(cropperCtx);
       cropperCtx.drawImage(cropperImg, 0, 0, cropperCanvas.width, cropperCanvas.height);
       cropperCtx.restore();
 
+      // Dark Overlay Outside Crop Area
       if (cropperRect) {
-        cropperCtx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+        cropperCtx.fillStyle = 'rgba(0, 0, 0, 0.65)';
         cropperCtx.fillRect(0, 0, cropperCanvas.width, cropperCanvas.height);
 
+        // Highlight Active Crop Area
         cropperCtx.save();
         cropperCtx.beginPath();
         cropperCtx.rect(cropperRect.x, cropperRect.y, cropperRect.w, cropperRect.h);
         cropperCtx.clip();
 
-        if (cropperRotation !== 0) {
-          cropperCtx.translate(cropperCanvas.width / 2, cropperCanvas.height / 2);
-          cropperCtx.rotate((cropperRotation * Math.PI) / 180);
-          cropperCtx.translate(-cropperCanvas.width / 2, -cropperCanvas.height / 2);
-        }
+        applyCanvasTransforms(cropperCtx);
         cropperCtx.drawImage(cropperImg, 0, 0, cropperCanvas.width, cropperCanvas.height);
         cropperCtx.restore();
 
+        // Selection Box Border & Grid
         cropperCtx.strokeStyle = '#64ffda';
         cropperCtx.lineWidth = 2;
         cropperCtx.strokeRect(cropperRect.x, cropperRect.y, cropperRect.w, cropperRect.h);
+
+        // 3x3 Grid Lines inside crop box
+        cropperCtx.strokeStyle = 'rgba(100, 255, 218, 0.3)';
+        cropperCtx.lineWidth = 1;
+        const thirdW = cropperRect.w / 3;
+        const thirdH = cropperRect.h / 3;
+        cropperCtx.beginPath();
+        cropperCtx.moveTo(cropperRect.x + thirdW, cropperRect.y);
+        cropperCtx.lineTo(cropperRect.x + thirdW, cropperRect.y + cropperRect.h);
+        cropperCtx.moveTo(cropperRect.x + thirdW * 2, cropperRect.y);
+        cropperCtx.lineTo(cropperRect.x + thirdW * 2, cropperRect.y + cropperRect.h);
+        cropperCtx.moveTo(cropperRect.x, cropperRect.y + thirdH);
+        cropperCtx.lineTo(cropperRect.x + cropperRect.w, cropperRect.y + thirdH);
+        cropperCtx.moveTo(cropperRect.x, cropperRect.y + thirdH * 2);
+        cropperCtx.lineTo(cropperRect.x + cropperRect.w, cropperRect.y + thirdH * 2);
+        cropperCtx.stroke();
+
+        // Render 8 Handles
+        drawHandles();
       }
     }
 
+    function applyCanvasTransforms(context) {
+      context.filter = `brightness(${100 + cropperBrightness}%) contrast(${100 + cropperContrast}%)`;
+      context.translate(cropperCanvas.width / 2, cropperCanvas.height / 2);
+
+      if (cropperZoom !== 1.0) {
+        context.scale(cropperZoom, cropperZoom);
+      }
+      if (cropperRotation !== 0) {
+        context.rotate((cropperRotation * Math.PI) / 180);
+      }
+      if (cropperFlipH || cropperFlipV) {
+        context.scale(cropperFlipH ? -1 : 1, cropperFlipV ? -1 : 1);
+      }
+
+      context.translate(-cropperCanvas.width / 2, -cropperCanvas.height / 2);
+    }
+
+    function getHandlePositions() {
+      if (!cropperRect) return {};
+      const { x, y, w, h } = cropperRect;
+      return {
+        nw: { x: x, y: y },
+        ne: { x: x + w, y: y },
+        sw: { x: x, y: y + h },
+        se: { x: x + w, y: y + h },
+        n: { x: x + w / 2, y: y },
+        s: { x: x + w / 2, y: y + h },
+        w: { x: x, y: y + h / 2 },
+        e: { x: x + w, y: y + h / 2 }
+      };
+    }
+
+    function drawHandles() {
+      const handles = getHandlePositions();
+      cropperCtx.fillStyle = '#64ffda';
+      cropperCtx.strokeStyle = '#0f172a';
+      cropperCtx.lineWidth = 2;
+
+      Object.keys(handles).forEach(k => {
+        const pt = handles[k];
+        cropperCtx.beginPath();
+        cropperCtx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+        cropperCtx.fill();
+        cropperCtx.stroke();
+      });
+    }
+
+    function initCropperEvents() {
+      if (!cropperCanvas || cropperCanvas._eventsInitialized) return;
+      cropperCanvas._eventsInitialized = true;
+
+      cropperCanvas.addEventListener('mousedown', handleMouseDown);
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      cropperCanvas.addEventListener('wheel', handleWheel, { passive: false });
+
+      // Touch screen support
+      cropperCanvas.addEventListener('touchstart', e => {
+        if (e.touches.length === 1) {
+          const touch = e.touches[0];
+          handleMouseDown({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => {} });
+        }
+      }, { passive: true });
+      window.addEventListener('touchmove', e => {
+        if (e.touches.length === 1 && (isDraggingBox || isResizingHandle)) {
+          const touch = e.touches[0];
+          handleMouseMove({ clientX: touch.clientX, clientY: touch.clientY });
+        }
+      }, { passive: true });
+      window.addEventListener('touchend', handleMouseUp);
+    }
+
+    function getCanvasCoords(e) {
+      const rect = cropperCanvas.getBoundingClientRect();
+      const scaleX = cropperCanvas.width / rect.width;
+      const scaleY = cropperCanvas.height / rect.height;
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+      };
+    }
+
+    function handleMouseDown(e) {
+      if (!cropperRect) return;
+      const pos = getCanvasCoords(e);
+      const handles = getHandlePositions();
+
+      // Check handle click
+      isResizingHandle = null;
+      Object.keys(handles).forEach(k => {
+        const pt = handles[k];
+        if (Math.hypot(pos.x - pt.x, pos.y - pt.y) <= 12) {
+          isResizingHandle = k;
+        }
+      });
+
+      if (isResizingHandle) {
+        dragStartPos = pos;
+        rectStartPos = { ...cropperRect };
+        return;
+      }
+
+      // Check inside crop box click
+      if (pos.x >= cropperRect.x && pos.x <= cropperRect.x + cropperRect.w &&
+          pos.y >= cropperRect.y && pos.y <= cropperRect.y + cropperRect.h) {
+        isDraggingBox = true;
+        dragStartPos = pos;
+        rectStartPos = { ...cropperRect };
+      }
+    }
+
+    function handleMouseMove(e) {
+      if (!cropperRect) return;
+      const pos = getCanvasCoords(e);
+
+      // Cursor styling
+      if (!isDraggingBox && !isResizingHandle) {
+        const handles = getHandlePositions();
+        let hoveredHandle = null;
+        Object.keys(handles).forEach(k => {
+          if (Math.hypot(pos.x - handles[k].x, pos.y - handles[k].y) <= 12) hoveredHandle = k;
+        });
+
+        if (hoveredHandle) {
+          const cursors = { nw: 'nwse-resize', se: 'nwse-resize', ne: 'nesw-resize', sw: 'nesw-resize', n: 'ns-resize', s: 'ns-resize', e: 'ew-resize', w: 'ew-resize' };
+          cropperCanvas.style.cursor = cursors[hoveredHandle] || 'pointer';
+        } else if (pos.x >= cropperRect.x && pos.x <= cropperRect.x + cropperRect.w && pos.y >= cropperRect.y && pos.y <= cropperRect.y + cropperRect.h) {
+          cropperCanvas.style.cursor = 'move';
+        } else {
+          cropperCanvas.style.cursor = 'default';
+        }
+      }
+
+      // Resizing box
+      if (isResizingHandle) {
+        const dx = pos.x - dragStartPos.x;
+        const dy = pos.y - dragStartPos.y;
+        let { x, y, w, h } = rectStartPos;
+
+        if (isResizingHandle.includes('e')) w = Math.max(30, rectStartPos.w + dx);
+        if (isResizingHandle.includes('s')) h = Math.max(30, rectStartPos.h + dy);
+        if (isResizingHandle.includes('w')) {
+          const newW = Math.max(30, rectStartPos.w - dx);
+          x = rectStartPos.x + (rectStartPos.w - newW);
+          w = newW;
+        }
+        if (isResizingHandle.includes('n')) {
+          const newH = Math.max(30, rectStartPos.h - dy);
+          y = rectStartPos.y + (rectStartPos.h - newH);
+          h = newH;
+        }
+
+        if (cropperAspect > 0) {
+          h = w / cropperAspect;
+        }
+
+        cropperRect = {
+          x: Math.max(0, Math.min(x, cropperCanvas.width - w)),
+          y: Math.max(0, Math.min(y, cropperCanvas.height - h)),
+          w: Math.min(w, cropperCanvas.width),
+          h: Math.min(h, cropperCanvas.height)
+        };
+
+        drawModalCropCanvas();
+        return;
+      }
+
+      // Dragging selection box
+      if (isDraggingBox) {
+        const dx = pos.x - dragStartPos.x;
+        const dy = pos.y - dragStartPos.y;
+        const newX = Math.max(0, Math.min(rectStartPos.x + dx, cropperCanvas.width - rectStartPos.w));
+        const newY = Math.max(0, Math.min(rectStartPos.y + dy, cropperCanvas.height - rectStartPos.h));
+
+        cropperRect.x = newX;
+        cropperRect.y = newY;
+        drawModalCropCanvas();
+      }
+    }
+
+    function handleMouseUp() {
+      isDraggingBox = false;
+      isResizingHandle = null;
+    }
+
+    function handleWheel(e) {
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 0.1 : -0.1;
+      adjustCropZoom(delta);
+    }
+
+    window.adjustCropZoom = step => {
+      cropperZoom = Math.max(0.5, Math.min(4.0, cropperZoom + step));
+      if ($('crop-zoom-level')) $('crop-zoom-level').innerText = Math.round(cropperZoom * 100) + '%';
+      drawModalCropCanvas();
+    };
+
+    window.resetCropZoom = () => {
+      cropperZoom = 1.0;
+      if ($('crop-zoom-level')) $('crop-zoom-level').innerText = '100%';
+      drawModalCropCanvas();
+    };
+
     window.rotateCropImage = deg => {
       cropperRotation = (cropperRotation + deg) % 360;
+      drawModalCropCanvas();
+    };
+
+    window.flipCropImage = dir => {
+      if (dir === 'h') cropperFlipH = !cropperFlipH;
+      if (dir === 'v') cropperFlipV = !cropperFlipV;
+      drawModalCropCanvas();
+    };
+
+    window.updateCropFilters = () => {
+      cropperBrightness = parseInt($('crop-brightness') ? $('crop-brightness').value : 0);
+      cropperContrast = parseInt($('crop-contrast') ? $('crop-contrast').value : 0);
+      drawModalCropCanvas();
+    };
+
+    window.resetCropFilters = () => {
+      cropperBrightness = 0;
+      cropperContrast = 0;
+      if ($('crop-brightness')) $('crop-brightness').value = 0;
+      if ($('crop-contrast')) $('crop-contrast').value = 0;
       drawModalCropCanvas();
     };
 
@@ -1921,11 +2220,14 @@
       const outCtx = outCanvas.getContext('2d');
 
       outCtx.save();
-      if (cropperRotation !== 0) {
-        outCtx.translate(outCanvas.width / 2, outCanvas.height / 2);
-        outCtx.rotate((cropperRotation * Math.PI) / 180);
-        outCtx.translate(-outCanvas.width / 2, -outCanvas.height / 2);
-      }
+      outCtx.filter = `brightness(${100 + cropperBrightness}%) contrast(${100 + cropperContrast}%)`;
+      outCtx.translate(outCanvas.width / 2, outCanvas.height / 2);
+
+      if (cropperZoom !== 1.0) outCtx.scale(cropperZoom, cropperZoom);
+      if (cropperRotation !== 0) outCtx.rotate((cropperRotation * Math.PI) / 180);
+      if (cropperFlipH || cropperFlipV) outCtx.scale(cropperFlipH ? -1 : 1, cropperFlipV ? -1 : 1);
+
+      outCtx.translate(-outCanvas.width / 2, -outCanvas.height / 2);
       outCtx.drawImage(
         cropperImg,
         cropperRect.x * scaleX,
@@ -1936,7 +2238,7 @@
       );
       outCtx.restore();
 
-      const base64Cropped = outCanvas.toDataURL('image/jpeg', 0.88);
+      const base64Cropped = outCanvas.toDataURL('image/jpeg', 0.92);
       if ($(cropperTargetInput)) $(cropperTargetInput).value = base64Cropped;
       if (cropperTargetPreview && $(cropperTargetPreview)) {
         $(cropperTargetPreview).src = base64Cropped;
@@ -1944,7 +2246,7 @@
       }
 
       closeCropperModal();
-      showToast('Cropped image applied!');
+      showToast('✨ Studio Cropped & Enhanced Image Applied!');
     };
 
     // Image Crop Tool for Certs
