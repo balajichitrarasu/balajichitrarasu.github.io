@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=30.0">
+  <link rel="stylesheet" href="style.css?v=31.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -534,10 +534,14 @@
               <label style="font-weight:600;">Avatar Image File Upload &amp; Cropper</label>
               <input type="file" id="prof-avatar-file" class="form-control" accept="image/*">
               <input type="text" id="prof-avatar" class="form-control" placeholder="Or enter Avatar Image URL / Base64" style="margin-top: 0.5rem;">
-              <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem;">
+              <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap:wrap;">
                 <img id="prof-avatar-preview" src="profile.jpg" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--teal); background: rgba(255,255,255,0.05);">
                 <button type="button" class="btn btn-primary" onclick="openCropperForTarget('prof-avatar', 'prof-avatar-preview', 1)" style="font-size:0.8rem; padding:0.45rem 1rem;">✂️ Crop Avatar Image</button>
+                <button type="button" class="btn" onclick="exportProfileJpg()" style="font-size:0.8rem; padding:0.45rem 1rem;">📥 Download as profile.jpg for Repo</button>
               </div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.5rem; line-height:1.4;">
+                💡 <strong>Cross-Device Reflection Note:</strong> LocalStorage avatar saves to your current browser. To make your new photo reflect permanently on <strong>ALL mobile phones &amp; secondary devices</strong>, click <em>"Download as profile.jpg"</em> and replace <code>G:\Portfolio\profile.jpg</code>!
+              </p>
             </div>
             <div class="form-group">
               <label style="font-weight:600;">Display Name</label>
@@ -1634,6 +1638,19 @@
       loadProfile();
       showToast('Profile reset to default!');
     });
+
+    window.exportProfileJpg = () => {
+      const avatarData = ($('prof-avatar') ? $('prof-avatar').value : '') || localStorage.getItem('custom_profile_avatar');
+      if (!avatarData || avatarData.trim() === '') {
+        showToast('⚠️ No custom avatar photo loaded yet!');
+        return;
+      }
+      const a = document.createElement('a');
+      a.href = avatarData;
+      a.download = 'profile.jpg';
+      a.click();
+      showToast('📥 Downloaded profile.jpg! Replace G:\\Portfolio\\profile.jpg with this file to apply across all devices.');
+    };
 
     /* ══ REUSABLE INTERACTIVE IMAGE CROPPER MODAL LOGIC ══ */
     let cropperTargetInput = null;
