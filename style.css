@@ -36,12 +36,19 @@
   --ease-fast: cubic-bezier(0.4,0,0.2,1);
 }
 
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  color-scheme: light !important;
+}
+
 [data-theme="light"] {
   color-scheme: light;
   --bg: #f8fafc;
   --bg-card: #ffffff;
   --bg-card-hover: #ffffff;
-  --border: #e2e8f0;
+  --border: #cbd5e1;
   --border-hover: rgba(2, 132, 199, 0.4);
 
   --teal: #0284c7;
@@ -55,6 +62,34 @@
   --text: #0f172a;
   --text-muted: #475569;
   --text-dim: #64748b;
+}
+
+[data-theme="light"] .glass,
+[data-theme="light"] .proj-card,
+[data-theme="light"] .cert-card,
+[data-theme="light"] .ach-item,
+[data-theme="light"] .tl-item,
+[data-theme="light"] .cinfo,
+[data-theme="light"] .stats-strip,
+[data-theme="light"] .avail-inner,
+[data-theme="light"] .testi-card,
+[data-theme="light"] .gh-repo,
+[data-theme="light"] .blog-card,
+[data-theme="light"] .art-box,
+[data-theme="light"] .cyber-login-card,
+[data-theme="light"] .card {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 20px rgba(15,23,42,0.06) !important;
+}
+
+[data-theme="light"] .hero-title,
+[data-theme="light"] .sec-title,
+[data-theme="light"] .hero-name,
+[data-theme="light"] .art-title,
+[data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3, [data-theme="light"] h4 {
+  color: #0f172a !important;
 }
 
 /* ══ PROFESSIONAL NAV SECTION TRANSITION & BLINK ANIMATION ══ */
