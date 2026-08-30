@@ -54,6 +54,9 @@
 
   --text: #0f172a;
   --text-muted: #475569;
+  --text-dim: #64748b;
+}
+
 /* ══ PROFESSIONAL NAV SECTION TRANSITION & BLINK ANIMATION ══ */
 .nav-progress-line {
   position: fixed; top: 0; left: 0; height: 3px; width: 0%;
