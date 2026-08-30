@@ -64,6 +64,30 @@ html[data-theme="light"] body {
   --text-dim: #64748b;
 }
 
+[data-theme="light"] .navbar {
+  background: rgba(248, 250, 252, 0.92) !important;
+  border-bottom-color: #cbd5e1 !important;
+}
+[data-theme="light"] .nav-brand {
+  color: #0f172a !important;
+}
+[data-theme="light"] .navbar ul li a {
+  color: #475569 !important;
+}
+[data-theme="light"] .navbar ul li a:hover {
+  color: #0284c7 !important;
+  background: rgba(2, 132, 199, 0.08) !important;
+}
+[data-theme="light"] .tech-bg-overlay {
+  opacity: 0.12 !important;
+}
+[data-theme="light"] #particles-js {
+  opacity: 0.25 !important;
+}
+[data-theme="light"] .hero {
+  background: transparent !important;
+}
+
 [data-theme="light"] .glass,
 [data-theme="light"] .proj-card,
 [data-theme="light"] .cert-card,
@@ -75,11 +99,16 @@ html[data-theme="light"] body {
 [data-theme="light"] .testi-card,
 [data-theme="light"] .gh-repo,
 [data-theme="light"] .blog-card,
+[data-theme="light"] .github-card,
+[data-theme="light"] .skills-tag-grid,
 [data-theme="light"] .art-box,
 [data-theme="light"] .cyber-login-card,
-[data-theme="light"] .card {
+[data-theme="light"] .card,
+[data-theme="light"] .admin-sidebar,
+[data-theme="light"] .tab-pane,
+[data-theme="light"] .stat-card {
   background: #ffffff !important;
-  border-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
   color: #0f172a !important;
   box-shadow: 0 4px 20px rgba(15,23,42,0.06) !important;
 }
@@ -88,8 +117,75 @@ html[data-theme="light"] body {
 [data-theme="light"] .sec-title,
 [data-theme="light"] .hero-name,
 [data-theme="light"] .art-title,
+[data-theme="light"] .gh-username,
+[data-theme="light"] .proj-title,
 [data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3, [data-theme="light"] h4 {
   color: #0f172a !important;
+}
+
+[data-theme="light"] p,
+[data-theme="light"] .hero-bio,
+[data-theme="light"] .sec-eyebrow,
+[data-theme="light"] .text-muted,
+[data-theme="light"] .avail-text,
+[data-theme="light"] .gh-bio,
+[data-theme="light"] .stat-label {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .logo-ticker-wrap {
+  background: rgba(248, 250, 252, 0.9) !important;
+  border-color: #cbd5e1 !important;
+}
+[data-theme="light"] .ticker-item {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .footer {
+  background: #f1f5f9 !important;
+  border-top-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+/* Standardized Glossy Mode Button to Match Nav Pills */
+.glossy-theme-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.4rem !important;
+  padding: 0.35rem 0.85rem !important;
+  border-radius: 20px !important;
+  background: rgba(251, 191, 36, 0.1) !important;
+  border: 1px solid rgba(251, 191, 36, 0.3) !important;
+  color: #fbbf24 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  outline: none !important;
+  white-space: nowrap !important;
+  transition: all 0.2s var(--ease-fast) !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+.glossy-theme-btn:hover {
+  background: rgba(251, 191, 36, 0.2) !important;
+  border-color: #fbbf24 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.3) !important;
+}
+
+[data-theme="light"] .glossy-theme-btn {
+  background: rgba(2, 132, 199, 0.08) !important;
+  border-color: rgba(2, 132, 199, 0.3) !important;
+  color: #0284c7 !important;
+}
+[data-theme="light"] .glossy-theme-btn:hover {
+  background: rgba(2, 132, 199, 0.18) !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.25) !important;
 }
 
 /* ══ PROFESSIONAL NAV SECTION TRANSITION & BLINK ANIMATION ══ */
