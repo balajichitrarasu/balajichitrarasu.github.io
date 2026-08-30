@@ -334,60 +334,6 @@
       border-color: rgba(13,148,136,0.3);
       color: #0d9488;
     }
-    /* Cyber Input Groups with Embedded Icons & Working Pass Toggle */
-    .cyber-input-group {
-      position: relative;
-      display: flex;
-      align-items: center;
-      margin-bottom: 1.2rem;
-    }
-    .cyber-input-icon {
-      position: absolute;
-      left: 1rem;
-      font-size: 1.1rem;
-      color: var(--teal);
-      pointer-events: none;
-      z-index: 2;
-    }
-    .cyber-input-field {
-      width: 100%;
-      padding: 0.85rem 1rem 0.85rem 2.8rem;
-      background: rgba(15, 23, 42, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
-      color: #ffffff;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.92rem;
-      outline: none;
-      transition: all 0.25s var(--ease);
-    }
-    .cyber-input-field:focus {
-      border-color: var(--teal);
-      background: rgba(15, 23, 42, 0.9);
-      box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.18), 0 0 20px rgba(100, 255, 218, 0.12);
-    }
-    .pass-toggle-btn {
-      position: absolute;
-      right: 0.6rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(100, 255, 218, 0.3);
-      color: var(--teal);
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 0.38rem 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      z-index: 3;
-    }
-    .pass-toggle-btn:hover {
-      background: var(--teal-dim);
-      border-color: var(--teal);
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
-    }
   </style>
 </head>
 <body>
@@ -414,38 +360,34 @@
         <div class="shield-icon-inner">🛡️</div>
       </div>
 
-      <h2 style="margin:0 0 0.4rem; font-size:1.55rem; color:var(--text); font-weight:800; letter-spacing:-0.02em;">Admin Security Portal</h2>
+      <h2 style="margin:0 0 0.4rem; font-size:1.5rem; color:var(--text); font-weight:800; letter-spacing:-0.02em;">Admin CMS Portal</h2>
       <p style="margin:0 0 1.5rem; font-size:0.82rem; color:var(--text-muted);">Enter master credentials to access portfolio control system.</p>
 
       <div id="login-lockout-msg" style="display:none; background:rgba(244,63,94,0.12); border:1px solid rgba(244,63,94,0.3); color:var(--rose); padding:0.75rem; border-radius:8px; font-size:0.8rem; margin-bottom:1rem; text-align:left;"></div>
       <div id="login-error-msg" style="display:none; background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); color:var(--amber); padding:0.75rem; border-radius:8px; font-size:0.8rem; margin-bottom:1rem; text-align:left;"></div>
 
       <form id="admin-login-form" action="javascript:void(0);" onsubmit="handleAdminLogin(event); return false;" autocomplete="off">
-        <div style="text-align:left; margin-bottom:1rem;">
-          <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text); margin-bottom:0.4rem;">Admin Username</label>
-          <div class="cyber-input-group">
-            <span class="cyber-input-icon">👤</span>
-            <input type="text" id="login-username" class="cyber-input-field" placeholder="Enter admin username..." autocomplete="off" required>
+        <div class="form-input-wrapper">
+          <label style="display:block; font-size:0.78rem; font-weight:600; color:var(--text-muted); margin-bottom:0.4rem;">Admin Username</label>
+          <input type="text" id="login-username" class="form-control" placeholder="e.g. alex_dev" autocomplete="off" required>
+        </div>
+
+        <div class="form-input-wrapper">
+          <label style="display:block; font-size:0.78rem; font-weight:600; color:var(--text-muted); margin-bottom:0.4rem;">Master Password</label>
+          <div style="position:relative;">
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••••••" autocomplete="off" required>
+            <button type="button" id="toggle-pass-btn" onclick="togglePasswordVisibility()" style="position:absolute; right:0.5rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--teal); font-size:0.75rem; font-weight:600; cursor:pointer; padding:0.3rem 0.5rem;">👁️ Show</button>
           </div>
         </div>
 
-        <div style="text-align:left; margin-bottom:1.2rem;">
-          <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text); margin-bottom:0.4rem;">Master Password</label>
-          <div class="cyber-input-group">
-            <span class="cyber-input-icon">🔑</span>
-            <input type="password" id="login-password" class="cyber-input-field" style="padding-right: 5.5rem;" placeholder="Enter master password..." autocomplete="off" required>
-            <button type="button" id="toggle-pass-btn" onclick="togglePasswordVisibility(event)" class="pass-toggle-btn">👁️ Show</button>
-          </div>
-        </div>
-
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; font-size:0.8rem; color:var(--text-muted);">
-          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; user-select:none;">
-            <input type="checkbox" id="login-remember" checked style="width:16px; height:16px; accent-color:var(--teal); cursor:pointer;"> Remember Session (7 Days)
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; font-size:0.78rem; color:var(--text-muted);">
+          <label style="display:flex; align-items:center; gap:0.4rem; cursor:pointer;">
+            <input type="checkbox" id="login-remember" checked style="accent-color:var(--teal);"> Remember Session (7 Days)
           </label>
-          <span style="color:var(--teal); font-size:0.72rem; font-weight:700; font-family:'DM Mono',monospace; background:rgba(100,255,218,0.08); padding:0.2rem 0.65rem; border-radius:12px; border:1px solid rgba(100,255,218,0.25);">🔒 SHA-256 Auth</span>
+          <span style="color:var(--teal); font-size:0.72rem; background:rgba(100,255,218,0.08); padding:0.15rem 0.55rem; border-radius:10px; border:1px solid rgba(100,255,218,0.2);">SHA-256 Auth</span>
         </div>
 
-        <button type="submit" onclick="handleAdminLogin(event)" id="login-submit-btn" class="btn btn-primary" style="width:100%; padding:0.95rem; font-size:0.98rem; font-weight:700; border-radius:10px; cursor:pointer; background:linear-gradient(135deg, rgba(100,255,218,0.25), rgba(167,139,250,0.25)); border:1px solid var(--teal); color:#ffffff; box-shadow:0 8px 25px rgba(100,255,218,0.2); transition:all 0.25s var(--ease);">
+        <button type="button" onclick="handleAdminLogin(event)" id="login-submit-btn" class="btn btn-primary" style="width:100%; padding:0.9rem; font-size:0.95rem; font-weight:700; border-radius:10px; cursor:pointer; background:linear-gradient(135deg, rgba(100,255,218,0.25), rgba(167,139,250,0.25)); border:1px solid var(--teal); color:var(--teal); transition:all 0.25s ease;">
           🔓 Authenticate &amp; Enter CMS
         </button>
       </form>
@@ -943,11 +885,7 @@
       if (btn) btn.style.display = 'inline-block';
     };
 
-    window.togglePasswordVisibility = function(e) {
-      if (e) {
-        if (typeof e.preventDefault === 'function') e.preventDefault();
-        if (typeof e.stopPropagation === 'function') e.stopPropagation();
-      }
+    window.togglePasswordVisibility = function() {
       const p = document.getElementById('login-password');
       const b = document.getElementById('toggle-pass-btn');
       if (!p) return;
@@ -2335,6 +2273,6 @@
     });
   </script>
   <div id="toast"></div>
-  <script src="script.js?v=15.0"></script>
+  <script src="script.js?v=14.0"></script>
 </body>
 </html>
