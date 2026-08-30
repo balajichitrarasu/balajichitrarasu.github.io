@@ -206,7 +206,59 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }, { threshold: 0.4 }).observe(s);
     });
-  }
+  /* ────────────────────────────────────────
+     PROFESSIONAL NAVBAR CLICK SECTION BLINK & PULSE REVEAL
+  ─────────────────────────────────────────── */
+  var allNavAnchors = document.querySelectorAll('.navbar ul li a[href^="#"], .hero-ctas a[href^="#"], .avail-cta[href^="#"]');
+  var progLine = document.getElementById('navProgressLine');
+  var transOverlay = document.getElementById('pageTransitionOverlay');
+
+  allNavAnchors.forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var targetId = this.getAttribute('href');
+      if (!targetId || targetId === '#' || targetId.indexOf('#') !== 0) return;
+      var targetSec = document.querySelector(targetId);
+      if (!targetSec) return;
+
+      e.preventDefault();
+
+      if (progLine) {
+        progLine.style.width = '0%';
+        progLine.classList.add('active');
+        setTimeout(function() { progLine.style.width = '100%'; }, 20);
+        setTimeout(function() {
+          progLine.classList.remove('active');
+          progLine.style.width = '0%';
+        }, 380);
+      }
+
+      if (transOverlay) {
+        transOverlay.classList.remove('blink-active');
+        void transOverlay.offsetWidth;
+        transOverlay.classList.add('blink-active');
+      }
+
+      setTimeout(function() {
+        var topY = targetSec.getBoundingClientRect().top + window.pageYOffset - 70;
+        window.scrollTo({ top: topY, behavior: 'auto' });
+
+        targetSec.classList.remove('section-pulse-active');
+        void targetSec.offsetWidth;
+        targetSec.classList.add('section-pulse-active');
+
+        var secTitle = targetSec.querySelector('.sec-title');
+        if (secTitle) {
+          secTitle.classList.remove('sec-title-pulse');
+          void secTitle.offsetWidth;
+          secTitle.classList.add('sec-title-pulse');
+        }
+
+        setTimeout(function() {
+          targetSec.classList.remove('section-pulse-active');
+        }, 1300);
+      }, 140);
+    });
+  });
 
   /* ────────────────────────────────────────
      REVEAL ON SCROLL (fixed NodeList bug)

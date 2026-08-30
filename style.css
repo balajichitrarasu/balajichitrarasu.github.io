@@ -54,7 +54,62 @@
 
   --text: #0f172a;
   --text-muted: #475569;
-  --text-dim: #64748b;
+/* ══ PROFESSIONAL NAV SECTION TRANSITION & BLINK ANIMATION ══ */
+.nav-progress-line {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--teal), var(--violet), var(--emerald));
+  z-index: 10001; opacity: 0;
+  transition: width 0.35s ease, opacity 0.2s ease;
+  box-shadow: 0 0 10px var(--teal);
+}
+.nav-progress-line.active {
+  opacity: 1; width: 100%;
+}
+
+.page-transition-overlay {
+  position: fixed; inset: 0; z-index: 9998;
+  background: rgba(9, 13, 22, 0.4);
+  backdrop-filter: blur(8px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.page-transition-overlay.blink-active {
+  animation: pageBlinkFlash 0.35s ease-out forwards;
+}
+
+@keyframes pageBlinkFlash {
+  0% { opacity: 0; backdrop-filter: blur(0px); }
+  40% { opacity: 1; backdrop-filter: blur(12px); background: rgba(56, 189, 248, 0.08); }
+  100% { opacity: 0; backdrop-filter: blur(0px); }
+}
+
+/* Section Cyber Pulse Highlight when clicked from Navbar */
+.section-pulse-active {
+  animation: sectionCyberGlow 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes sectionCyberGlow {
+  0% {
+    transform: scale(0.985);
+    box-shadow: 0 0 0px rgba(56, 189, 248, 0);
+  }
+  30% {
+    transform: scale(1.005);
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.35);
+    border-color: var(--teal);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0px rgba(56, 189, 248, 0);
+  }
+}
+
+.sec-title-pulse {
+  animation: titlePulseGlow 1s ease-in-out;
+}
+@keyframes titlePulseGlow {
+  0%, 100% { color: var(--text); text-shadow: none; }
+  50% { color: var(--teal); text-shadow: 0 0 16px rgba(56, 189, 248, 0.6); }
 }
 
 body, .navbar, .glass, .proj-card, .cert-card, .ach-item, .modal-box, .cmd-box, .stats-strip, .avail-inner, .testi-card, .gh-repo {
