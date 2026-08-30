@@ -4,9 +4,11 @@
    with automatic localStorage fallback when offline!
    ════════════════════════════════════════════════════════════════ */
 
+const RENDER_BACKEND_URL = 'https://balaji-portfolio-backend.onrender.com';
+
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:3000'
-  : (window.PORTFOLIO_API_URL || 'http://localhost:3000');
+  : (window.PORTFOLIO_API_URL || RENDER_BACKEND_URL);
 
 window.PortfolioAPI = {
   isOnline: false,
