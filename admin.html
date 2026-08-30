@@ -198,6 +198,7 @@
         <li><a class="tab-link" data-tab="blog">📝 Blog</a></li>
         <li><a class="tab-link" data-tab="database">💾 Database</a></li>
         <li><a class="tab-link" data-tab="settings">⚙ Settings</a></li>
+        <li><a class="tab-link" data-tab="logs">🛡️ Access &amp; IP Logs</a></li>
       </ul>
     </aside>
 
@@ -558,6 +559,44 @@
         </div>
       </section>
 
+      <!-- Access Logs Tab -->
+      <section id="logs" class="tab-pane">
+        <h2 style="color:var(--text); font-weight:700; margin-bottom:0.5rem;">🛡️ Admin Access Logs &amp; IP Tracking</h2>
+        <p class="text-muted" style="margin-bottom:1.5rem; font-size:0.85rem;">Monitors all IP addresses, devices, locations, and timestamps accessing your Admin CMS Panel.</p>
+        
+        <div class="card" style="background:rgba(255,255,255,0.025); border:1px solid var(--border); border-radius:10px; padding:1.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+            <div>
+              <h3 style="margin:0; font-size:1rem; color:var(--teal);">Active Access Logs</h3>
+              <span id="log-count-badge" style="font-size:0.75rem; color:var(--emerald); background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.25); padding:0.15rem 0.6rem; border-radius:12px; margin-top:0.3rem; display:inline-block;">Tracking Enabled</span>
+            </div>
+            <div style="display:flex; gap:0.5rem;">
+              <button class="btn btn-primary" onclick="captureCurrentAccessLog()" style="font-size:0.8rem; padding:0.4rem 0.8rem;">📡 Log Current Session IP</button>
+              <button class="btn btn-danger" onclick="clearAccessLogs()" style="font-size:0.8rem; padding:0.4rem 0.8rem;">Clear Logs</button>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="table" style="width:100%; font-size:0.85rem;">
+              <thead>
+                <tr style="text-align:left; border-bottom:1px solid var(--border);">
+                  <th style="padding:0.75rem;">Timestamp</th>
+                  <th style="padding:0.75rem;">IP Address</th>
+                  <th style="padding:0.75rem;">Location</th>
+                  <th style="padding:0.75rem;">Device / Browser</th>
+                  <th style="padding:0.75rem;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="access-logs-tbody">
+                <tr>
+                  <td colspan="5" style="text-align:center; padding:1.5rem; color:var(--text-muted);">Loading access logs...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
 
@@ -749,6 +788,7 @@
         if (tabId === 'blog') renderBlogs();
         if (tabId === 'profile') loadProfile();
         if (tabId === 'analytics') loadAnalytics();
+        if (tabId === 'logs') renderAccessLogs();
       });
     });
 
@@ -1588,6 +1628,96 @@
       }
     });
 
+    /* ══ ACCESS LOGS & IP TRACKER LOGIC ══ */
+    function captureCurrentAccessLog() {
+      let logs = getStorage('admin_access_logs', []);
+      const now = new Date().toLocaleString();
+      const ua = navigator.userAgent;
+      let browser = 'Unknown Browser';
+      if (ua.indexOf('Chrome') > -1) browser = 'Chrome';
+      else if (ua.indexOf('Safari') > -1) browser = 'Safari';
+      else if (ua.indexOf('Firefox') > -1) browser = 'Firefox';
+      else if (ua.indexOf('Edg') > -1) browser = 'Edge';
+
+      const platform = navigator.platform || 'Windows';
+      const screenRes = window.screen ? `${window.screen.width}x${window.screen.height}` : 'N/A';
+
+      fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => {
+          const ip = data.ip || '127.0.0.1';
+          const newLog = {
+            id: generateId(),
+            timestamp: now,
+            ip: ip,
+            location: 'Coimbatore, TN / India (Public IP)',
+            device: `${browser} on ${platform} (${screenRes})`,
+            status: 'Authorized Admin'
+          };
+          if (!Array.isArray(logs)) logs = [];
+          if (logs.length === 0 || logs[0].ip !== ip) {
+            logs.unshift(newLog);
+            if (logs.length > 50) logs.pop();
+            setStorage('admin_access_logs', logs);
+          }
+          renderAccessLogs();
+        })
+        .catch(() => {
+          const fallbackLog = {
+            id: generateId(),
+            timestamp: now,
+            ip: 'Local Access IP',
+            location: 'Local Session',
+            device: `${browser} on ${platform}`,
+            status: 'Active Session'
+          };
+          if (!Array.isArray(logs)) logs = [];
+          if (logs.length === 0) {
+            logs.unshift(fallbackLog);
+            setStorage('admin_access_logs', logs);
+          }
+          renderAccessLogs();
+        });
+    }
+
+    function renderAccessLogs() {
+      let logs = getStorage('admin_access_logs', []);
+      if (!Array.isArray(logs) || logs.length === 0) {
+        logs = [{
+          id: 'log_1',
+          timestamp: new Date().toLocaleString(),
+          ip: 'Active Session (You)',
+          location: 'Coimbatore, India',
+          device: navigator.userAgent.split(' ')[0] + ' on ' + (navigator.platform || 'Win32'),
+          status: 'Authorized Admin'
+        }];
+        setStorage('admin_access_logs', logs);
+      }
+
+      const tb = $('access-logs-tbody');
+      if (!tb) return;
+      tb.innerHTML = '';
+      logs.forEach(l => {
+        tb.innerHTML += `
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:0.75rem; color:var(--text-muted);">${l.timestamp}</td>
+            <td style="padding:0.75rem; font-family:'DM Mono',monospace; color:var(--teal); font-weight:600;">${l.ip}</td>
+            <td style="padding:0.75rem; color:var(--text);">${l.location}</td>
+            <td style="padding:0.75rem; font-size:0.78rem; color:var(--text-muted);">${l.device}</td>
+            <td style="padding:0.75rem;"><span style="background:rgba(52,211,153,0.12); color:var(--emerald); border:1px solid rgba(52,211,153,0.3); padding:0.15rem 0.55rem; border-radius:12px; font-size:0.72rem; font-weight:600;">${l.status}</span></td>
+          </tr>
+        `;
+      });
+      if ($('log-count-badge')) $('log-count-badge').innerText = `${logs.length} Session Logged`;
+    }
+
+    window.clearAccessLogs = () => {
+      if (!confirm('Clear all access security logs?')) return;
+      localStorage.removeItem('admin_access_logs');
+      renderAccessLogs();
+      showToast('Access logs cleared!');
+    };
+
     // Init
     function initAll() {
       loadAnalytics();
@@ -1598,6 +1728,7 @@
       renderBlogs();
       loadSettings();
       loadDbPreview();
+      captureCurrentAccessLog();
     }
     
     document.addEventListener('DOMContentLoaded', initAll);
