@@ -1535,3 +1535,133 @@ footer {
 .event-org { font-size: 0.82rem; color: var(--teal); margin-bottom: 0.8rem; font-weight: 500; }
 .event-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; }
 
+/* ════════════════════════════════════════════════════════
+   GLOBAL LIGHT THEME OVERRIDES (PLACED AT BOTTOM FOR CASCADE PRIORITY)
+   ════════════════════════════════════════════════════════ */
+[data-theme="light"],
+[data-theme="light"] body,
+html[data-theme="light"],
+body[data-theme="light"] {
+  color-scheme: light !important;
+  background-color: #f8fafc !important;
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  --bg: #f8fafc !important;
+  --bg-card: #ffffff !important;
+  --bg-card-hover: #f1f5f9 !important;
+  --border: #cbd5e1 !important;
+  --border-hover: rgba(2, 132, 199, 0.4) !important;
+
+  --teal: #0284c7 !important;
+  --teal-dim: rgba(2, 132, 199, 0.08) !important;
+  --violet: #4f46e5 !important;
+  --violet-dim: rgba(79, 70, 229, 0.08) !important;
+  --emerald: #059669 !important;
+  --amber: #d97706 !important;
+  --rose: #dc2626 !important;
+
+  --text: #0f172a !important;
+  --text-muted: #475569 !important;
+  --text-dim: #64748b !important;
+}
+
+[data-theme="light"] body::before {
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(2,132,199,0.06) 0%, transparent 70%) !important;
+}
+
+[data-theme="light"] .navbar {
+  background: rgba(248, 250, 252, 0.94) !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+}
+[data-theme="light"] .nav-brand {
+  color: #0f172a !important;
+}
+[data-theme="light"] .navbar ul li a {
+  color: #475569 !important;
+}
+[data-theme="light"] .navbar ul li a:hover {
+  color: #0284c7 !important;
+  background: rgba(2, 132, 199, 0.08) !important;
+}
+[data-theme="light"] .tech-bg-overlay {
+  opacity: 0.05 !important;
+  background: #f8fafc !important;
+}
+[data-theme="light"] #particles-js {
+  opacity: 0.15 !important;
+  background: transparent !important;
+}
+[data-theme="light"] .hero {
+  background: transparent !important;
+}
+
+[data-theme="light"] .glass,
+[data-theme="light"] .proj-card,
+[data-theme="light"] .cert-card,
+[data-theme="light"] .ach-item,
+[data-theme="light"] .tl-item,
+[data-theme="light"] .cinfo,
+[data-theme="light"] .stats-strip,
+[data-theme="light"] .avail-inner,
+[data-theme="light"] .testi-card,
+[data-theme="light"] .gh-repo,
+[data-theme="light"] .blog-card,
+[data-theme="light"] .github-card,
+[data-theme="light"] .skills-tag-grid,
+[data-theme="light"] .art-box,
+[data-theme="light"] .cyber-login-card,
+[data-theme="light"] .card,
+[data-theme="light"] .admin-sidebar,
+[data-theme="light"] .tab-pane,
+[data-theme="light"] .stat-card,
+[data-theme="light"] .event-card {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 20px rgba(15,23,42,0.06) !important;
+}
+
+[data-theme="light"] .hero-title,
+[data-theme="light"] .sec-title,
+[data-theme="light"] .hero-name,
+[data-theme="light"] .art-title,
+[data-theme="light"] .gh-username,
+[data-theme="light"] .proj-title,
+[data-theme="light"] .event-title,
+[data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3, [data-theme="light"] h4 {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] p,
+[data-theme="light"] .hero-bio,
+[data-theme="light"] .sec-eyebrow,
+[data-theme="light"] .text-muted,
+[data-theme="light"] .avail-text,
+[data-theme="light"] .gh-bio,
+[data-theme="light"] .stat-label,
+[data-theme="light"] .event-desc {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .logo-ticker-wrap {
+  background: rgba(248, 250, 252, 0.9) !important;
+  border-color: #cbd5e1 !important;
+}
+[data-theme="light"] .ticker-item {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .footer {
+  background: #f1f5f9 !important;
+  border-top-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+[data-theme="light"] .glossy-theme-btn {
+  background: rgba(2, 132, 199, 0.08) !important;
+  border-color: rgba(2, 132, 199, 0.3) !important;
+  color: #0284c7 !important;
+}
+

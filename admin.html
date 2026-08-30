@@ -6,12 +6,13 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=17.0">
+  <link rel="stylesheet" href="style.css?v=18.0">
   <script>
   window.toggleTheme = function() {
     var cur = document.documentElement.getAttribute('data-theme') || 'dark';
     var next = cur === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
+    if (document.body) document.body.setAttribute('data-theme', next);
     try { localStorage.setItem('site_theme', next); } catch(e) {}
     document.querySelectorAll('.glossy-theme-btn, #themeToggle').forEach(function(b) {
       b.setAttribute('title', next === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
@@ -24,6 +25,7 @@
     try {
       var saved = localStorage.getItem('site_theme') || 'dark';
       document.documentElement.setAttribute('data-theme', saved);
+      if (document.body) document.body.setAttribute('data-theme', saved);
     } catch(e) {}
   })();
   </script>

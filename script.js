@@ -13,6 +13,7 @@ window.toggleTheme = function() {
   var cur = document.documentElement.getAttribute('data-theme') || 'dark';
   var next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
+  if (document.body) document.body.setAttribute('data-theme', next);
   try { localStorage.setItem('site_theme', next); } catch(e) {}
   document.querySelectorAll('#themeToggle, .theme-toggle-btn, .glossy-theme-btn').forEach(function(btn) {
     btn.setAttribute('title', next === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
@@ -24,6 +25,7 @@ window.toggleTheme = function() {
   try {
     var saved = localStorage.getItem('site_theme') || 'dark';
     document.documentElement.setAttribute('data-theme', saved);
+    if (document.body) document.body.setAttribute('data-theme', saved);
   } catch (e) {}
 })();
 
