@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=47.0">
+  <link rel="stylesheet" href="style.css?v=48.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1135,6 +1135,7 @@
               <label style="font-weight:600; display:block; margin-bottom:0.4rem; color:var(--text);">Upload New Logo Image (PNG / JPG / SVG)</label>
               <input type="file" id="set-logo-file" class="form-control" accept="image/*" style="max-width:460px;">
               <input type="text" id="set-logo-url" class="form-control" placeholder="logo.png" style="margin-top:0.5rem; max-width:460px;">
+              <button type="button" class="btn btn-primary" onclick="openCropperForTarget('set-logo-url', 'preview-logo-login', 1)" style="margin-top:0.5rem; font-size:0.8rem; padding:0.35rem 0.8rem;">✂️ Crop Emblem Logo</button>
             </div>
             
             <!-- LIVE PREVIEW BOX -->
