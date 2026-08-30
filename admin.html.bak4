@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=41.0">
+  <link rel="stylesheet" href="style.css?v=40.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1715,16 +1715,14 @@
         showToast('📸 Profile Photo & Details Updated & Live on Portfolio!');
       }, 500);
     });
-    if ($('prof-reset')) {
-      $('prof-reset').addEventListener('click', () => {
-        localStorage.removeItem('custom_profile_avatar');
-        localStorage.removeItem('custom_profile_name');
-        localStorage.removeItem('custom_profile_role');
-        localStorage.removeItem('custom_profile_location');
-        loadProfile();
-        showToast('Profile reset to default!');
-      });
-    }
+    $('prof-reset').addEventListener('click', () => {
+      localStorage.removeItem('custom_profile_avatar');
+      localStorage.removeItem('custom_profile_name');
+      localStorage.removeItem('custom_profile_role');
+      localStorage.removeItem('custom_profile_location');
+      loadProfile();
+      showToast('Profile reset to default!');
+    });
 
     window.exportProfileJpg = () => {
       const avatarData = ($('prof-avatar') ? $('prof-avatar').value : '') || localStorage.getItem('custom_profile_avatar');
@@ -2215,20 +2213,18 @@
       showToast('Default projects restored!');
     };
 
-    if ($('proj-cancel')) {
-      $('proj-cancel').addEventListener('click', () => {
-        if ($('proj-form')) $('proj-form').reset();
-        if ($('proj-id')) $('proj-id').value = '';
-        if ($('projProgressVal')) $('projProgressVal').innerText = '65';
-        if ($('proj-form-title')) $('proj-form-title').innerText = 'Add Project';
-        $('proj-cancel').style.display = 'none';
-      });
-    }
+    $('proj-cancel').addEventListener('click', () => {
+      $('proj-form').reset();
+      $('proj-id').value = '';
+      if ($('projProgressVal')) $('projProgressVal').innerText = '65';
+      $('proj-form-title').innerText = 'Add Project';
+      $('proj-cancel').style.display = 'none';
+    });
+
 
     // Skills CRUD
     function renderSkills() {
       const tb = $('skill-tbody');
-      if (!tb) return;
       tb.innerHTML = '';
       skills.forEach((s, i) => {
         tb.innerHTML += `
@@ -2252,35 +2248,32 @@
       if (window.PortfolioAPI) PortfolioAPI.saveSkills(skills);
     }
 
-    if ($('skill-form')) {
-      $('skill-form').addEventListener('submit', e => {
-        e.preventDefault();
-        const idx = $('skill-index') ? $('skill-index').value : '';
-        const skill = {
-          name: $('skill-name') ? $('skill-name').value : '',
-          icon: $('skill-icon') ? $('skill-icon').value : '',
-          pct: parseInt($('skill-pct') ? $('skill-pct').value : 0),
-          category: $('skill-cat') ? $('skill-cat').value : ''
-        };
-        if(idx !== '') skills[idx] = skill;
-        else skills.push(skill);
-        renderSkills();
-        e.target.reset();
-        if ($('skill-index')) $('skill-index').value = '';
-        if ($('skill-cancel')) $('skill-cancel').style.display = 'none';
-        showToast('Skill saved!');
-      });
-    }
+    $('skill-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const idx = $('skill-index').value;
+      const skill = {
+        name: $('skill-name').value,
+        icon: $('skill-icon').value,
+        pct: parseInt($('skill-pct').value),
+        category: $('skill-cat').value
+      };
+      if(idx !== '') skills[idx] = skill;
+      else skills.push(skill);
+      renderSkills();
+      e.target.reset();
+      $('skill-index').value = '';
+      $('skill-cancel').style.display = 'none';
+      showToast('Skill saved!');
+    });
 
     window.editSkill = i => {
       const s = skills[i];
-      if (!s) return;
-      if ($('skill-index')) $('skill-index').value = i;
-      if ($('skill-name')) $('skill-name').value = s.name;
-      if ($('skill-icon')) $('skill-icon').value = s.icon || '';
-      if ($('skill-pct')) $('skill-pct').value = s.pct;
-      if ($('skill-cat')) $('skill-cat').value = s.category || '';
-      if ($('skill-cancel')) $('skill-cancel').style.display = 'inline-block';
+      $('skill-index').value = i;
+      $('skill-name').value = s.name;
+      $('skill-icon').value = s.icon || '';
+      $('skill-pct').value = s.pct;
+      $('skill-cat').value = s.category || '';
+      $('skill-cancel').style.display = 'inline-block';
     };
     window.deleteSkill = i => {
       if(confirm('Delete skill?')) {
@@ -2295,22 +2288,18 @@
       skills[i + dir] = temp;
       renderSkills();
     };
-    if ($('skill-cancel')) {
-      $('skill-cancel').addEventListener('click', () => {
-        if ($('skill-form')) $('skill-form').reset();
-        if ($('skill-index')) $('skill-index').value = '';
-        $('skill-cancel').style.display = 'none';
-      });
-    }
-    if ($('skill-restore')) {
-      $('skill-restore').addEventListener('click', () => {
-        if(confirm('Restore default skills? All changes will be lost.')) {
-          skills = [...defaultSkills];
-          renderSkills();
-          showToast('Default skills restored!');
-        }
-      });
-    }
+    $('skill-cancel').addEventListener('click', () => {
+      $('skill-form').reset();
+      $('skill-index').value = '';
+      $('skill-cancel').style.display = 'none';
+    });
+    $('skill-restore').addEventListener('click', () => {
+      if(confirm('Restore default skills? All changes will be lost.')) {
+        skills = [...defaultSkills];
+        renderSkills();
+        showToast('Default skills restored!');
+      }
+    });
 
     // Blog CRUD
     function renderBlogs() {
@@ -2651,55 +2640,49 @@
       }
       $('db-preview').value = JSON.stringify(data, null, 2);
     }
-    if ($('db-export')) {
-      $('db-export').addEventListener('click', () => {
-        if (!$('db-preview')) return;
-        const data = $('db-preview').value;
-        const blob = new Blob([data], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `portfolio_backup_${new Date().getTime()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-      });
-    }
+    
+    $('db-export').addEventListener('click', () => {
+      const data = $('db-preview').value;
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `portfolio_backup_${new Date().getTime()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
 
-    if ($('db-import')) {
-      $('db-import').addEventListener('change', e => {
-        const file = e.target.files[0];
-        if(!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-          try {
-            const data = JSON.parse(ev.target.result);
-            Object.keys(data).forEach(k => {
-              setStorage(k, data[k]);
-            });
-            showToast('Data imported successfully!');
-            setTimeout(() => location.reload(), 1000);
-          } catch(err) {
-            alert('Invalid JSON file');
-          }
-        };
-        reader.readAsText(file);
-      });
-    }
-
-    if ($('db-reset')) {
-      $('db-reset').addEventListener('click', () => {
-        if(confirm('DANGER! This will delete all custom data. Are you sure?')) {
-          const keys = [];
-          for(let i=0; i<localStorage.length; i++) {
-            const k = localStorage.key(i);
-            if(k.startsWith('custom_') || k.startsWith('site_')) keys.push(k);
-          }
-          keys.forEach(k => localStorage.removeItem(k));
-          showToast('Database reset!');
-          setTimeout(() => location.reload(), 1000);
+    $('db-import').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          Object.keys(data).forEach(k => {
+            setStorage(k, data[k]);
+          });
+          initAll();
+          showToast('Data imported successfully!');
+        } catch(err) {
+          alert('Invalid JSON file');
         }
-      });
-    }
+      };
+      reader.readAsText(file);
+    });
+
+    $('db-reset').addEventListener('click', () => {
+      if(confirm('DANGER! This will delete all custom data. Are you sure?')) {
+        const keys = [];
+        for(let i=0; i<localStorage.length; i++) {
+          if(localStorage.key(i).startsWith('custom_') || localStorage.key(i).startsWith('site_')) {
+            keys.push(localStorage.key(i));
+          }
+        }
+        keys.forEach(k => localStorage.removeItem(k));
+        location.reload();
+      }
+    });
 
     /* ══ ACCESS LOGS & IP TRACKER LOGIC WITH CROSS-DEVICE CLOUD SYNC ══ */
     async function captureCurrentAccessLog() {
