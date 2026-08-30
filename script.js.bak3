@@ -1069,19 +1069,19 @@ window.closeAbout = function() {
 (function initVisibility() {
   function apply() {
     var recs = localStorage.getItem('hide_recommendations');
-    var rEl = document.querySelector('section.section#recommendations, #recommendations.section');
+    var rEl = document.getElementById('recommendations');
     if (rEl) rEl.style.display = (recs === 'false') ? 'block' : 'none';
 
     var evs = localStorage.getItem('hide_events');
-    var eEl = document.querySelector('section.section#events, #events.section');
+    var eEl = document.getElementById('events');
     if (eEl) eEl.style.display = (evs === 'true') ? 'none' : 'block';
 
     var ghs = localStorage.getItem('hide_github');
-    var gEl = document.querySelector('section.section#github, #github.section');
+    var gEl = document.getElementById('github');
     if (gEl) gEl.style.display = (ghs === 'true') ? 'none' : 'block';
 
     var achs = localStorage.getItem('hide_achievements');
-    var aEl = document.querySelector('section.section#achievements, #achievements.section');
+    var aEl = document.getElementById('achievements');
     if (aEl) aEl.style.display = (achs === 'true') ? 'none' : 'block';
   }
   document.addEventListener('DOMContentLoaded', apply);

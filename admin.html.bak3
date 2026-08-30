@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=40.0">
+  <link rel="stylesheet" href="style.css?v=39.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1580,7 +1580,7 @@
     let ticker = getStorage('custom_ticker', defaultTicker);
     let events = getStorage('custom_events', defaultEvents);
 
-    // Tab Switching with Auto-Arrange & Inline Display Reset
+    // Tab Switching
     document.querySelectorAll('.tab-link').forEach(link => {
       link.addEventListener('click', e => {
         const btn = e.currentTarget || e.target.closest('.tab-link');
@@ -1589,19 +1589,12 @@
         if (!tabId) return;
 
         document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
-        document.querySelectorAll('.tab-pane').forEach(p => {
-          p.classList.remove('active');
-          p.style.display = 'none';
-        });
-        
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
         const pane = $(tabId);
-        if (pane) {
-          pane.classList.add('active');
-          pane.style.display = 'block';
-        }
+        if (pane) pane.classList.add('active');
 
-        // Re-render tab content on switch with smooth auto-arrange
+        // Re-render tab content on switch
         if (tabId === 'certs') renderCerts();
         if (tabId === 'projects') renderProjects();
         if (tabId === 'skills') renderSkills();
