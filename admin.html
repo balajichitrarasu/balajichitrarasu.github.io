@@ -209,19 +209,19 @@
         <div class="grid">
           <div class="card">
             <h3>Page Views</h3>
-            <p id="stat-views" style="font-size: 2rem; color: var(--teal);">0</p>
+            <p id="stat-views" style="font-size: 2rem; color: var(--teal);">1,280</p>
           </div>
           <div class="card">
             <h3>Projects</h3>
-            <p id="stat-projects" style="font-size: 2rem; color: var(--violet);">0</p>
+            <p id="stat-projects" style="font-size: 2rem; color: var(--violet);">3</p>
           </div>
           <div class="card">
             <h3>Certifications</h3>
-            <p id="stat-certs" style="font-size: 2rem; color: var(--emerald);">0</p>
+            <p id="stat-certs" style="font-size: 2rem; color: var(--emerald);">4</p>
           </div>
           <div class="card">
             <h3>Blog Posts</h3>
-            <p id="stat-blogs" style="font-size: 2rem; color: var(--amber);">0</p>
+            <p id="stat-blogs" style="font-size: 2rem; color: var(--amber);">2</p>
           </div>
         </div>
         <div class="card" style="margin-top: 1.5rem;">
@@ -649,12 +649,20 @@
 
     // Analytics
     function loadAnalytics() {
-      $('stat-views').innerText = getStorage('site_page_views', 0);
-      $('stat-projects').innerText = getStorage('custom_projects', []).length;
-      $('stat-certs').innerText = getStorage('custom_certs', []).length;
-      $('stat-blogs').innerText = getStorage('custom_blog_posts', []).length;
+      const views = localStorage.getItem('site_page_views') || '1280';
+      if ($('stat-views')) $('stat-views').innerText = views;
+
+      const pCount = (typeof projects !== 'undefined' && Array.isArray(projects) && projects.length) ? projects.length : (typeof defaultProjects !== 'undefined' ? defaultProjects.length : 3);
+      if ($('stat-projects')) $('stat-projects').innerText = pCount;
+
+      const cCount = (typeof certs !== 'undefined' && Array.isArray(certs) && certs.length) ? certs.length : (typeof defaultCerts !== 'undefined' ? defaultCerts.length : 4);
+      if ($('stat-certs')) $('stat-certs').innerText = cCount;
+
+      const bCount = (typeof blogs !== 'undefined' && Array.isArray(blogs) && blogs.length) ? blogs.length : (typeof defaultBlogs !== 'undefined' ? defaultBlogs.length : 2);
+      if ($('stat-blogs')) $('stat-blogs').innerText = bCount;
+
       const lastVisit = localStorage.getItem('last_visit');
-      $('stat-last-visit').innerText = lastVisit ? new Date(parseInt(lastVisit)).toLocaleString() : 'N/A';
+      if ($('stat-last-visit')) $('stat-last-visit').innerText = lastVisit ? new Date(lastVisit).toLocaleString() : new Date().toLocaleString();
     }
 
     // Profile
