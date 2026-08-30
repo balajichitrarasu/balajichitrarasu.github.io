@@ -15,6 +15,82 @@
       min-height: calc(100vh - var(--nav-h));
       padding-top: var(--nav-h);
     }
+
+    /* ══ FUTURISTIC CYBER LOGIN & WELCOME ANIMATION STYLES ══ */
+    .cyber-login-bg {
+      position: fixed; inset: 0; z-index: 9999;
+      background: radial-gradient(circle at 50% 30%, rgba(100, 255, 218, 0.08) 0%, rgba(15, 17, 23, 0.98) 70%);
+      backdrop-filter: blur(28px);
+      display: flex; align-items: center; justify-content: center; padding: 1.5rem;
+      overflow: hidden;
+    }
+    .cyber-login-card {
+      position: relative; z-index: 2;
+      background: rgba(15, 20, 35, 0.85);
+      border: 1px solid rgba(100, 255, 218, 0.25);
+      border-radius: 20px; max-width: 450px; width: 100%;
+      padding: 2.5rem 2.2rem; color: #fff;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 40px rgba(100, 255, 218, 0.12);
+      backdrop-filter: blur(20px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .shield-badge-container {
+      position: relative; width: 72px; height: 72px; margin: 0 auto 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .shield-ring {
+      position: absolute; inset: -4px; border-radius: 50%;
+      border: 2px dashed rgba(100, 255, 218, 0.5);
+      animation: spinRing 12s linear infinite;
+    }
+    @keyframes spinRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .shield-icon-inner {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(100, 255, 218, 0.15), rgba(167, 139, 250, 0.15));
+      border: 1px solid var(--teal); display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; box-shadow: 0 0 25px rgba(100, 255, 218, 0.3);
+    }
+    .form-input-wrapper {
+      position: relative; margin-bottom: 1.2rem; text-align: left;
+    }
+    .form-input-wrapper input {
+      width: 100%; padding: 0.85rem 1rem 0.85rem 2.6rem;
+      background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px; color: #fff; font-family: inherit; font-size: 0.9rem;
+      transition: all 0.25s ease;
+    }
+    .form-input-wrapper input:focus {
+      outline: none; background: rgba(100, 255, 218, 0.04);
+      border-color: var(--teal); box-shadow: 0 0 15px rgba(100, 255, 218, 0.2);
+    }
+    .form-input-icon {
+      position: absolute; left: 0.9rem; top: 2.3rem; color: var(--teal); font-size: 0.95rem; opacity: 0.8;
+    }
+    .welcome-overlay {
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(8, 11, 20, 0.97); backdrop-filter: blur(30px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #fff; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+    }
+    .welcome-overlay.show { opacity: 1; pointer-events: all; }
+    .welcome-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 800; color: #0f1117;
+      box-shadow: 0 0 35px rgba(100, 255, 218, 0.5);
+      animation: pulseAvatar 2s ease-in-out infinite; margin-bottom: 1.5rem;
+    }
+    @keyframes pulseAvatar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    .welcome-bar-track {
+      width: 280px; height: 4px; background: rgba(255, 255, 255, 0.1);
+      border-radius: 99px; overflow: hidden; margin-top: 1.5rem;
+    }
+    .welcome-bar-fill {
+      height: 100%; width: 0%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--teal), #a78bfa);
+      transition: width 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
     .admin-sidebar {
       width: 250px;
       background: var(--bg-card);
@@ -191,30 +267,31 @@
     </div>
   </nav>
 
-  <!-- SECURE AUTHENTICATION GATE MODAL OVERLAY -->
-  <div id="loginModal" style="display:flex; position:fixed; inset:0; z-index:9999; background:rgba(6,8,14,0.96); backdrop-filter:blur(24px); align-items:center; justify-content:center; padding:1.5rem;">
-    <div style="background:#0e1322; border:1px solid rgba(100,255,218,0.2); border-radius:16px; max-width:440px; width:100%; padding:2.2rem; color:#fff; box-shadow:0 25px 70px rgba(0,0,0,0.85); text-align:center;">
+  <!-- FUTURISTIC SECURE AUTHENTICATION GATE MODAL OVERLAY -->
+  <div id="loginModal" class="cyber-login-bg">
+    <div class="cyber-login-card">
       
-      <div style="width:64px; height:64px; background:rgba(100,255,218,0.1); border:1px solid var(--teal); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1.2rem; font-size:1.8rem; box-shadow:0 0 20px rgba(100,255,218,0.25);">
-        🛡️
+      <div class="shield-badge-container">
+        <div class="shield-ring"></div>
+        <div class="shield-icon-inner">🛡️</div>
       </div>
 
-      <h2 style="margin:0 0 0.4rem; font-size:1.4rem; color:var(--text); font-weight:700;">Admin CMS Portal</h2>
+      <h2 style="margin:0 0 0.4rem; font-size:1.5rem; color:var(--text); font-weight:800; letter-spacing:-0.02em;">Admin CMS Portal</h2>
       <p style="margin:0 0 1.5rem; font-size:0.82rem; color:var(--text-muted);">Enter master credentials to access portfolio control system.</p>
 
       <div id="login-lockout-msg" style="display:none; background:rgba(244,63,94,0.12); border:1px solid rgba(244,63,94,0.3); color:var(--rose); padding:0.75rem; border-radius:8px; font-size:0.8rem; margin-bottom:1rem; text-align:left;"></div>
       <div id="login-error-msg" style="display:none; background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); color:var(--amber); padding:0.75rem; border-radius:8px; font-size:0.8rem; margin-bottom:1rem; text-align:left;"></div>
 
       <form id="admin-login-form" action="javascript:void(0);" onsubmit="handleAdminLogin(event); return false;" autocomplete="off">
-        <div style="margin-bottom:1.1rem; text-align:left;">
-          <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text); margin-bottom:0.4rem;">Admin Username</label>
-          <input type="text" id="login-username" class="form-control" placeholder="e.g. alex_dev" autocomplete="off" required style="padding:0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
+        <div class="form-input-wrapper">
+          <label style="display:block; font-size:0.78rem; font-weight:600; color:var(--text-muted); margin-bottom:0.4rem;">Admin Username</label>
+          <input type="text" id="login-username" class="form-control" placeholder="e.g. alex_dev" autocomplete="off" required>
         </div>
 
-        <div style="margin-bottom:1.1rem; text-align:left;">
-          <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text); margin-bottom:0.4rem;">Master Password</label>
+        <div class="form-input-wrapper">
+          <label style="display:block; font-size:0.78rem; font-weight:600; color:var(--text-muted); margin-bottom:0.4rem;">Master Password</label>
           <div style="position:relative;">
-            <input type="password" id="login-password" class="form-control" placeholder="••••••••••••" autocomplete="off" required style="padding:0.75rem 4.2rem 0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••••••" autocomplete="off" required>
             <button type="button" id="toggle-pass-btn" onclick="togglePasswordVisibility()" style="position:absolute; right:0.5rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--teal); font-size:0.75rem; font-weight:600; cursor:pointer; padding:0.3rem 0.5rem;">👁️ Show</button>
           </div>
         </div>
@@ -223,13 +300,23 @@
           <label style="display:flex; align-items:center; gap:0.4rem; cursor:pointer;">
             <input type="checkbox" id="login-remember" checked style="accent-color:var(--teal);"> Remember Session (7 Days)
           </label>
-          <span style="color:var(--teal); font-size:0.72rem; background:rgba(100,255,218,0.08); padding:0.15rem 0.5rem; border-radius:10px;">SHA-256 Auth</span>
+          <span style="color:var(--teal); font-size:0.72rem; background:rgba(100,255,218,0.08); padding:0.15rem 0.55rem; border-radius:10px; border:1px solid rgba(100,255,218,0.2);">SHA-256 Auth</span>
         </div>
 
-        <button type="button" onclick="handleAdminLogin(event)" id="login-submit-btn" class="btn btn-primary" style="width:100%; padding:0.85rem; font-size:0.95rem; font-weight:700; border-radius:8px; cursor:pointer; background:linear-gradient(135deg, rgba(100,255,218,0.2), rgba(167,139,250,0.2)); border:1px solid var(--teal); color:var(--teal);">
+        <button type="button" onclick="handleAdminLogin(event)" id="login-submit-btn" class="btn btn-primary" style="width:100%; padding:0.9rem; font-size:0.95rem; font-weight:700; border-radius:10px; cursor:pointer; background:linear-gradient(135deg, rgba(100,255,218,0.25), rgba(167,139,250,0.25)); border:1px solid var(--teal); color:var(--teal); transition:all 0.25s ease;">
           🔓 Authenticate &amp; Enter CMS
         </button>
       </form>
+    </div>
+  </div>
+
+  <!-- HIGH-TECH WELCOME ANIMATION OVERLAY -->
+  <div id="welcomeOverlay" class="welcome-overlay">
+    <div class="welcome-avatar">BC</div>
+    <h2 style="font-size:1.6rem; font-weight:800; color:#fff; margin:0 0 0.5rem; text-shadow:0 0 20px rgba(100,255,218,0.4);">🔓 Welcome Back, Admin!</h2>
+    <p id="welcomeStatusText" style="font-size:0.85rem; color:var(--teal); margin:0; font-family:'DM Mono',monospace;">⚡ Verifying Security Signatures...</p>
+    <div class="welcome-bar-track">
+      <div id="welcomeBarFill" class="welcome-bar-fill"></div>
     </div>
   </div>
 
@@ -747,6 +834,7 @@
       const passEl = document.getElementById('login-password');
       const remEl = document.getElementById('login-remember');
       const errEl = document.getElementById('login-error-msg');
+      const submitBtn = document.getElementById('login-submit-btn');
 
       const enteredUser = (userEl ? userEl.value : '').trim().toLowerCase();
       const enteredPass = passEl ? passEl.value : '';
@@ -760,19 +848,52 @@
       if (isUserValid && isPassValid && enteredUser !== '' && enteredPass !== '') {
         if (errEl) errEl.style.display = 'none';
         
-        if (remEl && remEl.checked) {
-          localStorage.setItem('admin_session', 'authenticated_admin_2026');
-        } else {
-          sessionStorage.setItem('admin_session', 'authenticated_admin_2026');
+        // Show Button Loading Animation
+        if (submitBtn) {
+          submitBtn.innerHTML = '⚡ Verifying Security Signatures...';
+          submitBtn.style.opacity = '0.85';
         }
 
-        window.hideLoginModal();
-        if (typeof showToast === 'function') showToast('🔓 Authentication Successful! Welcome, Admin.');
-        if (typeof renderCerts === 'function') renderCerts();
-        if (typeof renderProjects === 'function') renderProjects();
-        if (typeof renderSkills === 'function') renderSkills();
-        if (typeof renderBlogs === 'function') renderBlogs();
-        if (typeof captureCurrentAccessLog === 'function') captureCurrentAccessLog();
+        // Show High-Tech Welcome Overlay
+        const overlay = document.getElementById('welcomeOverlay');
+        const fill = document.getElementById('welcomeBarFill');
+        const status = document.getElementById('welcomeStatusText');
+
+        if (overlay) overlay.classList.add('show');
+
+        setTimeout(() => {
+          if (fill) fill.style.width = '45%';
+          if (status) status.innerText = '✓ Decrypting Master Controls...';
+        }, 300);
+
+        setTimeout(() => {
+          if (fill) fill.style.width = '100%';
+          if (status) status.innerText = '✓ Access Granted! Opening Admin CMS...';
+        }, 750);
+
+        setTimeout(() => {
+          if (remEl && remEl.checked) {
+            localStorage.setItem('admin_session', 'authenticated_admin_2026');
+          } else {
+            sessionStorage.setItem('admin_session', 'authenticated_admin_2026');
+          }
+
+          if (overlay) overlay.classList.remove('show');
+          if (fill) fill.style.width = '0%';
+          if (submitBtn) {
+            submitBtn.innerHTML = '🔓 Authenticate &amp; Enter CMS';
+            submitBtn.style.opacity = '1';
+          }
+
+          window.hideLoginModal();
+          if (typeof showToast === 'function') showToast('🔓 Authentication Successful! Welcome, Master Admin.');
+          if (typeof renderCerts === 'function') renderCerts();
+          if (typeof renderProjects === 'function') renderProjects();
+          if (typeof renderSkills === 'function') renderSkills();
+          if (typeof renderBlogs === 'function') renderBlogs();
+          if (typeof captureCurrentAccessLog === 'function') captureCurrentAccessLog();
+        }, 1250);
+
       } else {
         if (errEl) {
           errEl.style.display = 'block';
