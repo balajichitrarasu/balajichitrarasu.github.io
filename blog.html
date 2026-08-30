@@ -10,8 +10,27 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1117'/%3E%3Ctext x='16' y='22' font-size='18' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%2364ffda'%3EB%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=9.5">
+<link rel="stylesheet" href="style.css?v=11.0">
+<script>
+window.toggleTheme = function() {
+  var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('site_theme', next); } catch(e) {}
+  document.querySelectorAll('.glossy-theme-btn, #themeToggle').forEach(function(b) {
+    b.setAttribute('title', next === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+  });
+  if (typeof window.showToast === 'function') {
+    window.showToast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
+  }
+};
+(function() {
+  try {
+    var saved = localStorage.getItem('site_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+  } catch(e) {}
+})();
+</script>
 <style>
 .blog-wrap { max-width: 1100px; margin: 0 auto; padding: calc(var(--nav-h) + 3rem) 1.5rem 5rem; }
 .blog-header { text-align: center; margin-bottom: 2.5rem; }
