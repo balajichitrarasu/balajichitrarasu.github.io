@@ -692,7 +692,7 @@ function closeAbout() {
   function apply() {
     var recs = localStorage.getItem('hide_recommendations');
     var rEl = document.getElementById('recommendations');
-    if (rEl) rEl.style.display = (recs === 'true') ? 'none' : 'block';
+    if (rEl) rEl.style.display = (recs === 'false') ? 'block' : 'none';
 
     var evs = localStorage.getItem('hide_events');
     var eEl = document.getElementById('events');
