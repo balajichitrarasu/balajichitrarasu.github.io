@@ -620,6 +620,7 @@ document.addEventListener('DOMContentLoaded', function () {
   ─────────────────────────────────────────── */
   var toggle = document.getElementById('navToggle');
   var menu = document.getElementById('navMenu');
+  var nav = document.querySelector('.navbar');
   if (toggle && menu && nav) {
     toggle.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -756,6 +757,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   }
+}
 
 }); /* end DOMContentLoaded */
 
