@@ -677,20 +677,95 @@
       cropRect = null;
     });
 
+    // Default Certifications Data
+    const defaultCerts = [
+      {
+        id: 'cert_1',
+        title: 'AWS Cloud Engineer Intern',
+        org: 'ZenFuture Technologies',
+        date: 'ZF-INTERN-0026 · June–July 2026',
+        desc: 'Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.',
+        image: 'cert1.jpg'
+      },
+      {
+        id: 'cert_2',
+        title: 'AI Fluency Frameworks',
+        org: 'Anthropic',
+        date: 'Certified · 2025',
+        desc: 'Certified by Anthropic in AI frameworks, LLM system architecture, prompt engineering, and AI safety foundations.',
+        image: 'cert1.jpg'
+      },
+      {
+        id: 'cert_3',
+        title: 'Industry 4.0 & IIoT',
+        org: 'NPTEL · IIT Kharagpur',
+        date: 'Certified · 2024',
+        desc: 'Completed 12-week proctored NPTEL course on Industrial IoT funded by the Ministry of Education, Government of India.',
+        image: 'cert1.jpg'
+      },
+      {
+        id: 'cert_4',
+        title: 'Software Engineer Certificate',
+        org: 'HackerRank',
+        date: 'Role Certification (2024)',
+        desc: 'Passed HackerRank Software Engineer role certification — covering algorithms, data structures, and software development.',
+        image: 'cert1.jpg'
+      }
+    ];
+
+    // Default Projects Data
+    const defaultProjects = [
+      {
+        id: 'proj_1',
+        title: 'ZentroShift ERM App',
+        category: 'cloud',
+        status: 'completed',
+        progress: 100,
+        image: 'project2.jpg',
+        tags: 'EC2, S3, RDS, CloudFront, VPC',
+        summary: 'Full-stack ERM system deployed across 6 AWS services with custom VPC, IAM roles, and CloudWatch monitoring.',
+        details: 'During my internship at ZenFuture Technologies (June–July 2026), I built and deployed ZentroShift — a full-stack ERM system across 6 AWS services: EC2 (server), S3 (assets), CloudFront (CDN), RDS (MySQL database), custom VPC (with public subnets, Internet Gateway, NAT Gateway, security groups), and CloudWatch (server health alarms). Features: 4-tier IAM role access control, location-based clock-in, attendance management, and REST APIs tested via Postman.'
+      },
+      {
+        id: 'proj_2',
+        title: 'Smart Solar Crossing',
+        category: 'embedded',
+        status: 'completed',
+        progress: 100,
+        image: 'project3.jpg',
+        tags: 'Arduino, IR Sensor, Solar, LDR',
+        summary: 'Arduino-powered pedestrian crossing alert system with solar panel, boost converter battery management, IR & LDR sensors.',
+        details: 'Designed and built a solar-powered zebra crossing alert system. Hardware: Arduino Uno, IR sensors (pedestrian detection), LDR (ambient light sensing), solar panel, boost converter (battery charge management), Li-ion battery pack, LEDs, and a buzzer. When IR sensors detect an approaching pedestrian in low-light conditions (LDR threshold), the system triggers audio-visual warnings for drivers while the solar boost converter keeps the battery charged.'
+      },
+      {
+        id: 'proj_3',
+        title: 'Developer Portfolio',
+        category: 'web',
+        status: 'ongoing',
+        progress: 85,
+        image: 'project1.jpg',
+        tags: 'HTML5, CSS3, JavaScript, Node.js',
+        summary: 'Responsive portfolio with full SEO, JSON-LD schema, admin CMS panel, and tech blog.',
+        details: 'Built a fully responsive developer portfolio with clean UI, JSON-LD structured data, Open Graph meta tags, GitHub Pages deployment, an admin CMS panel (REST API & localStorage-backed CRUD for projects, certs, blog posts), and a tech blog.'
+      }
+    ];
+
     // Certs CRUD
-    let certs = getStorage('custom_certs', []);
+    let certs = getStorage('custom_certs', defaultCerts);
     function renderCerts() {
       const list = $('cert-list');
       list.innerHTML = '';
       certs.forEach(c => {
+        const issuer = c.org || c.issuer || 'Issuer';
+        const statusDate = c.date || c.status || '';
         list.innerHTML += `
-          <div class="card">
-            <h4>${c.title}</h4>
-            <p class="text-muted">${c.org} | ${c.date}</p>
-            ${c.image ? `<img src="${c.image}" style="max-width:100%; margin-top:0.5rem;">` : ''}
-            <div class="card-actions">
-              <button class="btn btn-primary" onclick="editCert('${c.id}')">Edit</button>
-              <button class="btn btn-danger" onclick="deleteCert('${c.id}')">Delete</button>
+          <div class="card" style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1rem; margin-bottom:0.75rem;">
+            <h4 style="color:var(--text); font-weight:700; margin-bottom:0.2rem;">${c.title}</h4>
+            <p class="text-muted" style="font-size:0.8rem; color:var(--text-muted);">${issuer} ${statusDate ? '| ' + statusDate : ''}</p>
+            ${(c.image || c.img) ? `<img src="${c.image || c.img}" style="max-width:100%; max-height:120px; object-fit:contain; margin-top:0.5rem; border-radius:6px; border:1px solid var(--border);">` : ''}
+            <div class="card-actions" style="display:flex; gap:0.5rem; margin-top:0.75rem;">
+              <button class="btn btn-primary" onclick="editCert('${c.id}')" style="padding:0.3rem 0.8rem; font-size:0.8rem;">Edit</button>
+              <button class="btn btn-danger" onclick="deleteCert('${c.id}')" style="padding:0.3rem 0.8rem; font-size:0.8rem;">Delete</button>
             </div>
           </div>
         `;
@@ -762,22 +837,22 @@
     });
 
     // Projects CRUD
-    let projects = getStorage('custom_projects', []);
+    let projects = getStorage('custom_projects', defaultProjects);
     function renderProjects() {
       const list = $('proj-list');
       list.innerHTML = '';
       projects.forEach(p => {
         list.innerHTML += `
-          <div class="card">
-            <h4>${p.title}</h4>
-            <p class="text-muted">${p.category} | ${p.tags}</p>
+          <div class="card" style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1rem; margin-bottom:0.75rem;">
+            <h4 style="color:var(--text); font-weight:700; margin-bottom:0.2rem;">${p.title}</h4>
+            <p class="text-muted" style="font-size:0.8rem; color:var(--text-muted);">${p.category} | ${p.tags}</p>
             <div style="margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
               <span class="proj-status-badge status-${p.status || 'ongoing'}">${p.status || 'ongoing'}</span>
               <span class="proj-progress-pct">${p.progress !== undefined ? p.progress : 0}%</span>
             </div>
-            <div class="card-actions">
-              <button class="btn btn-primary" onclick="editProj('${p.id}')">Edit</button>
-              <button class="btn btn-danger" onclick="deleteProj('${p.id}')">Delete</button>
+            <div class="card-actions" style="display:flex; gap:0.5rem; margin-top:0.75rem;">
+              <button class="btn btn-primary" onclick="editProj('${p.id}')" style="padding:0.3rem 0.8rem; font-size:0.8rem;">Edit</button>
+              <button class="btn btn-danger" onclick="deleteProj('${p.id}')" style="padding:0.3rem 0.8rem; font-size:0.8rem;">Delete</button>
             </div>
           </div>
         `;
