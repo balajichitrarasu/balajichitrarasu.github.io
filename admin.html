@@ -202,16 +202,16 @@
       <div id="login-lockout-msg" style="display:none; background:rgba(244,63,94,0.12); border:1px solid rgba(244,63,94,0.3); color:var(--rose); padding:0.75rem; border-radius:8px; font-size:0.8rem; margin-bottom:1rem; text-align:left;"></div>
       <div id="login-error-msg" style="display:none; background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); color:var(--amber); padding:0.75rem; border-radius:8px; font-size:0.8rem; margin-bottom:1rem; text-align:left;"></div>
 
-      <form onsubmit="handleAdminLogin(event)">
+      <form onsubmit="event.preventDefault(); handleAdminLogin(event); return false;" autocomplete="off">
         <div style="margin-bottom:1.1rem; text-align:left;">
           <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text); margin-bottom:0.4rem;">Admin Username</label>
-          <input type="text" id="login-username" class="form-control" value="admin" placeholder="admin" required style="padding:0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
+          <input type="text" id="login-username" class="form-control" placeholder="Enter Username" autocomplete="off" required style="padding:0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
         </div>
 
         <div style="margin-bottom:1.1rem; text-align:left;">
           <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text); margin-bottom:0.4rem;">Master Password</label>
           <div style="position:relative;">
-            <input type="password" id="login-password" class="form-control" value="BalajiCloud2026!" placeholder="••••••••••••" required style="padding:0.75rem 4.2rem 0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
+            <input type="password" id="login-password" class="form-control" placeholder="Enter Password" autocomplete="off" required style="padding:0.75rem 4.2rem 0.75rem 0.9rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:#fff;">
             <button type="button" id="toggle-pass-btn" onclick="togglePasswordVisibility()" style="position:absolute; right:0.5rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--teal); font-size:0.75rem; font-weight:600; cursor:pointer; padding:0.3rem 0.5rem;">👁️ Show</button>
           </div>
         </div>
@@ -223,15 +223,10 @@
           <span style="color:var(--teal); font-size:0.72rem; background:rgba(100,255,218,0.08); padding:0.15rem 0.5rem; border-radius:10px;">SHA-256 Auth</span>
         </div>
 
-        <button type="submit" id="login-submit-btn" class="btn btn-primary" style="width:100%; padding:0.85rem; font-size:0.95rem; font-weight:700; border-radius:8px; cursor:pointer; background:linear-gradient(135deg, rgba(100,255,218,0.2), rgba(167,139,250,0.2)); border:1px solid var(--teal); color:var(--teal);">
+        <button type="button" onclick="handleAdminLogin(event)" id="login-submit-btn" class="btn btn-primary" style="width:100%; padding:0.85rem; font-size:0.95rem; font-weight:700; border-radius:8px; cursor:pointer; background:linear-gradient(135deg, rgba(100,255,218,0.2), rgba(167,139,250,0.2)); border:1px solid var(--teal); color:var(--teal);">
           🔓 Authenticate &amp; Enter CMS
         </button>
       </form>
-
-      <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.75rem; color:var(--text-dim);">
-        🔐 <strong>Master Credentials</strong>: Username: <code style="color:var(--teal)">admin</code> | Password: <code style="color:var(--teal)">BalajiCloud2026!</code>
-        <br><span style="font-size:0.7rem; color:var(--text-muted);">(Customizable inside Settings tab)</span>
-      </div>
     </div>
   </div>
 
@@ -1906,6 +1901,10 @@
         hideLoginModal();
         showToast('🔓 Security Authentication Successful! Welcome, Admin.');
         captureCurrentAccessLog();
+        renderCerts();
+        renderProjects();
+        renderSkills();
+        renderBlogs();
       } else {
         failedAttempts++;
         localStorage.setItem('admin_failed_attempts', failedAttempts.toString());
