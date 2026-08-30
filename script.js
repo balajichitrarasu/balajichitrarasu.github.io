@@ -342,6 +342,85 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderSkills();
 
+  var DEFAULT_PROJECTS = [
+    {
+      id: 'proj_1',
+      title: 'ZentroShift ERM App',
+      category: 'cloud',
+      status: 'completed',
+      progress: 100,
+      image: 'project2.jpg',
+      tags: 'EC2, S3, RDS, CloudFront, VPC',
+      summary: 'Full-stack ERM system deployed across 6 AWS services with custom VPC, IAM roles, and CloudWatch monitoring.',
+      details: 'During my internship at ZenFuture Technologies (June–July 2026), I built and deployed ZentroShift — a full-stack ERM system across 6 AWS services: EC2 (server), S3 (assets), CloudFront (CDN), RDS (MySQL database), custom VPC (with public subnets, Internet Gateway, NAT Gateway, security groups), and CloudWatch (server health alarms).'
+    },
+    {
+      id: 'proj_2',
+      title: 'Smart Solar Crossing',
+      category: 'embedded',
+      status: 'completed',
+      progress: 100,
+      image: 'project3.jpg',
+      tags: 'Arduino, IR Sensor, Solar, LDR',
+      summary: 'Arduino-powered pedestrian crossing alert system with solar panel, boost converter battery management, IR & LDR sensors.',
+      details: 'Designed and built a solar-powered zebra crossing alert system. Hardware: Arduino Uno, IR sensors (pedestrian detection), LDR (ambient light sensing), solar panel, boost converter (battery charge management), Li-ion battery pack, LEDs, and a buzzer.'
+    },
+    {
+      id: 'proj_3',
+      title: 'Developer Portfolio',
+      category: 'web',
+      status: 'ongoing',
+      progress: 85,
+      image: 'project1.jpg',
+      tags: 'HTML5, CSS3, JavaScript, Node.js',
+      summary: 'Responsive developer portfolio website with 9-tab admin panel CMS, tech blog, dynamic progress bars, and real SVG tech icons.',
+      details: 'Built a responsive developer portfolio showcasing AWS cloud projects, embedded systems hardware, and full-stack web applications.'
+    }
+  ];
+
+  var DEFAULT_CERTS = [
+    {
+      id: 'cert_1',
+      title: 'AWS Cloud Engineer Intern',
+      org: 'ZenFuture Technologies',
+      date: 'ZF-INTERN-0026 · June–July 2026',
+      desc: 'Completed hands-on AWS Cloud internship. Deployed ZentroShift full-stack ERM app on EC2, S3, RDS, CloudFront, VPC, and CloudWatch with 4-tier IAM access control.',
+      image: 'cert1.jpg',
+      badgeText: '☁️ Production Certified',
+      badgeClass: 'badge-teal'
+    },
+    {
+      id: 'cert_2',
+      title: 'Anthropic AI Fluency 2025',
+      org: 'Anthropic',
+      date: 'Earned 2025',
+      desc: 'Certified in prompt engineering, LLM application architecture, and AI tool integration.',
+      image: 'cert1.jpg',
+      badgeText: '🤖 AI Certified',
+      badgeClass: 'badge-violet'
+    },
+    {
+      id: 'cert_3',
+      title: 'NPTEL Industry 4.0',
+      org: 'IIT Kharagpur',
+      date: 'NPTEL24CS112 · 2024',
+      desc: '12-week course on Industrial IoT, Cyber-Physical Systems, Sensors, and Smart Manufacturing.',
+      image: 'cert1.jpg',
+      badgeText: '🏭 IoT Certified',
+      badgeClass: 'badge-teal'
+    },
+    {
+      id: 'cert_4',
+      title: 'Software Engineer Certificate',
+      org: 'HackerRank',
+      date: 'Earned 2024',
+      desc: 'Verified proficiency in data structures, algorithms, problem solving, and software design.',
+      image: 'cert1.jpg',
+      badgeText: '💻 Verified',
+      badgeClass: 'badge-teal'
+    }
+  ];
+
   /* ────────────────────────────────────────
      DYNAMIC PROJECTS RENDERING
      Reads from admin's localStorage custom_projects
@@ -356,7 +435,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (saved) saved = JSON.parse(saved);
     } catch (e) {}
 
-    if (!Array.isArray(saved) || saved.length === 0) return;
+    if (!Array.isArray(saved) || saved.length === 0) {
+      saved = DEFAULT_PROJECTS;
+    }
 
     container.innerHTML = saved.map(function (p) {
       var status = p.status || 'ongoing';
@@ -429,7 +510,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (saved) saved = JSON.parse(saved);
     } catch (e) {}
 
-    if (!Array.isArray(saved) || saved.length === 0) return;
+    if (!Array.isArray(saved) || saved.length === 0) {
+      saved = DEFAULT_CERTS;
+    }
 
     container.innerHTML = saved.map(function (c) {
       var title = c.title || 'Certification';
