@@ -1027,10 +1027,79 @@ document.addEventListener('DOMContentLoaded', function () {
   renderEvents();
 
   /* ────────────────────────────────────────
+     SOCIAL MEDIA & CONTACT LINKS HYDRATION & vCARD GENERATOR
+  ─────────────────────────────────────────── */
+  function renderSocialLinks() {
+    var linkedin = localStorage.getItem('custom_linkedin_url') || 'https://www.linkedin.com/in/balajichitrarasu';
+    var github = localStorage.getItem('custom_github_url') || 'https://github.com/balajichitrarasu';
+    var email = localStorage.getItem('custom_email_url') || 'balajichitrarasu07@gmail.com';
+    var phone = localStorage.getItem('custom_phone_url') || '+91 76396 83223';
+    var website = localStorage.getItem('custom_website_url') || 'https://balajichitrarasu.github.io';
+
+    // Update LinkedIn Links
+    document.querySelectorAll('a[href*="linkedin.com"]').forEach(function(a) {
+      a.href = linkedin;
+    });
+
+    // Update GitHub Links
+    document.querySelectorAll('a[href*="github.com"]').forEach(function(a) {
+      if (a.getAttribute('href') !== '#github') {
+        a.href = github;
+      }
+    });
+
+    // Update Email Links
+    document.querySelectorAll('a[href^="mailto:"]').forEach(function(a) {
+      a.href = 'mailto:' + email;
+    });
+
+    // Update Phone Elements
+    document.querySelectorAll('.phone-text-val').forEach(function(el) {
+      el.textContent = phone;
+    });
+  }
+
+  renderSocialLinks();
+
+  window.downloadVCard = function() {
+    var name = localStorage.getItem('custom_profile_name') || 'Balaji Chitrarasu';
+    var role = localStorage.getItem('custom_profile_role') || 'AWS Cloud Engineer Intern';
+    var email = localStorage.getItem('custom_email_url') || 'balajichitrarasu07@gmail.com';
+    var phone = localStorage.getItem('custom_phone_url') || '+91 76396 83223';
+    var linkedin = localStorage.getItem('custom_linkedin_url') || 'https://www.linkedin.com/in/balajichitrarasu';
+    var website = localStorage.getItem('custom_website_url') || 'https://balajichitrarasu.github.io';
+
+    var vCardData = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'FN:' + name,
+      'TITLE:' + role,
+      'TEL;TYPE=CELL:' + phone,
+      'EMAIL;TYPE=INTERNET:' + email,
+      'URL;TYPE=LinkedIn:' + linkedin,
+      'URL;TYPE=Portfolio:' + website,
+      'END:VCARD'
+    ].join('\n');
+
+    var blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name.replace(/\s+/g, '_') + '_Contact.vcf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('📇 Contact vCard downloaded! Save directly to phone contacts.');
+  };
+
+  /* ────────────────────────────────────────
      DYNAMIC DYNAMIC RESUME LINK & BIO
   ─────────────────────────────────────────── */
   function renderBio() {
-    var resumeUrl = 'resume.pdf?v=58.0';
+    var resumeUrl = localStorage.getItem('custom_resume_pdf') || 'resume.pdf?v=58.0';
+    if (!resumeUrl || resumeUrl.trim() === '' || resumeUrl.indexOf('blob:') === 0 || resumeUrl.indexOf('data:') === 0) {
+      resumeUrl = 'resume.pdf?v=58.0';
+    }
     document.querySelectorAll('a[href*="resume"], a[href*="Resume"], a[href$=".pdf"], .btn-resume').forEach(function(a) {
       if (a.getAttribute('href') !== '#contact') {
         a.href = resumeUrl;
@@ -1338,7 +1407,7 @@ window.closePopup = function() {
 };
 
 /* Certificate modal */
-window.openCertImg = function(title, issuer, status, desc, imgUrl) {
+window.openCertImg = function(title, issuer, status, desc, imgUrl, verifyUrl) {
   var el = document.getElementById('certPopup'); if (!el) return;
   var cTitle = document.getElementById('cTitle');
   var cIssuer = document.getElementById('cIssuer');
@@ -1350,18 +1419,23 @@ window.openCertImg = function(title, issuer, status, desc, imgUrl) {
   if (cBody) cBody.textContent   = desc || '';
   var wrap = document.getElementById('certModalImgWrap');
 
+  var verifyLinkHtml = '';
+  if (verifyUrl && verifyUrl.trim() !== '') {
+    verifyLinkHtml = '<div style="margin-top:1rem; text-align:center;"><a href="' + verifyUrl + '" target="_blank" class="btn btn-teal-ghost" style="padding:0.45rem 1.2rem; font-size:0.82rem; font-weight:700; border-radius:20px;">🔗 Verify Official Credential ↗</a></div>';
+  }
+
   if (imgUrl && imgUrl.trim() !== '' && wrap) {
     var isPdf = (imgUrl.indexOf('data:application/pdf') === 0 || imgUrl.toLowerCase().endsWith('.pdf'));
     if (isPdf) {
       wrap.innerHTML = '<iframe src="' + imgUrl + '" style="width:100%; height:400px; border:1px solid var(--border); border-radius:6px; margin-top:1rem;"></iframe>' +
-                       '<div style="text-align:center; margin-top:0.5rem;"><a href="' + imgUrl + '" target="_blank" download class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">📥 Download PDF Certificate</a></div>';
+                       '<div style="text-align:center; margin-top:0.5rem; display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;"><a href="' + imgUrl + '" target="_blank" download class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">📥 Download PDF Certificate</a>' + verifyLinkHtml + '</div>';
       wrap.style.display = 'block';
     } else {
-      wrap.innerHTML = '<img id="certModalImg" src="' + imgUrl + '" style="max-width:100%; border-radius:6px; margin-top:1rem;" alt="' + (title || 'Certificate') + '">';
+      wrap.innerHTML = '<img id="certModalImg" src="' + imgUrl + '" style="max-width:100%; border-radius:6px; margin-top:1rem;" alt="' + (title || 'Certificate') + '">' + verifyLinkHtml;
       wrap.style.display = 'block';
     }
   } else if (wrap) {
-    wrap.innerHTML = '<div style="padding:1.2rem; text-align:center; background:rgba(255,255,255,0.02); border:1px dashed var(--border); border-radius:6px; margin:1rem 0; color:var(--text-muted); font-size:0.84rem;"><span style="font-size:1.8rem; display:block; margin-bottom:0.3rem; opacity:0.8;">📜</span><span>Verified Credential Record (No image uploaded)</span></div>';
+    wrap.innerHTML = '<div style="padding:1.2rem; text-align:center; background:rgba(255,255,255,0.02); border:1px dashed var(--border); border-radius:6px; margin:1rem 0; color:var(--text-muted); font-size:0.84rem;"><span style="font-size:1.8rem; display:block; margin-bottom:0.3rem; opacity:0.8;">📜</span><span>Verified Credential Record</span></div>' + verifyLinkHtml;
     wrap.style.display = 'block';
   }
   el.classList.add('open'); document.body.style.overflow = 'hidden';

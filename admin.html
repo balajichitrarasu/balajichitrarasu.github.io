@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=63.0">
+  <link rel="stylesheet" href="style.css?v=64.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -569,9 +569,31 @@
               <label style="font-weight:600;">Role &amp; Tagline</label>
               <input type="text" id="prof-role" class="form-control" placeholder="AWS Cloud Engineer Intern & B.E. ECE Student">
             </div>
-            <div class="form-group">
-              <label style="font-weight:600;">Location</label>
-              <input type="text" id="prof-location" class="form-control" placeholder="Coimbatore, Tamil Nadu, India">
+            <!-- SOCIAL MEDIA & CONTACT LINKS MANAGER -->
+            <div style="border-top:1px solid var(--border); padding-top:1.2rem; margin-top:1.2rem;">
+              <h3 style="font-size:1rem; color:var(--teal); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                🌐 Social Media &amp; Contact Links Manager
+              </h3>
+              <div class="form-group">
+                <label style="font-weight:600;">💼 LinkedIn Profile URL</label>
+                <input type="text" id="prof-linkedin" class="form-control" placeholder="https://www.linkedin.com/in/balajichitrarasu">
+              </div>
+              <div class="form-group">
+                <label style="font-weight:600;">💻 GitHub Profile URL</label>
+                <input type="text" id="prof-github" class="form-control" placeholder="https://github.com/balajichitrarasu">
+              </div>
+              <div class="form-group">
+                <label style="font-weight:600;">✉️ Contact Email Address</label>
+                <input type="email" id="prof-email" class="form-control" placeholder="balajichitrarasu07@gmail.com">
+              </div>
+              <div class="form-group">
+                <label style="font-weight:600;">📞 Phone Number</label>
+                <input type="text" id="prof-phone" class="form-control" placeholder="+91 76396 83223">
+              </div>
+              <div class="form-group">
+                <label style="font-weight:600;">🌐 Portfolio Website URL</label>
+                <input type="text" id="prof-website" class="form-control" placeholder="https://balajichitrarasu.github.io">
+              </div>
             </div>
 
             <!-- RESUME PDF & DOCUMENT UPLOADER -->
@@ -579,7 +601,7 @@
               <label style="font-weight:700; color:var(--teal);">📄 Resume PDF / Document Upload</label>
               <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem;">Upload your Resume PDF file or enter URL. All "Resume" download buttons on the portfolio site will link to this file!</p>
               <input type="file" id="prof-resume-file" class="form-control" accept=".pdf,.doc,.docx,image/*">
-              <input type="text" id="prof-resume-url" class="form-control" placeholder="Or enter Resume PDF URL (e.g. Resume.pdf or Google Drive link)" style="margin-top:0.5rem;">
+              <input type="text" id="prof-resume-url" class="form-control" placeholder="Or enter Resume PDF URL (e.g. resume.pdf or Google Drive link)" style="margin-top:0.5rem;">
               <div id="resume-preview-status" style="margin-top:0.5rem; display:none; padding:0.6rem; background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.3); border-radius:6px; color:var(--emerald); font-weight:600; font-size:0.8rem;">
                 📄 Resume PDF Document Ready! <a id="resume-preview-link" href="#" target="_blank" style="color:var(--teal); margin-left:0.5rem; text-decoration:underline;">View Attached Resume →</a>
               </div>
@@ -648,6 +670,10 @@
             <div class="form-group">
               <label>Description</label>
               <textarea id="cert-desc" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Official Credential / Verification URL (Optional)</label>
+              <input type="text" id="cert-verify-url" class="form-control" placeholder="https://nptel.ac.in/noc/... or https://hackerrank.com/certificates/...">
             </div>
             <div class="form-group">
               <label>Certificate Image or PDF Document Upload</label>
@@ -1746,6 +1772,11 @@
       const name = getStorage('custom_profile_name', 'Balaji Chitrarasu');
       const role = getStorage('custom_profile_role', 'AWS Cloud Engineer Intern & B.E. ECE Student');
       const location = getStorage('custom_profile_location', 'Coimbatore, Tamil Nadu, India');
+      const linkedin = getStorage('custom_linkedin_url', 'https://www.linkedin.com/in/balajichitrarasu');
+      const github = getStorage('custom_github_url', 'https://github.com/balajichitrarasu');
+      const email = getStorage('custom_email_url', 'balajichitrarasu07@gmail.com');
+      const phone = getStorage('custom_phone_url', '+91 76396 83223');
+      const website = getStorage('custom_website_url', 'https://balajichitrarasu.github.io');
 
       $('prof-avatar').value = avatar;
       $('prof-avatar-preview').src = avatar;
@@ -1753,7 +1784,12 @@
 
       $('prof-name').value = name;
       $('prof-role').value = role;
-      $('prof-location').value = location;
+      if ($('prof-location')) $('prof-location').value = location;
+      if ($('prof-linkedin')) $('prof-linkedin').value = linkedin;
+      if ($('prof-github')) $('prof-github').value = github;
+      if ($('prof-email')) $('prof-email').value = email;
+      if ($('prof-phone')) $('prof-phone').value = phone;
+      if ($('prof-website')) $('prof-website').value = website;
     }
     $('profile-form').addEventListener('submit', e => {
       e.preventDefault();
@@ -1761,7 +1797,7 @@
       const origText = submitBtn ? submitBtn.innerText : 'Save Profile Changes';
       
       if (submitBtn) {
-        submitBtn.innerHTML = '⚡ Syncing & Uploading Avatar...';
+        submitBtn.innerHTML = '⚡ Syncing Social Links & Profile...';
         submitBtn.style.opacity = '0.85';
       }
 
@@ -1774,7 +1810,13 @@
         setStorage('custom_profile_avatar', $('prof-avatar').value || 'profile.jpg');
         setStorage('custom_profile_name', $('prof-name').value || 'Balaji Chitrarasu');
         setStorage('custom_profile_role', $('prof-role').value || 'AWS Cloud Engineer Intern & B.E. ECE Student');
-        setStorage('custom_profile_location', $('prof-location').value || 'Coimbatore, Tamil Nadu, India');
+        setStorage('custom_profile_location', ($('prof-location') ? $('prof-location').value : '') || 'Coimbatore, Tamil Nadu, India');
+        if ($('prof-linkedin')) setStorage('custom_linkedin_url', $('prof-linkedin').value);
+        if ($('prof-github')) setStorage('custom_github_url', $('prof-github').value);
+        if ($('prof-email')) setStorage('custom_email_url', $('prof-email').value);
+        if ($('prof-phone')) setStorage('custom_phone_url', $('prof-phone').value);
+        if ($('prof-website')) setStorage('custom_website_url', $('prof-website').value);
+
         if($('prof-avatar').value) {
           $('prof-avatar-preview').src = $('prof-avatar').value;
           $('prof-avatar-preview').style.display = 'block';
@@ -2388,6 +2430,7 @@
           org: $('cert-org').value,
           date: $('cert-date').value,
           desc: $('cert-desc').value,
+          verifyUrl: $('cert-verify-url') ? $('cert-verify-url').value : '',
           image: certImageVal
         };
         
@@ -2436,6 +2479,7 @@
       $('cert-org').value = c.org || c.issuer || '';
       $('cert-date').value = c.date || c.status || '';
       $('cert-desc').value = c.desc || c.description || '';
+      if ($('cert-verify-url')) $('cert-verify-url').value = c.verifyUrl || c.verify || '';
       const imgVal = c.image || c.img || '';
       $('cert-image').value = imgVal;
       if (imgVal) {

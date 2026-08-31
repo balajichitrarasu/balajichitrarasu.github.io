@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=63.0">
+<link rel="stylesheet" href="style.css?v=64.0">
 <script>
 var themeToggleLock = false;
 window.toggleTheme = function(e) {
@@ -690,7 +690,7 @@ window.toggleTheme = function(e) {
   <div class="contact-info-row">
     <a href="tel:+917639683223" class="cinfo">
       <div class="cinfo-icon">📱</div>
-      <div><p class="cinfo-label">Phone</p><p class="cinfo-val">+91 76396 83223</p></div>
+      <div><p class="cinfo-label">Phone</p><p class="cinfo-val phone-text-val">+91 76396 83223</p></div>
     </a>
     <div id="emailCard" class="cinfo" onclick="copyEmail()" style="cursor:pointer;">
       <div class="cinfo-icon">✉️</div>
@@ -700,6 +700,10 @@ window.toggleTheme = function(e) {
       <div class="cinfo-icon">💼</div>
       <div><p class="cinfo-label">LinkedIn</p><p class="cinfo-val">balajichitrarasu</p></div>
     </a>
+    <div class="cinfo" onclick="downloadVCard()" style="cursor:pointer; background:var(--teal-dim); border-color:rgba(100,255,218,0.3);">
+      <div class="cinfo-icon">📇</div>
+      <div><p class="cinfo-label">Save Contact Card</p><p class="cinfo-val" style="color:var(--teal); font-weight:700;">Download .vcf 📥</p></div>
+    </div>
   </div>
   <div class="glass msg-box reveal">
     <h3 class="msg-box-title">Send a Message</h3>
@@ -782,8 +786,8 @@ window.toggleTheme = function(e) {
 <script>
   window.PORTFOLIO_API_URL = "https://balaji-portfolio-backend.onrender.com";
 </script>
-<script src="api.js?v=63.0"></script>
-<script src="script.js?v=63.0"></script>
+<script src="api.js?v=64.0"></script>
+<script src="script.js?v=64.0"></script>
 
 <!-- COMMAND PALETTE MODAL (CTRL+K) -->
 <div id="cmdPalette" class="cmd-modal" role="dialog" aria-modal="true" style="display:none;">
