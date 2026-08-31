@@ -153,6 +153,40 @@ window.PortfolioAPI = {
     }
   },
 
+  /* Get Skills from Cloud API */
+  async getSkills() {
+    if (await this.checkHealth()) {
+      try {
+        const res = await fetch(`${API_BASE}/api/skills`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) return data;
+        }
+      } catch (e) {}
+    }
+    try {
+      const saved = localStorage.getItem('custom_skills');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return null;
+  },
+
+  /* Save Skills */
+  async saveSkills(skillsArray) {
+    try {
+      localStorage.setItem('custom_skills', JSON.stringify(skillsArray));
+    } catch (e) {}
+    if (await this.checkHealth()) {
+      try {
+        await fetch(`${API_BASE}/api/skills`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(skillsArray)
+        });
+      } catch (e) {}
+    }
+  },
+
   /* Send Contact Message */
   async sendMessage(name, email, message) {
     if (await this.checkHealth()) {

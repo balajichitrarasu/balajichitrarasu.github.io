@@ -373,13 +373,13 @@ document.addEventListener('DOMContentLoaded', function () {
         ? '<img class="skill-icon" src="' + iconSrc + '" alt="" width="20" height="20" style="object-fit:contain;">'
         : '<span class="skill-icon">' + (s.icon || '⚡') + '</span>';
 
-      return '<div class="skill-bar-item reveal">' +
+      return '<div class="skill-bar-item reveal visible">' +
         '<div class="skill-top">' +
           iconEl +
           '<span class="skill-name">' + s.name + '</span>' +
           '<span class="skill-pct">' + s.pct + '%</span>' +
         '</div>' +
-        '<div class="sbar-track"><div class="sbar-fill" data-w="' + s.pct + '"></div></div>' +
+        '<div class="sbar-track"><div class="sbar-fill" style="width:' + s.pct + '%;" data-w="' + s.pct + '"></div></div>' +
       '</div>';
     }).join('');
 
@@ -396,6 +396,22 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   renderSkills();
+
+  /* GLOBAL CLOUD SKILLS HYDRATION FOR ALL DEVICES GLOBALLY */
+  function syncSkillsFromCloud() {
+    if (window.PortfolioAPI && typeof window.PortfolioAPI.getSkills === 'function') {
+      window.PortfolioAPI.getSkills().then(function(cloudSkills) {
+        if (Array.isArray(cloudSkills) && cloudSkills.length > 0) {
+          try {
+            localStorage.setItem('custom_skills', JSON.stringify(cloudSkills));
+          } catch(e) {}
+          renderSkills();
+        }
+      }).catch(function() {});
+    }
+  }
+
+  setTimeout(syncSkillsFromCloud, 700);
 
   var DEFAULT_PROJECTS = [
     {
