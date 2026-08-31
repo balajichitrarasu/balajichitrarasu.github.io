@@ -626,7 +626,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     if (Array.isArray(saved) && saved.length > 0) {
-      // Merge updates for default 4 certificates
+      // Merge updates for default certificates
       masterList.forEach(function(m) {
         var userVer = saved.find(function(s) { return String(s.id) === String(m.id); });
         if (userVer) {
@@ -634,15 +634,14 @@ document.addEventListener('DOMContentLoaded', function () {
           if (userVer.org || userVer.issuer) m.org = userVer.org || userVer.issuer;
           if (userVer.date || userVer.status) m.date = userVer.date || userVer.status;
           if (userVer.desc || userVer.description) m.desc = userVer.desc || userVer.description;
-          if (userVer.image && userVer.image.indexOf('WhatsApp_Image_') === -1) m.image = userVer.image;
+          if (userVer.image) m.image = userVer.image;
         }
       });
 
-      // Append any newly added custom certificates beyond the master 4
+      // Append any newly added custom certificates beyond defaults
       saved.forEach(function(s) {
         var isMaster = masterList.some(function(m) { return String(m.id) === String(s.id); });
         if (!isMaster) {
-          if (s.image && s.image.indexOf('WhatsApp_Image_') > -1 && s.image.indexOf('data:') !== 0) return;
           masterList.push(s);
         }
       });
