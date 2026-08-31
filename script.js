@@ -496,7 +496,7 @@ document.addEventListener('DOMContentLoaded', function () {
       org: 'Self-Employed · Freelance',
       date: '2023 — Present',
       desc: 'Provided digital asset creation, hardware troubleshooting, and office IT network setups for business clients in Coimbatore.',
-      image: 'cert_wa1.jpg',
+      image: '',
       badgeText: '🛠️ Freelance Certified',
       badgeClass: 'badge-violet'
     },
@@ -506,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function () {
       org: 'United Institute of Technology',
       date: 'ECE Department · 2025',
       desc: 'Honored by ECE department leadership for academic performance (CGPA 7.13/10) and innovation project achievements.',
-      image: 'cert_wa2.jpg',
+      image: '',
       badgeText: '🏆 Department Award',
       badgeClass: 'badge-amber'
     },
@@ -516,7 +516,7 @@ document.addEventListener('DOMContentLoaded', function () {
       org: 'ZenFuture Technologies',
       date: 'June 2026',
       desc: 'Successfully architected 6-service AWS cloud infrastructure featuring VPC multi-subnet isolation, CloudFront CDN, and IAM roles.',
-      image: 'cert_wa3.jpg',
+      image: '',
       badgeText: '☁️ AWS Architect',
       badgeClass: 'badge-teal'
     }
@@ -661,8 +661,8 @@ document.addEventListener('DOMContentLoaded', function () {
         'cert_3': 'cert2.jpg',
         'cert_4': 'cert4.jpg'
       };
-      if (!image || image.trim() === '' || image.indexOf('WhatsApp_Image_') > -1 || (c.id === 'cert_3' && image === 'cert1.jpg')) {
-        image = defaultMap[c.id] || (idx === 0 ? 'cert1.jpg' : (idx === 1 ? 'cert3.jpg' : (idx === 2 ? 'cert2.jpg' : (idx === 3 ? 'cert4.jpg' : ''))));
+      if (defaultMap[c.id] && (!image || image.trim() === '' || (c.id === 'cert_3' && image === 'cert1.jpg'))) {
+        image = defaultMap[c.id];
       }
 
       var badgeText = c.badgeText || (issuer.indexOf('AWS') > -1 || title.indexOf('AWS') > -1 ? '☁️ Production Certified' : '🏆 Certified');
