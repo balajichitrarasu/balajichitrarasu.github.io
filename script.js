@@ -489,36 +489,6 @@ document.addEventListener('DOMContentLoaded', function () {
       image: 'cert4.jpg',
       badgeText: '💻 Verified',
       badgeClass: 'badge-teal'
-    },
-    {
-      id: 'cert_5',
-      title: 'Digital Design & IT Support Specialist',
-      org: 'Self-Employed · Freelance',
-      date: '2023 — Present',
-      desc: 'Provided digital asset creation, hardware troubleshooting, and office IT network setups for business clients in Coimbatore.',
-      image: '',
-      badgeText: '🛠️ Freelance Certified',
-      badgeClass: 'badge-violet'
-    },
-    {
-      id: 'cert_6',
-      title: 'Exemplary Achiever Award',
-      org: 'United Institute of Technology',
-      date: 'ECE Department · 2025',
-      desc: 'Honored by ECE department leadership for academic performance (CGPA 7.13/10) and innovation project achievements.',
-      image: '',
-      badgeText: '🏆 Department Award',
-      badgeClass: 'badge-amber'
-    },
-    {
-      id: 'cert_7',
-      title: 'Production AWS Cloud Architect',
-      org: 'ZenFuture Technologies',
-      date: 'June 2026',
-      desc: 'Successfully architected 6-service AWS cloud infrastructure featuring VPC multi-subnet isolation, CloudFront CDN, and IAM roles.',
-      image: '',
-      badgeText: '☁️ AWS Architect',
-      badgeClass: 'badge-teal'
     }
   ];
 

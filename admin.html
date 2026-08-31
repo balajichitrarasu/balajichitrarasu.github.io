@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=70.0">
+  <link rel="stylesheet" href="style.css?v=71.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -690,9 +690,12 @@
             <button type="button" class="btn" id="cert-cancel" style="display:none;">Cancel</button>
           </form>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
           <h3 style="margin:0;">Existing Certifications</h3>
-          <button type="button" class="btn btn-primary" onclick="restoreCerts()" style="padding:0.3rem 0.8rem; font-size:0.8rem;">↻ Restore Default Certifications</button>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="button" class="btn btn-danger" onclick="cleanCertDatabase()" style="padding:0.3rem 0.8rem; font-size:0.8rem;">🧹 Clear Conflicting Cache &amp; Reset Data</button>
+            <button type="button" class="btn btn-primary" onclick="restoreCerts()" style="padding:0.3rem 0.8rem; font-size:0.8rem;">↻ Restore Default Certifications</button>
+          </div>
         </div>
         <div id="cert-list" class="grid"></div>
       </section>
@@ -2531,6 +2534,15 @@
       setStorage('custom_certs', certs);
       renderCerts();
       showToast('Default certifications restored!');
+    };
+
+    window.cleanCertDatabase = () => {
+      if(!confirm('Clear all legacy/conflicting certificate caches and start clean?')) return;
+      certs = JSON.parse(JSON.stringify(defaultCerts));
+      localStorage.removeItem('custom_certs');
+      setStorage('custom_certs', certs);
+      renderCerts();
+      showToast('🧹 Legacy certificate conflicts cleared! Clean database ready.');
     };
 
     $('cert-cancel').addEventListener('click', () => {
