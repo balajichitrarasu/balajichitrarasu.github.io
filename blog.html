@@ -10,7 +10,7 @@
 <link rel="icon" type="image/png" href="logo.png?v=45.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=65.0">
+<link rel="stylesheet" href="style.css?v=66.0">
 <script>
 var themeToggleLock = false;
 window.toggleTheme = function(e) {
@@ -211,48 +211,33 @@ window.toggleTheme = function(e) {
 var DEFAULT_ARTICLES = [
   {
     id: 'aws-vpc-setup',
-    title: 'How I Built a Production Custom VPC on AWS from Scratch',
+    title: 'Architecting & Deploying ZentroShift ERM Across 6 AWS Services: Custom VPC, RDS MySQL & CloudFront',
     cat: 'aws',
-    time: '8 min',
+    time: '10 min read',
     date: 'July 2026',
-    excerpt: 'Real-world walkthrough of setting up a production VPC with public subnets, Internet Gateway, NAT Gateway, Security Groups, and IAM roles during my ZenFuture internship.',
-    body: '<h3>Why a Custom VPC?</h3><p>AWS default VPCs work for demos — but real production apps need isolation, fine-grained routing, and controlled egress. For ZentroShift, I built a full VPC from scratch.</p><h3>Architecture</h3><p>1 VPC (10.0.0.0/16) → 2 public subnets across AZs → Internet Gateway for inbound → NAT Gateway for secure outbound Lambda/EC2 calls → Route Tables per subnet → Security Groups with minimal port exposure (80, 443, 22 restricted by IP).</p><h3>IAM Role Access Control</h3><p>Implemented 4-tier IAM roles: SuperAdmin, Admin, Manager, Employee — each with scoped permissions via JSON policies. All REST API calls validated through Postman before going live.</p><h3>CloudWatch Alarms</h3><p>Set CPU utilization >80% and unhealthy instance alarms with SNS email alerts for server health monitoring.</p>'
+    author: 'Balaji Chitrarasu · AWS Cloud Engineer Intern',
+    excerpt: 'Comprehensive production engineering walkthrough of designing a multi-tier AWS VPC architecture with EC2, S3 asset buckets, RDS MySQL pooling, CloudFront CDN, and 4-tier IAM access policies.',
+    body: '<h3>1. Executive Summary &amp; Background</h3><p>Default AWS VPC setups work well for prototyping, but enterprise full-stack enterprise resource management (ERM) systems demand isolated networking, zero-trust security groups, and automated health monitoring. During my cloud internship at <strong>ZenFuture Technologies</strong> (Cert No. ZF-INTERN-0026), I architected and deployed <strong>ZentroShift ERM</strong> to handle production employee attendance, shift schedules, and operational workflows across 6 core AWS services.</p><div class="callout-box" style="padding:1rem; background:rgba(100,255,218,0.06); border-left:4px solid var(--teal); border-radius:6px; margin:1.2rem 0; font-size:0.88rem;"><strong>☁️ Production AWS Stack Highlight:</strong> Amazon EC2 (Ubuntu 24.04 LTS), Amazon S3 (Asset Storage), Amazon CloudFront (Edge CDN), Amazon RDS (MySQL 8.0), Custom VPC (CIDR 10.0.0.0/16), and Amazon CloudWatch (SNS Alarms).</div><h3>2. Custom VPC Network Design &amp; Subnet Isolation</h3><p>We designed a high-availability VPC layout spanning 2 Availability Zones (AZ-a and AZ-b) in the <code>ap-south-1</code> (Mumbai) region:</p><ul><li><strong>VPC CIDR Block:</strong> <code>10.0.0.0/16</code> (65,536 private IP addresses).</li><li><strong>Public Subnets:</strong> <code>10.0.1.0/24</code> (AZ-a) and <code>10.0.2.0/24</code> (AZ-b) hosting the EC2 web servers and Application Load Balancer.</li><li><strong>Private Database Subnets:</strong> <code>10.0.10.0/24</code> and <code>10.0.11.0/24</code> isolated exclusively for Amazon RDS MySQL instances with zero inbound public internet access.</li><li><strong>Internet Gateway (IGW):</strong> Attached to route table for public subnet ingress/egress.</li><li><strong>NAT Gateway:</strong> Deployed in public subnet <code>10.0.1.0/24</code> with an Elastic IP (EIP) allowing private EC2 instances to fetch security patches from canonical repositories securely.</li></ul><h3>3. 4-Tier IAM Security Policy Architecture</h3><p>To enforce least-privilege security principles, we implemented 4 distinct IAM roles with custom JSON permission policies:</p><pre style="background:rgba(15,23,42,0.9); padding:1rem; border-radius:8px; border:1px solid var(--border); overflow-x:auto; font-family:\'DM Mono\',monospace; font-size:0.8rem; color:var(--teal);"><code>{\n  "Version": "2012-10-17",\n  "Statement": [\n    {\n      "Effect": "Allow",\n      "Action": [\n        "s3:GetObject",\n        "s3:PutObject"\n      ],\n      "Resource": "arn:aws:s3:::zentroshift-production-assets/*"\n    },\n    {\n      "Effect": "Allow",\n      "Action": "cloudwatch:PutMetricData",\n      "Resource": "*"\n    }\n  ]\n}</code></pre><h3>4. Database Connection Pooling &amp; Amazon RDS Setup</h3><p>The RDS MySQL 8.0 instance was provisioned inside the private subnet group. Connection pooling was configured with SQLAlchemy ORM (<code>pool_size=10, max_overflow=20</code>) to prevent connection exhaustion during high-concurrency morning shift clock-ins.</p><h3>5. Amazon CloudWatch Alarm Alerter</h3><p>We configured custom CloudWatch alarms evaluating EC2 CPU Utilization (&gt;80% for 5 minutes) and RDS Free Storage Space (&lt;2 GB), connected directly to an Amazon Simple Notification Service (SNS) topic that dispatches instant email alerts to the DevOps team.</p><div style="margin-top:1.5rem; padding:1.2rem; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:8px; display:flex; align-items:center; gap:1rem;"><img src="profile.jpg" style="width:52px; height:52px; border-radius:50%; object-fit:cover; border:2px solid var(--teal);"><div><h4 style="margin:0; font-size:0.9rem; color:#fff;">Written by Balaji Chitrarasu</h4><p style="margin:0.2rem 0 0; font-size:0.78rem; color:var(--text-muted);">AWS Cloud Engineer Intern · Certified in AWS Production Deployments &amp; AI Systems</p></div></div>'
   },
   {
     id: 'iot-solar-crossing',
-    title: 'Building a Smart Solar-Powered Pedestrian Crossing Alert System',
+    title: 'Designing a Solar-Powered Smart Pedestrian Crossing: Arduino Uno, IR Sensors & Boost Converters',
     cat: 'iot',
-    time: '6 min',
+    time: '8 min read',
     date: 'March 2026',
-    excerpt: 'How I designed an Arduino-based zebra crossing alert system with IR sensors, LDR light sensing, solar panel, and boost converter battery management.',
-    body: '<h3>Problem Statement</h3><p>Most pedestrian crossings in rural areas lack active warning systems for drivers, especially at night. This IoT system provides automated audio-visual alerts.</p><h3>Hardware Stack</h3><p>Arduino Uno · 2× IR Sensors (pedestrian detection at 1m range) · LDR (ambient light threshold trigger) · Solar panel (6V, 1W) · MT3608 Boost Converter (3.7V → 5V) · Li-ion 18650 Battery · Red/Green LEDs + 5V Buzzer.</p><h3>Logic Flow</h3><p>When the LDR detects low-light (dusk or dark) AND an IR sensor triggers, the Arduino activates the buzzer + red LED for 5 seconds before switching green. The solar panel charges the battery via the boost converter during daylight hours.</p><h3>Key Challenge</h3><p>Managing boost converter noise interference with IR sensor readings — solved by adding 100µF capacitors across the power rails.</p>'
+    author: 'Balaji Chitrarasu · ECE Undergraduate',
+    excerpt: 'Detailed hardware engineering documentation of an autonomous zebra crossing alert system utilizing dual IR distance sensors, LDR ambient lighting thresholds, MT3608 boost converters, and Li-ion battery charging.',
+    body: '<h3>1. Problem Statement &amp; Need for Active Alerting</h3><p>Traditional zebra crossings in rural and semi-urban Indian road corridors lack active illumination and automated warning signals. Drivers approaching at night often fail to spot pedestrians stepping into crossing zones. This project delivers an autonomous, solar-powered active pedestrian alert system.</p><h3>2. Complete Hardware Component Breakdown</h3><ul><li><strong>Microcontroller:</strong> Arduino Uno R3 (ATmega328P @ 16 MHz).</li><li><strong>Sensors:</strong> 2× Active Infrared (IR) Obstacle Detection Sensors (1m range adjustment) + 1× Light Dependent Resistor (LDR) module.</li><li><strong>Power Circuit:</strong> 6V 1.5W Monocrystalline Solar Panel + TP4056 Li-ion Solar Charging Module + 18650 3.7V 2200mAh Li-ion Cell + MT3608 DC-DC Boost Converter (3.7V → 5.0V step-up).</li><li><strong>Actuators:</strong> High-luminosity Red &amp; Green LED arrays + 5V Piezo Active Buzzer.</li></ul><h3>3. Arduino C++ Source Code &amp; State Machine</h3><pre style="background:rgba(15,23,42,0.9); padding:1rem; border-radius:8px; border:1px solid var(--border); overflow-x:auto; font-family:\'DM Mono\',monospace; font-size:0.8rem; color:var(--teal);"><code>const int IR_SENSOR_LEFT = 2;\nconst int IR_SENSOR_RIGHT = 3;\nconst int LDR_PIN = A0;\nconst int RED_LED = 8;\nconst int BUZZER = 9;\n\nvoid setup() {\n  pinMode(IR_SENSOR_LEFT, INPUT);\n  pinMode(IR_SENSOR_RIGHT, INPUT);\n  pinMode(RED_LED, OUTPUT);\n  pinMode(BUZZER, OUTPUT);\n}\n\nvoid loop() {\n  int ldrVal = analogRead(LDR_PIN);\n  bool pedDetected = (digitalRead(IR_SENSOR_LEFT) == LOW || digitalRead(IR_SENSOR_RIGHT) == LOW);\n  \n  if (ldrVal < 400 && pedDetected) {\n    digitalWrite(RED_LED, HIGH);\n    tone(BUZZER, 1000);\n    delay(5000);\n    digitalWrite(RED_LED, LOW);\n    noTone(BUZZER);\n  }\n}</code></pre><h3>4. Hardware Troubleshooting &amp; Noise Decoupling</h3><p>During field prototyping, MT3608 boost converter switching ripple (1.2 MHz frequency) caused false IR sensor trigger pulses. We resolved this by adding a 100µF electrolytic capacitor in parallel with a 0.1µF ceramic decoupling capacitor across the Arduino VCC/GND rails.</p>'
   },
   {
-    id: 'pc-assembly-guide',
-    title: 'Step-by-Step Custom PC Assembly & Thermal Optimization Guide',
-    cat: 'hardware',
-    time: '7 min',
-    date: 'Jan 2026',
-    excerpt: 'Comprehensive guide to component selection, anti-static precautions, thermal paste application, and BIOS configuration for maximum system stability.',
-    body: '<h3>1. Component Compatibility</h3><p>Match CPU socket to motherboard (LGA1700 or AM5), verify RAM speed support (XMP/EXPO), ensure PSU wattage headroom of 20%+ above total TDP for stability during peak loads.</p><h3>2. Thermal Paste Application</h3><p>Apply a pea-sized dot of quality compound (e.g. Noctua NT-H1) in the center of the CPU IHS. Mounting pressure spreads it evenly — never smear manually.</p><h3>3. BIOS Configuration</h3><p>Boot into BIOS immediately. Enable XMP/EXPO memory profiles. Set fan curves: 30% at idle, 100% above 80°C CPU temp. Update BIOS firmware before installing OS.</p><h3>4. Cable Management & Airflow</h3><p>Route cables behind the motherboard tray. Maintain positive pressure airflow: more intake fans than exhaust to reduce dust buildup on components.</p>'
-  },
-  {
-    id: 'office-lan-setup',
-    title: 'Designing a High-Performance Office LAN Network',
-    cat: 'networking',
-    time: '6 min',
-    date: 'Dec 2025',
-    excerpt: 'How to plan static IP allocation, VLAN segmentation, switch port management, and shared network printer configuration for a small business office.',
-    body: '<h3>1. IP Planning</h3><p>Use 192.168.1.0/24 with DHCP reservations for static devices (NAS, printers, servers: .100-.150) and dynamic pool for client machines (.151-.250).</p><h3>2. VLAN Segmentation</h3><p>Separate admin/finance traffic (VLAN 10) from general staff (VLAN 20) and guest Wi-Fi (VLAN 30) to prevent lateral movement between network segments.</p><h3>3. Switch Port Configuration</h3><p>Assign access ports per VLAN. Set trunk ports only between managed switches and the router. Disable unused ports to reduce attack surface.</p><h3>4. Shared Printer Setup</h3><p>Assign printers static IPs. Install vendor print server software on a Windows Server VM, then deploy printer to all endpoints via Group Policy.</p>'
-  },
-  {
-    id: 'python-rest-api',
-    title: 'Building REST APIs with Python Flask & MySQL — Lessons from ZentroShift',
+    id: 'ai-fluency-engineering',
+    title: 'Anthropic AI Fluency & LLM Architecture: System Prompts, Context Windows & RAG',
     cat: 'software',
-    time: '5 min',
-    date: 'Aug 2026',
-    excerpt: 'Practical lessons building Postman-tested REST APIs for employee attendance, role-based auth, and location clock-in during my AWS internship project.',
-    body: '<h3>Project Context</h3><p>ZentroShift required REST APIs for: employee login, role-based dashboard data, GPS-based clock-in, and admin overrides — all tested via Postman before integration with the AWS-hosted frontend.</p><h3>Flask Route Structure</h3><p>Organized routes by resource: /auth/login, /employees/, /attendance/clockin, /admin/users — each validating JWT tokens from an IAM-integrated auth layer.</p><h3>MySQL on Amazon RDS</h3><p>Used SQLAlchemy ORM with connection pooling (pool_size=5) against an Amazon RDS MySQL 8.0 instance in the private subnet — only accessible from the EC2 instance\'s security group.</p><h3>Testing with Postman</h3><p>Maintained a Postman collection with environment variables for base URL and auth tokens. Ran automated pre-request scripts to refresh JWT tokens before protected endpoint tests.</p>'
+    time: '9 min read',
+    date: '2025',
+    author: 'Balaji Chitrarasu · Anthropic Certified',
+    excerpt: 'Engineering principles for LLM application development — XML tag structuring, retrieval-augmented generation (RAG) vector pipelines, and AI safety guardrails.',
+    body: '<h3>1. Anthropic AI System Architecture</h3><p>Building production software backed by Large Language Models requires moving past simple chat prompts to structured system engineering. As an Anthropic Certified developer, I apply XML tag encapsulation, deterministic output formatting, and context window management in production tools.</p><h3>2. Structuring Prompts with XML Tags</h3><p>Encapsulating instructions in clear XML tags (<code>&lt;context&gt;</code>, <code>&lt;instructions&gt;</code>, <code>&lt;examples&gt;</code>) drastically reduces hallucination rates and forces the LLM to follow explicit logical boundaries.</p><h3>3. Retrieval-Augmented Generation (RAG) Flow</h3><p>For domain-specific querying, document embeddings are indexed in vector databases (e.g. Pinecone/ChromaDB). At query time, top cosine similarity matches are injected into the system prompt context before generating responses.</p>'
   }
 ];
 
@@ -297,7 +282,7 @@ function renderArticles() {
         '<p>' + (a.excerpt || a.summary || '') + '</p>' +
         '<div class="blog-card-foot">' +
           '<span class="blog-read">Read Article →</span>' +
-          '<span>' + (a.time || '5 min') + ' read · ' + (a.date || '2026') + '</span>' +
+          '<span>' + (a.time || a.readtime || '8 min read') + ' · ' + (a.date || '2026') + '</span>' +
         '</div>' +
       '</div>' +
     '</article>';
@@ -309,25 +294,24 @@ function openArticle(id) {
   if (!a) return;
   document.getElementById('aCat').textContent = (a.category || a.cat || 'TECH').toUpperCase() + ' · ' + (a.date || '2026');
   document.getElementById('aTitle').textContent = a.title;
-  document.getElementById('aMeta').textContent = (a.time || '5 min') + ' read';
+  document.getElementById('aMeta').textContent = (a.time || a.readtime || '8 min read') + ' · ' + (a.author || 'Balaji Chitrarasu · AWS Cloud Engineer Intern');
 
   var bodyHtml = a.body || '';
   
   /* Add cover image if exists */
   var cover = a.image || a.img;
   if (cover) {
-    bodyHtml = '<img src="' + cover + '" style="width:100%; max-height:300px; object-fit:cover; border-radius:8px; margin-bottom:1.2rem; border:1px solid var(--border);">' + bodyHtml;
+    bodyHtml = '<img src="' + cover + '" style="width:100%; max-height:340px; object-fit:cover; border-radius:8px; margin-bottom:1.5rem; border:1px solid var(--border);">' + bodyHtml;
   }
 
   /* Add PDF attachment button if exists */
   var pdf = a.pdf || a.pdfUrl;
   if (pdf) {
-    bodyHtml += '<div style="margin-top:1.5rem; padding:1rem; background:rgba(100,255,218,0.05); border:1px solid rgba(100,255,218,0.2); border-radius:8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">' +
+    bodyHtml += '<div style="margin-top:1.8rem; padding:1.1rem; background:rgba(100,255,218,0.05); border:1px solid rgba(100,255,218,0.2); border-radius:8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">' +
       '<div style="color:var(--teal); font-weight:600; font-size:0.9rem;">📄 Attached Technical Report / Document</div>' +
       '<a href="' + pdf + '" target="_blank" download class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">📥 Download / View PDF Report</a>' +
     '</div>';
   }
-
   /* Add screenshots/diagrams gallery if exists */
   if (a.gallery) {
     var imgs = a.gallery.split(',').map(function(s){ return s.trim(); }).filter(Boolean);

@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=65.0">
+  <link rel="stylesheet" href="style.css?v=66.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -940,11 +940,30 @@
               <label>Report Diagrams &amp; Screenshots Gallery (Comma separated URLs)</label>
               <textarea id="blog-gallery" class="form-control" rows="2" placeholder="e.g. diagram1.png, chart2.png"></textarea>
             </div>
-            <div class="form-group">
-              <label>Body</label>
-              <textarea id="blog-body" class="form-control" rows="8"></textarea>
+            <div class="form-group" style="display:flex; gap:1rem; flex-wrap:wrap;">
+              <div style="flex:1; min-width:200px;">
+                <label>Author Name &amp; Role</label>
+                <input type="text" id="blog-author" class="form-control" placeholder="Balaji Chitrarasu · AWS Cloud Engineer Intern">
+              </div>
+              <div style="flex:1; min-width:180px;">
+                <label>Reading Time &amp; Date</label>
+                <input type="text" id="blog-readtime" class="form-control" placeholder="8 min read · Aug 2026">
+              </div>
             </div>
-            <button type="submit" class="btn btn-primary">Publish Post</button>
+            <div class="form-group">
+              <label style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Full Article Body (HTML / Markdown Supported) *</span>
+                <span style="font-size:0.75rem; color:var(--teal); font-weight:600;">Rich Formatting Active</span>
+              </label>
+              <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.4rem;">
+                <button type="button" class="btn" style="padding:0.25rem 0.6rem; font-size:0.75rem;" onclick="insertBlogTag('<h3>', '</h3>')">Heading</button>
+                <button type="button" class="btn" style="padding:0.25rem 0.6rem; font-size:0.75rem;" onclick="insertBlogTag('<pre><code>', '</code></pre>')">Code Block</button>
+                <button type="button" class="btn" style="padding:0.25rem 0.6rem; font-size:0.75rem;" onclick="insertBlogTag('<div class=\'callout-box\'>', '</div>')">Callout Note</button>
+                <button type="button" class="btn" style="padding:0.25rem 0.6rem; font-size:0.75rem;" onclick="insertBlogTag('<strong>', '</strong>')">Bold</button>
+              </div>
+              <textarea id="blog-body" class="form-control" rows="12" placeholder="Write publication-ready structured technical article HTML/Markdown..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Publish Article</button>
             <button type="button" class="btn" id="blog-cancel" style="display:none;">Cancel</button>
           </form>
         </div>
@@ -2804,11 +2823,13 @@
         title: $('blog-title').value,
         category: $('blog-cat').value,
         excerpt: $('blog-excerpt').value,
+        author: $('blog-author') ? $('blog-author').value : 'Balaji Chitrarasu · AWS Cloud Engineer Intern',
+        readtime: $('blog-readtime') ? $('blog-readtime').value : '8 min read',
         body: $('blog-body').value,
         image: $('blog-image') ? $('blog-image').value : '',
         pdf: $('blog-pdf') ? $('blog-pdf').value : '',
         gallery: $('blog-gallery') ? $('blog-gallery').value : '',
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
       };
       const idx = blogs.findIndex(x => String(x.id) === String(id));
       if(idx > -1) blogs[idx] = blog;
@@ -2823,7 +2844,7 @@
       $('blog-form-title').innerText = 'Write Post';
       $('blog-cancel').style.display = 'none';
       if ($('blog-pdf-status')) $('blog-pdf-status').innerText = '';
-      showToast(' Post published & synced live!');
+      showToast('📝 Article published & synced live!');
       return false;
     });
 
@@ -2834,13 +2855,26 @@
       $('blog-title').value = b.title || '';
       $('blog-cat').value = b.category || b.cat || '';
       $('blog-excerpt').value = b.excerpt || '';
+      if ($('blog-author')) $('blog-author').value = b.author || 'Balaji Chitrarasu · AWS Cloud Engineer Intern';
+      if ($('blog-readtime')) $('blog-readtime').value = b.readtime || b.time || '8 min read';
       $('blog-body').value = b.body || '';
       if ($('blog-image')) $('blog-image').value = b.image || b.img || '';
       if ($('blog-pdf')) $('blog-pdf').value = b.pdf || b.pdfUrl || '';
       if ($('blog-gallery')) $('blog-gallery').value = b.gallery || '';
-      $('blog-form-title').innerText = 'Edit Post';
+      $('blog-form-title').innerText = 'Edit Article';
       $('blog-cancel').style.display = 'inline-block';
       window.scrollTo(0, $('blog').offsetTop);
+    };
+
+    window.insertBlogTag = (openTag, closeTag) => {
+      const txt = $('blog-body');
+      if (!txt) return;
+      const start = txt.selectionStart;
+      const end = txt.selectionEnd;
+      const selected = txt.value.substring(start, end) || 'Sample text';
+      const replacement = openTag + selected + closeTag;
+      txt.value = txt.value.substring(0, start) + replacement + txt.value.substring(end);
+      txt.focus();
     };
 
     window.deleteBlog = id => {
