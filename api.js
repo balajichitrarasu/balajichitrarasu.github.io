@@ -111,6 +111,25 @@ window.PortfolioAPI = {
     }
   },
 
+  /* Get Certifications from Cloud API */
+  async getCerts() {
+    if (await this.checkHealth()) {
+      try {
+        const res = await fetch(`${API_BASE}/api/certs`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) return data;
+        }
+      } catch (e) {}
+    }
+    // LocalStorage Fallback
+    try {
+      const saved = localStorage.getItem('custom_certs');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return null;
+  },
+
   /* Save / Create Certification */
   async saveCert(certObj) {
     // Save to local storage first

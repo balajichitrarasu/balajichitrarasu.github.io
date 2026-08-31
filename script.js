@@ -662,6 +662,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderCerts();
 
+  /* GLOBAL CLOUD BACKEND CERTIFICATE HYDRATION FOR ALL DEVICES GLOBALLY */
+  function syncCertsFromCloud() {
+    if (window.PortfolioAPI && typeof window.PortfolioAPI.getCerts === 'function') {
+      window.PortfolioAPI.getCerts().then(function(cloudCerts) {
+        if (Array.isArray(cloudCerts) && cloudCerts.length > 0) {
+          try {
+            localStorage.setItem('custom_certs', JSON.stringify(cloudCerts));
+          } catch(e) {}
+          renderCerts();
+        }
+      }).catch(function() {});
+    }
+  }
+
+  setTimeout(syncCertsFromCloud, 600);
+
   /* ────────────────────────────────────────
      INTERACTIVE CERTIFICATE SLIDER TICKER & ANDROID TOUCH SWIPE
   ─────────────────────────────────────────── */
