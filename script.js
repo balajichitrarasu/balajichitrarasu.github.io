@@ -677,21 +677,59 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderCerts();
 
-  /* GLOBAL CLOUD BACKEND CERTIFICATE HYDRATION FOR ALL DEVICES GLOBALLY */
-  function syncCertsFromCloud() {
-    if (window.PortfolioAPI && typeof window.PortfolioAPI.getCerts === 'function') {
+  /* GLOBAL UNIFIED REAL-TIME CLOUD HYDRATION FOR ALL SECTIONS ACROSS ALL DEVICES */
+  function syncAllDataFromCloud() {
+    if (!window.PortfolioAPI) return;
+
+    if (typeof window.PortfolioAPI.getCerts === 'function') {
       window.PortfolioAPI.getCerts().then(function(cloudCerts) {
         if (Array.isArray(cloudCerts) && cloudCerts.length > 0) {
-          try {
-            localStorage.setItem('custom_certs', JSON.stringify(cloudCerts));
-          } catch(e) {}
+          try { localStorage.setItem('custom_certs', JSON.stringify(cloudCerts)); } catch(e) {}
           renderCerts();
+        }
+      }).catch(function() {});
+    }
+
+    if (typeof window.PortfolioAPI.getSkills === 'function') {
+      window.PortfolioAPI.getSkills().then(function(cloudSkills) {
+        if (Array.isArray(cloudSkills) && cloudSkills.length > 0) {
+          try { localStorage.setItem('custom_skills', JSON.stringify(cloudSkills)); } catch(e) {}
+          renderSkills();
+        }
+      }).catch(function() {});
+    }
+
+    if (typeof window.PortfolioAPI.getProjects === 'function') {
+      window.PortfolioAPI.getProjects().then(function(cloudProjects) {
+        if (Array.isArray(cloudProjects) && cloudProjects.length > 0) {
+          try { localStorage.setItem('custom_projects', JSON.stringify(cloudProjects)); } catch(e) {}
+          renderProjects();
+        }
+      }).catch(function() {});
+    }
+
+    if (typeof window.PortfolioAPI.getProfile === 'function') {
+      window.PortfolioAPI.getProfile().then(function(prof) {
+        if (prof && typeof prof === 'object') {
+          if (prof.name) localStorage.setItem('custom_profile_name', prof.name);
+          if (prof.role) localStorage.setItem('custom_profile_role', prof.role);
+          if (prof.avatar) localStorage.setItem('custom_profile_avatar', prof.avatar);
+          if (prof.location) localStorage.setItem('custom_profile_location', prof.location);
+          if (prof.linkedin) localStorage.setItem('custom_linkedin_url', prof.linkedin);
+          if (prof.github) localStorage.setItem('custom_github_url', prof.github);
+          if (prof.email) localStorage.setItem('custom_email_url', prof.email);
+          if (prof.phone) localStorage.setItem('custom_phone_url', prof.phone);
+          if (prof.website) localStorage.setItem('custom_website_url', prof.website);
+          renderBio();
+          renderSocialLinks();
         }
       }).catch(function() {});
     }
   }
 
-  setTimeout(syncCertsFromCloud, 600);
+  // Initial sync & periodic 4-second polling loop for real-time reflection everywhere
+  setTimeout(syncAllDataFromCloud, 500);
+  setInterval(syncAllDataFromCloud, 4000);
 
   /* ────────────────────────────────────────
      INTERACTIVE CERTIFICATE SLIDER TICKER & ANDROID TOUCH SWIPE

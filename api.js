@@ -231,12 +231,60 @@ window.PortfolioAPI = {
     return JSON.parse(localStorage.getItem('admin_access_logs') || '[]');
   },
 
-  /* ══ LOCAL CMS DATA STORAGE ══ */
+  /* ══ UNIFIED REAL-TIME CLOUD DATABASE CONTROLLER ══ */
   async syncGlobalCMSData() {
+    const fullSnapshot = {
+      profile: {
+        name: localStorage.getItem('custom_profile_name') || 'Balaji Chitrarasu',
+        role: localStorage.getItem('custom_profile_role') || 'AWS Cloud Engineer Intern & B.E. ECE Student',
+        avatar: localStorage.getItem('custom_profile_avatar') || 'profile.jpg',
+        location: localStorage.getItem('custom_profile_location') || 'Coimbatore, Tamil Nadu, India',
+        resumePdf: localStorage.getItem('custom_resume_pdf') || 'resume.pdf?v=58.0',
+        linkedin: localStorage.getItem('custom_linkedin_url') || 'https://www.linkedin.com/in/balajichitrarasu',
+        github: localStorage.getItem('custom_github_url') || 'https://github.com/balajichitrarasu',
+        email: localStorage.getItem('custom_email_url') || 'balajichitrarasu07@gmail.com',
+        phone: localStorage.getItem('custom_phone_url') || '+91 76396 83223',
+        website: localStorage.getItem('custom_website_url') || 'https://balajichitrarasu.github.io'
+      },
+      certs: JSON.parse(localStorage.getItem('custom_certs') || '[]'),
+      projects: JSON.parse(localStorage.getItem('custom_projects') || '[]'),
+      skills: JSON.parse(localStorage.getItem('custom_skills') || '[]'),
+      events: JSON.parse(localStorage.getItem('custom_events') || '[]'),
+      timeline: JSON.parse(localStorage.getItem('custom_timeline') || '[]'),
+      blogs: JSON.parse(localStorage.getItem('custom_blog_posts') || '[]'),
+      timestamp: new Date().toISOString()
+    };
+
+    try {
+      localStorage.setItem('custom_portfolio_database_v1', JSON.stringify(fullSnapshot));
+    } catch(e) {}
+
+    if (await this.checkHealth()) {
+      try {
+        await fetch(`${API_BASE}/api/cms/sync`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(fullSnapshot)
+        });
+      } catch (e) {}
+    }
     return true;
   },
 
   async fetchGlobalCMSData() {
+    if (await this.checkHealth()) {
+      try {
+        const res = await fetch(`${API_BASE}/api/cms/all`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && typeof data === 'object') return data;
+        }
+      } catch (e) {}
+    }
+    try {
+      const saved = localStorage.getItem('custom_portfolio_database_v1');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
     return null;
   }
 };
