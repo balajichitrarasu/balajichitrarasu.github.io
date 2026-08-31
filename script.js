@@ -663,42 +663,56 @@ document.addEventListener('DOMContentLoaded', function () {
   renderCerts();
 
   /* ────────────────────────────────────────
-     INTERACTIVE CERTIFICATE SLIDER CAROUSEL
+     INTERACTIVE CERTIFICATE SLIDER TICKER & ANDROID TOUCH SWIPE
   ─────────────────────────────────────────── */
-  var certAutoSlideTimer = null;
+  var certAutoSlideReq = null;
+  var isCertUserInteracting = false;
+  var certResumeTimeout = null;
 
   window.scrollCertSlider = function(direction) {
     var wrapper = document.getElementById('certSliderWrapper');
     if (!wrapper) return;
+    stopCertAutoSlide();
     var cardWidth = 315;
     wrapper.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
     updateCertSliderDots();
+    scheduleCertResume();
   };
 
+  function stepCertMarquee() {
+    if (isCertUserInteracting) return;
+    var wrapper = document.getElementById('certSliderWrapper');
+    if (wrapper) {
+      var maxScrollLeft = wrapper.scrollWidth - wrapper.clientWidth;
+      if (maxScrollLeft > 0) {
+        if (wrapper.scrollLeft >= maxScrollLeft - 2) {
+          wrapper.scrollLeft = 0;
+        } else {
+          wrapper.scrollLeft += 0.75;
+        }
+        updateCertSliderDots();
+      }
+    }
+    certAutoSlideReq = requestAnimationFrame(stepCertMarquee);
+  }
+
   window.startCertAutoSlide = function() {
-    if (certAutoSlideTimer) clearInterval(certAutoSlideTimer);
+    isCertUserInteracting = false;
+    if (certAutoSlideReq) cancelAnimationFrame(certAutoSlideReq);
     var statusBadge = document.getElementById('certAutoSlideStatus');
     if (statusBadge) {
       statusBadge.innerText = '⚡ Auto-Slide Active';
       statusBadge.style.color = 'var(--teal)';
       statusBadge.style.borderColor = 'rgba(100,255,218,0.25)';
     }
-
-    certAutoSlideTimer = setInterval(function() {
-      var wrapper = document.getElementById('certSliderWrapper');
-      if (!wrapper) return;
-      var maxScrollLeft = wrapper.scrollWidth - wrapper.clientWidth;
-      if (wrapper.scrollLeft >= maxScrollLeft - 10) {
-        wrapper.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        wrapper.scrollBy({ left: 315, behavior: 'smooth' });
-      }
-      updateCertSliderDots();
-    }, 4000);
+    certAutoSlideReq = requestAnimationFrame(stepCertMarquee);
   };
 
   window.stopCertAutoSlide = function() {
-    if (certAutoSlideTimer) clearInterval(certAutoSlideTimer);
+    isCertUserInteracting = true;
+    if (certAutoSlideReq) cancelAnimationFrame(certAutoSlideReq);
+    if (certResumeTimeout) clearTimeout(certResumeTimeout);
+
     var statusBadge = document.getElementById('certAutoSlideStatus');
     if (statusBadge) {
       statusBadge.innerText = '⏸️ Paused (Interactive)';
@@ -706,6 +720,13 @@ document.addEventListener('DOMContentLoaded', function () {
       statusBadge.style.borderColor = 'rgba(251,191,36,0.3)';
     }
   };
+
+  function scheduleCertResume() {
+    if (certResumeTimeout) clearTimeout(certResumeTimeout);
+    certResumeTimeout = setTimeout(function() {
+      startCertAutoSlide();
+    }, 2800);
+  }
 
   function updateCertSliderDots() {
     var wrapper = document.getElementById('certSliderWrapper');
@@ -731,25 +752,87 @@ document.addEventListener('DOMContentLoaded', function () {
   window.jumpToCertSlide = function(index) {
     var wrapper = document.getElementById('certSliderWrapper');
     if (!wrapper) return;
+    stopCertAutoSlide();
     wrapper.scrollTo({ left: index * 315, behavior: 'smooth' });
     setTimeout(updateCertSliderDots, 350);
+    scheduleCertResume();
   };
 
   function renderCertSliderDots() {
     updateCertSliderDots();
   }
 
+  // Setup Android Touch Navigation & Dragging
   setTimeout(function() {
     renderCertSliderDots();
     startCertAutoSlide();
 
     var wrapper = document.getElementById('certSliderWrapper');
-    if (wrapper) {
-      wrapper.addEventListener('scroll', function() {
-        updateCertSliderDots();
-      }, { passive: true });
-    }
-  }, 400);
+    if (!wrapper) return;
+
+    var isDown = false;
+    var startX = 0;
+    var scrollLeft = 0;
+
+    // Touch events for Android / Mobile
+    wrapper.addEventListener('touchstart', function(e) {
+      stopCertAutoSlide();
+      isDown = true;
+      startX = e.touches[0].pageX - wrapper.offsetLeft;
+      scrollLeft = wrapper.scrollLeft;
+    }, { passive: true });
+
+    wrapper.addEventListener('touchmove', function(e) {
+      if (!isDown) return;
+      var x = e.touches[0].pageX - wrapper.offsetLeft;
+      var walk = (x - startX) * 1.5;
+      wrapper.scrollLeft = scrollLeft - walk;
+      updateCertSliderDots();
+    }, { passive: true });
+
+    wrapper.addEventListener('touchend', function() {
+      isDown = false;
+      scheduleCertResume();
+    });
+
+    // Mouse drag for desktop
+    wrapper.addEventListener('mousedown', function(e) {
+      stopCertAutoSlide();
+      isDown = true;
+      wrapper.style.cursor = 'grabbing';
+      startX = e.pageX - wrapper.offsetLeft;
+      scrollLeft = wrapper.scrollLeft;
+    });
+
+    wrapper.addEventListener('mouseleave', function() {
+      if (isDown) {
+        isDown = false;
+        wrapper.style.cursor = 'grab';
+        scheduleCertResume();
+      }
+    });
+
+    wrapper.addEventListener('mouseup', function() {
+      if (isDown) {
+        isDown = false;
+        wrapper.style.cursor = 'grab';
+        scheduleCertResume();
+      }
+    });
+
+    wrapper.addEventListener('mousemove', function(e) {
+      if (!isDown) return;
+      e.preventDefault();
+      var x = e.pageX - wrapper.offsetLeft;
+      var walk = (x - startX) * 1.8;
+      wrapper.scrollLeft = scrollLeft - walk;
+      updateCertSliderDots();
+    });
+
+    wrapper.addEventListener('scroll', function() {
+      updateCertSliderDots();
+    }, { passive: true });
+  }, 350);
 
   /* ────────────────────────────────────────
      SKILL BAR ANIMATION

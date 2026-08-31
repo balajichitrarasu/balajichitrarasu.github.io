@@ -1156,26 +1156,18 @@ body::before {
   position: relative;
   width: 100%;
   overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 0.5rem 0.2rem 1.2rem;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(100,255,218,0.3) transparent;
+  padding: 0.6rem 0.4rem 1.2rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
+  user-select: none;
+  -webkit-user-select: none;
 }
 .cert-slider-container::-webkit-scrollbar {
-  height: 6px;
-}
-.cert-slider-container::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.03);
-  border-radius: 10px;
-}
-.cert-slider-container::-webkit-scrollbar-thumb {
-  background: rgba(100,255,218,0.3);
-  border-radius: 10px;
-}
-.cert-slider-container::-webkit-scrollbar-thumb:hover {
-  background: var(--teal);
+  display: none;
 }
 
 .cert-grid {
