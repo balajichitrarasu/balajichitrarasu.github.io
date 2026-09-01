@@ -1375,6 +1375,48 @@ window.copyEmail = function() {
   }
 };
 
+window.copyFullContactInfo = function() {
+  var name = 'Balaji Chitrarasu';
+  var role = 'AWS Cloud Engineer Intern & B.E. ECE Student';
+  var email = 'balajichitrarasu07@gmail.com';
+  var phone = '+91 76396 83223';
+  var linkedin = 'https://www.linkedin.com/in/balajichitrarasu';
+  var github = 'https://github.com/balajichitrarasu';
+  var website = 'https://balajichitrarasu.github.io';
+
+  var text = [
+    '--- ' + name + ' ---',
+    'Role: ' + role,
+    'Email: ' + email,
+    'Phone: ' + phone,
+    'LinkedIn: ' + linkedin,
+    'GitHub: ' + github,
+    'Portfolio: ' + website
+  ].join('\n');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function () {
+      showToast('📋 All contact details copied to clipboard!');
+    }).catch(function () { showToast('Email: ' + email + ' | Phone: ' + phone); });
+  } else {
+    showToast('Email: ' + email + ' | Phone: ' + phone);
+  }
+};
+
+window.filterSkills = function(cat, e) {
+  if (e && e.target) {
+    var btn = e.target.closest('.fbtn') || e.target;
+    var container = btn.closest('.section') || document;
+    container.querySelectorAll('.fbtn').forEach(function (b) { b.classList.remove('active'); });
+    if (btn && btn.classList) btn.classList.add('active');
+  }
+  document.querySelectorAll('#skillBarsContainer .skill-bar-item').forEach(function (item) {
+    var txt = item.textContent.toLowerCase();
+    var show = (cat === 'all' || txt.includes(cat) || (cat === 'cloud' && (txt.includes('aws') || txt.includes('cloud'))) || (cat === 'embedded' && (txt.includes('iot') || txt.includes('arduino'))));
+    item.style.display = show ? 'block' : 'none';
+  });
+};
+
 window.filterProjects = function(cat, e) {
   if (e && e.target) {
     var btn = e.target.closest('.fbtn') || e.target;

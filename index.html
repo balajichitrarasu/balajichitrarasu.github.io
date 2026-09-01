@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=78.0">
+<link rel="stylesheet" href="style.css?v=79.0">
 <script>
 var themeToggleLock = false;
 window.toggleTheme = function(e) {
@@ -432,8 +432,13 @@ window.toggleTheme = function(e) {
 
 <!-- SKILLS -->
 <section id="skills" class="section">
-  <p class="sec-eyebrow">Skills &amp; Tooling</p>
-  <h2 class="sec-title">Technical Competencies &amp; Proficiency</h2>
+  <div class="filter-bar" style="margin-bottom: 1.2rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+    <button class="fbtn active" onclick="filterSkills('all', event)">All Skills</button>
+    <button class="fbtn" onclick="filterSkills('cloud', event)">Cloud &amp; AWS</button>
+    <button class="fbtn" onclick="filterSkills('networking', event)">Networking</button>
+    <button class="fbtn" onclick="filterSkills('programming', event)">Programming</button>
+    <button class="fbtn" onclick="filterSkills('embedded', event)">IoT / Hardware</button>
+  </div>
 
   <div class="skill-bars" id="skillBarsContainer">
     <div class="skill-bar-item reveal visible">
@@ -704,6 +709,10 @@ window.toggleTheme = function(e) {
       <div class="cinfo-icon">📇</div>
       <div><p class="cinfo-label">Save Contact Card</p><p class="cinfo-val" style="color:var(--teal); font-weight:700;">Download .vcf 📥</p></div>
     </div>
+    <div class="cinfo" onclick="copyFullContactInfo()" style="cursor:pointer; background:var(--violet-dim); border-color:rgba(167,139,250,0.3);">
+      <div class="cinfo-icon">📋</div>
+      <div><p class="cinfo-label">Full Contact Sheet</p><p class="cinfo-val" style="color:var(--violet); font-weight:700;">Copy All Details 📋</p></div>
+    </div>
   </div>
   <div class="glass msg-box reveal">
     <h3 class="msg-box-title">Send a Message</h3>
@@ -786,8 +795,8 @@ window.toggleTheme = function(e) {
 <script>
   window.PORTFOLIO_API_URL = "https://balaji-portfolio-backend.onrender.com";
 </script>
-<script src="api.js?v=78.0"></script>
-<script src="script.js?v=78.0"></script>
+<script src="api.js?v=79.0"></script>
+<script src="script.js?v=79.0"></script>
 
 <!-- COMMAND PALETTE MODAL (CTRL+K) -->
 <div id="cmdPalette" class="cmd-modal" role="dialog" aria-modal="true" style="display:none;">
