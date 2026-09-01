@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=76.0">
+  <link rel="stylesheet" href="style.css?v=77.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1505,9 +1505,6 @@
         const item = localStorage.getItem(key);
         if (item === null || item === undefined || item === '') return def;
         const parsed = JSON.parse(item);
-        if (Array.isArray(parsed) && parsed.length === 0 && Array.isArray(def) && def.length > 0) {
-          return def;
-        }
         return parsed !== null && parsed !== undefined ? parsed : def;
       } catch (e) {
         const val = localStorage.getItem(key);
