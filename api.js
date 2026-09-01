@@ -170,6 +170,50 @@ window.PortfolioAPI = {
     await this.syncGlobalCMSData();
   },
 
+  /* Delete Certification from Cloud Backend API */
+  async deleteCertCloud(id) {
+    let saved = [];
+    try {
+      saved = JSON.parse(localStorage.getItem('custom_certs') || '[]');
+      saved = saved.filter(c => String(c.id) !== String(id));
+      localStorage.setItem('custom_certs', JSON.stringify(saved));
+    } catch (e) {}
+
+    if (await this.checkHealth()) {
+      try {
+        await fetch(`${API_BASE}/api/certs/${id}`, { method: 'DELETE' });
+        await fetch(`${API_BASE}/api/certs/all`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(saved)
+        });
+      } catch (e) {}
+    }
+    await this.syncGlobalCMSData();
+  },
+
+  /* Delete Project from Cloud Backend API */
+  async deleteProjCloud(id) {
+    let saved = [];
+    try {
+      saved = JSON.parse(localStorage.getItem('custom_projects') || '[]');
+      saved = saved.filter(p => String(p.id) !== String(id));
+      localStorage.setItem('custom_projects', JSON.stringify(saved));
+    } catch (e) {}
+
+    if (await this.checkHealth()) {
+      try {
+        await fetch(`${API_BASE}/api/projects/${id}`, { method: 'DELETE' });
+        await fetch(`${API_BASE}/api/projects/all`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(saved)
+        });
+      } catch (e) {}
+    }
+    await this.syncGlobalCMSData();
+  },
+
   /* Get Skills from Cloud API */
   async getSkills() {
     if (await this.checkHealth()) {

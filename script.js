@@ -715,9 +715,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Initial sync & periodic 4-second polling loop for real-time reflection everywhere
-  setTimeout(syncAllDataFromCloud, 500);
-  setInterval(syncAllDataFromCloud, 4000);
+  // Initial sync & periodic 2.5-second polling loop for real-time reflection everywhere
+  setTimeout(syncAllDataFromCloud, 300);
+  setInterval(syncAllDataFromCloud, 2500);
 
   /* ────────────────────────────────────────
      INTERACTIVE CERTIFICATE SLIDER TICKER & ANDROID TOUCH SWIPE

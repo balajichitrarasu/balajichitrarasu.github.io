@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=79.0">
+  <link rel="stylesheet" href="style.css?v=80.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -2538,12 +2538,14 @@
       setStorage('custom_certs', certs);
       renderCerts();
       if (window.PortfolioAPI) {
-        if (typeof window.PortfolioAPI.saveAllCerts === 'function') {
+        if (typeof window.PortfolioAPI.deleteCertCloud === 'function') {
+          await PortfolioAPI.deleteCertCloud(id);
+        } else if (typeof window.PortfolioAPI.saveAllCerts === 'function') {
           await PortfolioAPI.saveAllCerts(certs);
         }
         await PortfolioAPI.syncGlobalCMSData();
       }
-      showToast('Deleted certification & synced to cloud database!');
+      showToast('Deleted certification & purged from cloud database!');
     };
 
     window.restoreCerts = async () => {
@@ -2710,18 +2712,28 @@
       window.scrollTo(0, $('projects').offsetTop);
     };
 
-    window.deleteProj = id => {
+    window.deleteProj = async id => {
       if(!confirm('Delete this project?')) return;
       projects = projects.filter(x => String(x.id) !== String(id));
+      setStorage('custom_projects', projects);
       renderProjects();
-      showToast('Deleted!');
+      if (window.PortfolioAPI) {
+        if (typeof window.PortfolioAPI.deleteProjCloud === 'function') {
+          await PortfolioAPI.deleteProjCloud(id);
+        }
+        await PortfolioAPI.syncGlobalCMSData();
+      }
+      showToast('Deleted project & purged from cloud database!');
     };
 
-    window.restoreProjects = () => {
+    window.restoreProjects = async () => {
       projects = JSON.parse(JSON.stringify(defaultProjects));
       setStorage('custom_projects', projects);
       renderProjects();
-      showToast('Default projects restored!');
+      if (window.PortfolioAPI) {
+        await PortfolioAPI.syncGlobalCMSData();
+      }
+      showToast('Default projects restored & synced to cloud database!');
     };
 
     if ($('proj-cancel')) {
@@ -2791,10 +2803,16 @@
       if ($('skill-cat')) $('skill-cat').value = s.category || '';
       if ($('skill-cancel')) $('skill-cancel').style.display = 'inline-block';
     };
-    window.deleteSkill = i => {
+    window.deleteSkill = async i => {
       if(confirm('Delete skill?')) {
         skills.splice(i, 1);
+        setStorage('custom_skills', skills);
         renderSkills();
+        if (window.PortfolioAPI && typeof window.PortfolioAPI.saveSkills === 'function') {
+          await PortfolioAPI.saveSkills(skills);
+        }
+        if (window.PortfolioAPI) await PortfolioAPI.syncGlobalCMSData();
+        showToast('Skill deleted & synced to cloud database!');
       }
     };
     window.moveSkill = (i, dir) => {
