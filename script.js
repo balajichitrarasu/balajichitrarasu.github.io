@@ -1258,10 +1258,13 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return showFormMsg('err', 'Please enter a valid email address.');
       if (!m)  return showFormMsg('err', 'Please enter a message.');
 
+      if (window.PortfolioAPI && typeof window.PortfolioAPI.sendMessage === 'function') {
+        window.PortfolioAPI.sendMessage(n, em, m);
+      }
       var subj = encodeURIComponent('Portfolio Contact from ' + n);
       var body = encodeURIComponent('From: ' + n + ' (' + em + ')\n\n' + m);
       window.location.href = 'mailto:balajichitrarasu07@gmail.com?subject=' + subj + '&body=' + body;
-      showFormMsg('ok', '✓ Opening your email client! Alternatively reach me at +91 76396 83223.');
+      showFormMsg('ok', '✓ Opening your email client & saved message to admin inbox!');
     });
   }
 
