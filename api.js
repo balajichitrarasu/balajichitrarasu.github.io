@@ -13,17 +13,22 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
 window.PortfolioAPI = {
   isOnline: false,
 
-  /* Check Backend Health Status */
-  async checkHealth() {
-    try {
-      const res = await fetch(`${API_BASE}/api/health`, { method: 'GET' });
-      if (res.ok) {
-        this.isOnline = true;
-        return true;
-      }
-    } catch (e) {
-      this.isOnline = false;
+  /* Check Backend Health Status with Retry Engine for Cold Starts */
+  async checkHealth(retries = 2) {
+    for (let i = 0; i <= retries; i++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(`${API_BASE}/api/health`, { method: 'GET', signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          this.isOnline = true;
+          return true;
+        }
+      } catch (e) {}
+      if (i < retries) await new Promise(r => setTimeout(r, 1200));
     }
+    this.isOnline = false;
     return false;
   },
 

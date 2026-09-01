@@ -719,6 +719,13 @@ document.addEventListener('DOMContentLoaded', function () {
   setTimeout(syncAllDataFromCloud, 300);
   setInterval(syncAllDataFromCloud, 2500);
 
+  /* KEEP-ALIVE ENGINE TO PREVENT RENDER CLOUD BACKEND COLD STARTS */
+  setInterval(function() {
+    if (window.PortfolioAPI && typeof window.PortfolioAPI.checkHealth === 'function') {
+      window.PortfolioAPI.checkHealth(0);
+    }
+  }, 30000);
+
   /* ────────────────────────────────────────
      INTERACTIVE CERTIFICATE SLIDER TICKER & ANDROID TOUCH SWIPE
   ─────────────────────────────────────────── */
