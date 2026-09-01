@@ -721,6 +721,32 @@ body::before {
   color: var(--violet) !important;
   border-radius: 20px !important;
 }
+.nav-pill-sync {
+  background: rgba(56,189,248,0.12) !important;
+  border: 1px solid rgba(56,189,248,0.3) !important;
+  color: #38bdf8 !important;
+  border-radius: 20px !important;
+  padding: .35rem .85rem !important;
+  font-size: .8rem !important;
+  font-weight: 600 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: .35rem !important;
+  cursor: pointer !important;
+  transition: all .2s var(--ease-fast) !important;
+  outline: none !important;
+  font-family: inherit !important;
+}
+.nav-pill-sync:hover {
+  background: rgba(56,189,248,0.22) !important;
+  border-color: rgba(56,189,248,0.6) !important;
+  color: #7dd3fc !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 0 12px rgba(56,189,248,0.3) !important;
+}
+.nav-pill-sync:active {
+  transform: translateY(0) scale(0.97) !important;
+}
 
 .nav-toggle {
   display: none; flex-direction: column; justify-content: center;
