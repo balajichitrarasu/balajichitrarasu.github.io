@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=83.0">
+<link rel="stylesheet" href="style.css?v=84.0">
 <script>
 var themeToggleLock = false;
 window.toggleTheme = function(e) {
@@ -171,6 +171,7 @@ window.toggleTheme = function(e) {
       <li><a href="#contact">Contact</a></li>
       <li><button id="cmdBtn" class="cmd-pill" title="Command Palette (Ctrl+K)"><span>⌘K</span> Quick Search</button></li>
       <li><button id="themeToggle" onclick="toggleTheme()" class="glossy-theme-btn" aria-label="Toggle Theme" title="Toggle Light/Dark Mode"><span class="theme-icon-dark">🌙</span><span class="theme-icon-light">☀️</span> Mode</button></li>
+      <li><button onclick="clearAndSyncDeviceCache()" class="nav-pill" style="border-color:rgba(100,255,218,0.4); color:var(--teal);" title="Clear Browser Cache &amp; Sync Live Cloud Data">🔄 Sync Data</button></li>
       <li><a href="blog.html" class="nav-pill">✦ Blog</a></li>
       <li><a href="admin.html" class="nav-pill-v">⚙ Admin</a></li>
     </ul>
@@ -795,8 +796,8 @@ window.toggleTheme = function(e) {
 <script>
   window.PORTFOLIO_API_URL = "https://balaji-portfolio-backend.onrender.com";
 </script>
-<script src="api.js?v=83.0"></script>
-<script src="script.js?v=83.0"></script>
+<script src="api.js?v=84.0"></script>
+<script src="script.js?v=84.0"></script>
 
 <!-- COMMAND PALETTE MODAL (CTRL+K) -->
 <div id="cmdPalette" class="cmd-modal" role="dialog" aria-modal="true" style="display:none;">

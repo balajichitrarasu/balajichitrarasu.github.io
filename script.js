@@ -1371,6 +1371,22 @@ window.showToast = function(txt) {
   t._timer = setTimeout(function () { t.classList.remove('show'); }, 3200);
 };
 
+window.clearAndSyncDeviceCache = function() {
+  if (confirm('🔄 Clear browser cache & sync live database across devices?')) {
+    try {
+      localStorage.removeItem('custom_certs');
+      localStorage.removeItem('custom_projects');
+      localStorage.removeItem('custom_skills');
+      localStorage.removeItem('custom_portfolio_database_v1');
+    } catch(e) {}
+    showToast('🔄 Device cache cleared! Fetching live database...');
+    setTimeout(function() {
+      if (typeof syncAllDataFromCloud === 'function') syncAllDataFromCloud();
+      location.reload();
+    }, 500);
+  }
+};
+
 window.copyEmail = function() {
   var email = 'balajichitrarasu07@gmail.com';
   if (navigator.clipboard && navigator.clipboard.writeText) {
