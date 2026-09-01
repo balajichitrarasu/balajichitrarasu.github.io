@@ -671,7 +671,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (typeof window.PortfolioAPI.getCerts === 'function') {
       window.PortfolioAPI.getCerts().then(function(cloudCerts) {
-        if (Array.isArray(cloudCerts) && cloudCerts.length > 0) {
+        if (Array.isArray(cloudCerts)) {
           try { localStorage.setItem('custom_certs', JSON.stringify(cloudCerts)); } catch(e) {}
           renderCerts();
         }
@@ -680,7 +680,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (typeof window.PortfolioAPI.getSkills === 'function') {
       window.PortfolioAPI.getSkills().then(function(cloudSkills) {
-        if (Array.isArray(cloudSkills) && cloudSkills.length > 0) {
+        if (Array.isArray(cloudSkills)) {
           try { localStorage.setItem('custom_skills', JSON.stringify(cloudSkills)); } catch(e) {}
           renderSkills();
         }
@@ -689,7 +689,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (typeof window.PortfolioAPI.getProjects === 'function') {
       window.PortfolioAPI.getProjects().then(function(cloudProjects) {
-        if (Array.isArray(cloudProjects) && cloudProjects.length > 0) {
+        if (Array.isArray(cloudProjects)) {
           try { localStorage.setItem('custom_projects', JSON.stringify(cloudProjects)); } catch(e) {}
           renderProjects();
         }

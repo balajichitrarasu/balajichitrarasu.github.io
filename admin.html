@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=74.0">
+  <link rel="stylesheet" href="style.css?v=75.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -2534,7 +2534,11 @@
       certs = certs.filter(c => String(c.id) !== String(id));
       setStorage('custom_certs', certs);
       renderCerts();
-      if (window.PortfolioAPI) PortfolioAPI.syncGlobalCMSData();
+      if (window.PortfolioAPI && typeof window.PortfolioAPI.saveAllCerts === 'function') {
+        PortfolioAPI.saveAllCerts(certs);
+      } else if (window.PortfolioAPI) {
+        PortfolioAPI.syncGlobalCMSData();
+      }
       showToast('Deleted certification!');
     };
 
@@ -2542,7 +2546,11 @@
       certs = JSON.parse(JSON.stringify(defaultCerts));
       setStorage('custom_certs', certs);
       renderCerts();
-      if (window.PortfolioAPI) PortfolioAPI.syncGlobalCMSData();
+      if (window.PortfolioAPI && typeof window.PortfolioAPI.saveAllCerts === 'function') {
+        PortfolioAPI.saveAllCerts(certs);
+      } else if (window.PortfolioAPI) {
+        PortfolioAPI.syncGlobalCMSData();
+      }
       showToast('Default certifications restored!');
     };
 
@@ -2551,7 +2559,11 @@
       certs = [];
       setStorage('custom_certs', []);
       renderCerts();
-      if (window.PortfolioAPI) PortfolioAPI.syncGlobalCMSData();
+      if (window.PortfolioAPI && typeof window.PortfolioAPI.saveAllCerts === 'function') {
+        PortfolioAPI.saveAllCerts([]);
+      } else if (window.PortfolioAPI) {
+        PortfolioAPI.syncGlobalCMSData();
+      }
       showToast('🧹 All certificate data cleared! 0 certificates in database.');
     };
 

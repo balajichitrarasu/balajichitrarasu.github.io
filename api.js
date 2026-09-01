@@ -118,19 +118,19 @@ window.PortfolioAPI = {
         const res = await fetch(`${API_BASE}/api/certs`);
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) return data;
+          if (Array.isArray(data)) return data;
         }
       } catch (e) {}
     }
     // LocalStorage Fallback
     try {
       const saved = localStorage.getItem('custom_certs');
-      if (saved) return JSON.parse(saved);
+      if (saved !== null) return JSON.parse(saved);
     } catch (e) {}
     return null;
   },
 
-  /* Save / Create Certification */
+  /* Save / Create Single Certification */
   async saveCert(certObj) {
     // Save to local storage first
     try {
@@ -153,6 +153,23 @@ window.PortfolioAPI = {
     }
   },
 
+  /* Save Full Certifications List (Supports Delete & Clear All) */
+  async saveAllCerts(certsArray) {
+    try {
+      localStorage.setItem('custom_certs', JSON.stringify(certsArray));
+    } catch (e) {}
+    if (await this.checkHealth()) {
+      try {
+        await fetch(`${API_BASE}/api/certs/all`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(certsArray)
+        });
+      } catch (e) {}
+    }
+    await this.syncGlobalCMSData();
+  },
+
   /* Get Skills from Cloud API */
   async getSkills() {
     if (await this.checkHealth()) {
@@ -160,13 +177,13 @@ window.PortfolioAPI = {
         const res = await fetch(`${API_BASE}/api/skills`);
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) return data;
+          if (Array.isArray(data)) return data;
         }
       } catch (e) {}
     }
     try {
       const saved = localStorage.getItem('custom_skills');
-      if (saved) return JSON.parse(saved);
+      if (saved !== null) return JSON.parse(saved);
     } catch (e) {}
     return null;
   },
