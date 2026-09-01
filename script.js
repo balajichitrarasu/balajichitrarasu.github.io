@@ -577,44 +577,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var saved = null;
     try {
-      saved = localStorage.getItem('custom_certs');
-      if (saved) saved = JSON.parse(saved);
+      var raw = localStorage.getItem('custom_certs');
+      if (raw !== null) saved = JSON.parse(raw);
     } catch (e) {}
 
-    // Baseline master list of 4 default certificates
-    var masterList = DEFAULT_CERTS.map(function(c) {
-      return {
-        id: c.id,
-        title: c.title,
-        org: c.org,
-        date: c.date,
-        desc: c.desc,
-        image: c.image,
-        badgeText: c.badgeText,
-        badgeClass: c.badgeClass
-      };
-    });
-
-    if (Array.isArray(saved) && saved.length > 0) {
-      // Merge updates for default certificates
-      masterList.forEach(function(m) {
-        var userVer = saved.find(function(s) { return String(s.id) === String(m.id); });
-        if (userVer) {
-          if (userVer.title) m.title = userVer.title;
-          if (userVer.org || userVer.issuer) m.org = userVer.org || userVer.issuer;
-          if (userVer.date || userVer.status) m.date = userVer.date || userVer.status;
-          if (userVer.desc || userVer.description) m.desc = userVer.desc || userVer.description;
-          if (userVer.image) m.image = userVer.image;
-        }
+    var masterList = [];
+    if (Array.isArray(saved)) {
+      masterList = saved;
+    } else {
+      masterList = DEFAULT_CERTS.map(function(c) {
+        return {
+          id: c.id,
+          title: c.title,
+          org: c.org,
+          date: c.date,
+          desc: c.desc,
+          image: c.image,
+          badgeText: c.badgeText,
+          badgeClass: c.badgeClass
+        };
       });
+    }
 
-      // Append any newly added custom certificates beyond defaults
-      saved.forEach(function(s) {
-        var isMaster = masterList.some(function(m) { return String(m.id) === String(s.id); });
-        if (!isMaster) {
-          masterList.push(s);
-        }
-      });
+    if (masterList.length === 0) {
+      container.innerHTML = '<div style="grid-column:1 / -1; text-align:center; padding:2.5rem 1rem; color:var(--text-muted); font-size:0.9rem; background:rgba(255,255,255,0.02); border:1px dashed var(--border); border-radius:12px;">📜 No certificates in database. Add your certificates in Admin CMS!</div>';
+      setTimeout(renderCertSliderDots, 200);
+      return;
     }
 
     container.innerHTML = masterList.map(function (c, idx) {

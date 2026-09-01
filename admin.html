@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=72.0">
+  <link rel="stylesheet" href="style.css?v=73.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -2413,29 +2413,33 @@
 
     // Certs CRUD
     function renderCerts() {
-      if (!Array.isArray(certs) || certs.length === 0) certs = defaultCerts;
+      if (!Array.isArray(certs)) certs = defaultCerts;
       const list = $('cert-list');
       if (!list) return;
       list.innerHTML = '';
-      certs.forEach(c => {
-        const issuer = c.org || c.issuer || 'Issuer';
-        const statusDate = c.date || c.status || '';
-        list.innerHTML += `
-          <div class="card" style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1rem; margin-bottom:0.75rem;">
-            <h4 style="color:var(--text); font-weight:700; margin-bottom:0.2rem;">${c.title}</h4>
-            <p class="text-muted" style="font-size:0.8rem; color:var(--text-muted);">${issuer} ${statusDate ? '| ' + statusDate : ''}</p>
-            ${(c.image || c.img) ? `<img src="${c.image || c.img}" style="max-width:100%; max-height:120px; object-fit:contain; margin-top:0.5rem; border-radius:6px; border:1px solid var(--border);">` : ''}
-            <div class="card-actions" style="display:flex; gap:0.5rem; margin-top:0.75rem;">
-              <button class="btn btn-primary" onclick="editCert('${c.id}')" style="padding:0.3rem 0.8rem; font-size:0.8rem;">Edit</button>
-              <button class="btn btn-danger" onclick="deleteCert('${c.id}')" style="padding:0.3rem 0.8rem; font-size:0.8rem;">Delete</button>
+      if (certs.length === 0) {
+        list.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:1.5rem; color:var(--text-muted); font-size:0.85rem; background:rgba(255,255,255,0.02); border:1px dashed var(--border); border-radius:6px;">📜 0 certifications in database. Use the form above to add a certificate!</div>';
+      } else {
+        certs.forEach(c => {
+          const issuer = c.org || c.issuer || 'Issuer';
+          const statusDate = c.date || c.status || '';
+          list.innerHTML += `
+            <div class="card" style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1rem; margin-bottom:0.75rem;">
+              <h4 style="color:var(--text); font-weight:700; margin-bottom:0.2rem;">${c.title}</h4>
+              <p class="text-muted" style="font-size:0.8rem; color:var(--text-muted);">${issuer} ${statusDate ? '| ' + statusDate : ''}</p>
+              ${(c.image || c.img) ? `<img src="${c.image || c.img}" style="max-width:100%; max-height:120px; object-fit:contain; margin-top:0.5rem; border-radius:6px; border:1px solid var(--border);">` : ''}
+              <div class="card-actions" style="display:flex; gap:0.5rem; margin-top:0.75rem;">
+                <button class="btn btn-primary" onclick="editCert('${c.id}')" style="padding:0.3rem 0.8rem; font-size:0.8rem;">Edit</button>
+                <button class="btn btn-danger" onclick="deleteCert('${c.id}')" style="padding:0.3rem 0.8rem; font-size:0.8rem;">Delete</button>
+              </div>
             </div>
-          </div>
-        `;
-      });
+          `;
+        });
+      }
       setStorage('custom_certs', certs);
       loadAnalytics();
     }
-    
+
     $('cert-form').addEventListener('submit', e => {
       e.preventDefault();
       const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -2461,7 +2465,10 @@
         else certs.push(cert);
         
         renderCerts();
-        if (window.PortfolioAPI) PortfolioAPI.saveCert(cert);
+        if (window.PortfolioAPI) {
+          PortfolioAPI.saveCert(cert);
+          PortfolioAPI.syncGlobalCMSData();
+        }
 
         // AUTO-DOWNLOAD CROPPED IMAGE ON SAVE FORM CLICK
         if (certImageVal && certImageVal.indexOf('data:image') === 0) {
@@ -2525,24 +2532,27 @@
     window.deleteCert = id => {
       if(!confirm('Delete this certification?')) return;
       certs = certs.filter(c => String(c.id) !== String(id));
+      setStorage('custom_certs', certs);
       renderCerts();
-      showToast('Deleted!');
+      if (window.PortfolioAPI) PortfolioAPI.syncGlobalCMSData();
+      showToast('Deleted certification!');
     };
 
     window.restoreCerts = () => {
       certs = JSON.parse(JSON.stringify(defaultCerts));
       setStorage('custom_certs', certs);
       renderCerts();
+      if (window.PortfolioAPI) PortfolioAPI.syncGlobalCMSData();
       showToast('Default certifications restored!');
     };
 
     window.cleanCertDatabase = () => {
-      if(!confirm('Clear all legacy/conflicting certificate caches and start clean?')) return;
-      certs = JSON.parse(JSON.stringify(defaultCerts));
-      localStorage.removeItem('custom_certs');
-      setStorage('custom_certs', certs);
+      if(!confirm('Clear ALL certificate data and start with 0 certificates?')) return;
+      certs = [];
+      setStorage('custom_certs', []);
       renderCerts();
-      showToast('🧹 Legacy certificate conflicts cleared! Clean database ready.');
+      if (window.PortfolioAPI) PortfolioAPI.syncGlobalCMSData();
+      showToast('🧹 All certificate data cleared! 0 certificates in database.');
     };
 
     $('cert-cancel').addEventListener('click', () => {
