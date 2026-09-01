@@ -127,12 +127,11 @@ window.PortfolioAPI = {
         }
       } catch (e) {}
     }
-    // LocalStorage Fallback
     try {
       const saved = localStorage.getItem('custom_certs');
       if (saved !== null) return JSON.parse(saved);
     } catch (e) {}
-    return null;
+    return [];
   },
 
   /* Save / Create Single Certification */

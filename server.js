@@ -241,25 +241,61 @@ const server = http.createServer(async (req, res) => {
     return res.end(JSON.stringify({ success: true, deletedId: id }));
   }
 
+  // Unified CMS Snapshot API
+  if (url === '/api/cms/sync' && (req.method === 'POST' || req.method === 'PUT')) {
+    const body = await parseBody(req);
+    if (body && typeof body === 'object') {
+      if (body.profile) db.profile = { ...db.profile, ...body.profile };
+      if (Array.isArray(body.certs)) db.certs = body.certs;
+      if (Array.isArray(body.projects)) db.projects = body.projects;
+      if (Array.isArray(body.skills)) db.skills = body.skills;
+      if (Array.isArray(body.events)) db.events = body.events;
+      if (Array.isArray(body.timeline)) db.timeline = body.timeline;
+      if (Array.isArray(body.blogs)) db.blog = body.blogs;
+      saveDB(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, database: db }));
+    }
+  }
+
+  if (url === '/api/cms/all' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify(db));
+  }
+
   // Certifications API
+  if (url === '/api/certs/all' && (req.method === 'POST' || req.method === 'PUT')) {
+    const body = await parseBody(req);
+    if (Array.isArray(body)) {
+      db.certs = body;
+      saveDB(db);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, certs: db.certs }));
+    }
+  }
+
   if (url === '/api/certs') {
     if (req.method === 'GET') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify(db.certs));
     }
-    if (req.method === 'POST') {
+    if (req.method === 'POST' || req.method === 'PUT') {
       const body = await parseBody(req);
-      const newCert = { id: Date.now(), ...body };
-      db.certs.push(newCert);
+      const idx = db.certs.findIndex(c => String(c.id) === String(body.id));
+      if (idx !== -1) {
+        db.certs[idx] = { ...db.certs[idx], ...body };
+      } else {
+        db.certs.push({ id: body.id || Date.now(), ...body });
+      }
       saveDB(db);
-      res.writeHead(201, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ success: true, cert: newCert }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ success: true, certs: db.certs }));
     }
   }
 
   if (url.startsWith('/api/certs/') && req.method === 'DELETE') {
     const id = url.split('/')[3];
-    db.certs = db.certs.filter(c => c.id != id);
+    db.certs = db.certs.filter(c => String(c.id) !== String(id));
     saveDB(db);
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({ success: true, deletedId: id }));
