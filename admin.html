@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=75.0">
+  <link rel="stylesheet" href="style.css?v=76.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -2529,42 +2529,45 @@
       window.scrollTo(0, $('certs').offsetTop);
     };
 
-    window.deleteCert = id => {
+    window.deleteCert = async id => {
       if(!confirm('Delete this certification?')) return;
       certs = certs.filter(c => String(c.id) !== String(id));
       setStorage('custom_certs', certs);
       renderCerts();
-      if (window.PortfolioAPI && typeof window.PortfolioAPI.saveAllCerts === 'function') {
-        PortfolioAPI.saveAllCerts(certs);
-      } else if (window.PortfolioAPI) {
-        PortfolioAPI.syncGlobalCMSData();
+      if (window.PortfolioAPI) {
+        if (typeof window.PortfolioAPI.saveAllCerts === 'function') {
+          await PortfolioAPI.saveAllCerts(certs);
+        }
+        await PortfolioAPI.syncGlobalCMSData();
       }
-      showToast('Deleted certification!');
+      showToast('Deleted certification & synced to cloud database!');
     };
 
-    window.restoreCerts = () => {
+    window.restoreCerts = async () => {
       certs = JSON.parse(JSON.stringify(defaultCerts));
       setStorage('custom_certs', certs);
       renderCerts();
-      if (window.PortfolioAPI && typeof window.PortfolioAPI.saveAllCerts === 'function') {
-        PortfolioAPI.saveAllCerts(certs);
-      } else if (window.PortfolioAPI) {
-        PortfolioAPI.syncGlobalCMSData();
+      if (window.PortfolioAPI) {
+        if (typeof window.PortfolioAPI.saveAllCerts === 'function') {
+          await PortfolioAPI.saveAllCerts(certs);
+        }
+        await PortfolioAPI.syncGlobalCMSData();
       }
-      showToast('Default certifications restored!');
+      showToast('Default certifications restored & synced to cloud database!');
     };
 
-    window.cleanCertDatabase = () => {
+    window.cleanCertDatabase = async () => {
       if(!confirm('Clear ALL certificate data and start with 0 certificates?')) return;
       certs = [];
       setStorage('custom_certs', []);
       renderCerts();
-      if (window.PortfolioAPI && typeof window.PortfolioAPI.saveAllCerts === 'function') {
-        PortfolioAPI.saveAllCerts([]);
-      } else if (window.PortfolioAPI) {
-        PortfolioAPI.syncGlobalCMSData();
+      if (window.PortfolioAPI) {
+        if (typeof window.PortfolioAPI.saveAllCerts === 'function') {
+          await PortfolioAPI.saveAllCerts([]);
+        }
+        await PortfolioAPI.syncGlobalCMSData();
       }
-      showToast('🧹 All certificate data cleared! 0 certificates in database.');
+      showToast('🧹 All certificate data cleared & synced to cloud database!');
     };
 
     $('cert-cancel').addEventListener('click', () => {
