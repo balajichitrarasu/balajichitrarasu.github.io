@@ -726,7 +726,7 @@ body::before {
   border: 1px solid rgba(56,189,248,0.3) !important;
   color: #38bdf8 !important;
   border-radius: 20px !important;
-  padding: .35rem .75rem !important;
+  padding: .35rem .6rem !important;
   font-size: .8rem !important;
   font-weight: 600 !important;
   display: inline-flex !important;
