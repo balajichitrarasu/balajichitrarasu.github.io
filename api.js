@@ -357,8 +357,8 @@ window.PortfolioAPI = {
   },
 
   /* ══ UNIFIED REAL-TIME CLOUD DATABASE CONTROLLER ══ */
-  async syncGlobalCMSData() {
-    const fullSnapshot = {
+  async syncGlobalCMSData(overrideObj) {
+    let fullSnapshot = {
       profile: {
         name: localStorage.getItem('custom_profile_name') || 'Balaji Chitrarasu',
         role: localStorage.getItem('custom_profile_role') || 'AWS Cloud Engineer Intern & B.E. ECE Student',
@@ -371,6 +371,15 @@ window.PortfolioAPI = {
         phone: localStorage.getItem('custom_phone_url') || '+91 76396 83223',
         website: localStorage.getItem('custom_website_url') || 'https://balajichitrarasu.github.io'
       },
+      admin_credentials: {
+        username: localStorage.getItem('custom_admin_user') || 'Stealth@227',
+        password: localStorage.getItem('custom_admin_pass') || 'Cleared@#9486'
+      },
+      security_lockout: {
+        attempts: parseInt(localStorage.getItem('failed_login_attempts') || '0'),
+        lockoutUntil: parseInt(localStorage.getItem('login_lockout_until') || '0'),
+        isPerm: localStorage.getItem('login_permanently_locked') === 'true'
+      },
       certs: JSON.parse(localStorage.getItem('custom_certs') || '[]'),
       projects: JSON.parse(localStorage.getItem('custom_projects') || '[]'),
       skills: JSON.parse(localStorage.getItem('custom_skills') || '[]'),
@@ -380,15 +389,19 @@ window.PortfolioAPI = {
       timestamp: new Date().toISOString()
     };
 
+    if (overrideObj && typeof overrideObj === 'object') {
+      fullSnapshot = { ...fullSnapshot, ...overrideObj };
+    }
+
     try {
       localStorage.setItem('custom_portfolio_database_v1', JSON.stringify(fullSnapshot));
     } catch(e) {}
 
     if (await this.checkHealth()) {
       try {
-        await fetch(`${API_BASE}/api/cms/sync`, {
+        await fetch(`${API_BASE}/api/cms/sync?_t=${Date.now()}`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache, no-store' },
           body: JSON.stringify(fullSnapshot)
         });
       } catch (e) {}
@@ -399,7 +412,9 @@ window.PortfolioAPI = {
   async fetchGlobalCMSData() {
     if (await this.checkHealth()) {
       try {
-        const res = await fetch(`${API_BASE}/api/cms/all`);
+        const res = await fetch(`${API_BASE}/api/cms/all?_t=${Date.now()}`, {
+          headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+        });
         if (res.ok) {
           const data = await res.json();
           if (data && typeof data === 'object') return data;
