@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=96.0">
+  <link rel="stylesheet" href="style.css?v=97.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1615,11 +1615,22 @@
         }, 750);
 
         setTimeout(() => {
+          const dynamicToken = 'token_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
           if (remEl && remEl.checked) {
-            localStorage.setItem('admin_session', 'authenticated_admin_2026');
+            localStorage.setItem('admin_session', dynamicToken);
           } else {
-            sessionStorage.setItem('admin_session', 'authenticated_admin_2026');
+            sessionStorage.setItem('admin_session', dynamicToken);
           }
+          localStorage.setItem('admin_session_token', dynamicToken);
+
+          // Push active session token to Cloud DB so only this device session is active
+          try {
+            if (window.PortfolioAPI && typeof window.PortfolioAPI.syncGlobalCMSData === 'function') {
+              window.PortfolioAPI.syncGlobalCMSData({
+                admin_credentials: { username: storedUser, password: storedPass, active_token: dynamicToken }
+              });
+            }
+          } catch(e) {}
 
           if (overlay) overlay.classList.remove('show');
           if (fill) fill.style.width = '0%';
@@ -4090,10 +4101,12 @@ Note: The login form is locked worldwide on all devices until you click link #1 
         return false;
       }
       const sessionToken = sessionStorage.getItem('admin_session') || localStorage.getItem('admin_session');
-      if (sessionToken === 'authenticated_admin_2026' || sessionToken) {
+      if (sessionToken && sessionToken !== 'authenticated_admin_2026') {
         hideLoginModal();
         return true;
       } else {
+        sessionStorage.removeItem('admin_session');
+        localStorage.removeItem('admin_session');
         showLoginModal();
         return false;
       }
@@ -4103,7 +4116,11 @@ Note: The login form is locked worldwide on all devices until you click link #1 
       const modal = $('loginModal');
       const container = document.querySelector('.admin-container');
       if (modal) modal.style.display = 'flex';
-      if (container) container.style.display = 'none';
+      if (container) {
+        container.style.display = 'none';
+        container.style.opacity = '0';
+        container.style.pointerEvents = 'none';
+      }
       if ($('nav-logout-btn')) $('nav-logout-btn').style.display = 'none';
     }
 
@@ -4111,7 +4128,11 @@ Note: The login form is locked worldwide on all devices until you click link #1 
       const modal = $('loginModal');
       const container = document.querySelector('.admin-container');
       if (modal) modal.style.display = 'none';
-      if (container) container.style.display = 'flex';
+      if (container) {
+        container.style.display = 'flex';
+        container.style.opacity = '1';
+        container.style.pointerEvents = 'all';
+      }
       if ($('nav-logout-btn')) $('nav-logout-btn').style.display = 'inline-block';
     }
 

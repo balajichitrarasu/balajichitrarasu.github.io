@@ -16,7 +16,8 @@ const INITIAL_DB = {
   admin_credentials: {
     username: "Stealth@227",
     password: "Cleared@#9486",
-    session_version: 1001
+    session_version: 1001,
+    active_token: "token_initial_2026"
   },
   profile: {
     name: "Balaji Chitrarasu",
