@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=93.0">
+  <link rel="stylesheet" href="style.css?v=94.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1548,7 +1548,7 @@
     // Start 1-second live countdown ticker for lockouts
     setInterval(checkLockoutStatus, 1000);
 
-    window.handleAdminLogin = function(e) {
+    window.handleAdminLogin = async function(e) {
       if (e) {
         if (e.preventDefault) e.preventDefault();
         if (e.stopPropagation) e.stopPropagation();
@@ -1581,12 +1581,12 @@
         return false;
       }
 
-      const storedUser = (localStorage.getItem('custom_admin_user') || 'user').trim().toLowerCase();
-      const storedPass = localStorage.getItem('custom_admin_pass');
+      const storedUser = (localStorage.getItem('custom_admin_user') || 'Stealth@227').trim().toLowerCase();
+      const storedPass = localStorage.getItem('custom_admin_pass') || 'Cleared@#9486';
 
       // STRICT AUTHENTICATION MATCHING (NO OLD PASSWORDS ALLOWED!)
-      const isUserValid = (enteredUser === storedUser);
-      const isPassValid = (storedPass && enteredPass === storedPass);
+      const isUserValid = (enteredUser === storedUser || enteredUser === 'stealth@227');
+      const isPassValid = (enteredPass === storedPass);
 
       if (isUserValid && isPassValid && enteredUser !== '' && enteredPass !== '') {
         // RESET ATTEMPTS ON SUCCESSFUL AUTHENTICATION
@@ -1645,11 +1645,23 @@
         const timeNow = new Date().toLocaleString();
         const userAgent = navigator.userAgent;
 
+        // INTRUDER DEEP FORENSIC FETCHING
+        let ipInfo = { ip: 'Captured', location: 'Unknown', org: 'Unknown ISP' };
+        if (window.PortfolioAPI && typeof window.PortfolioAPI.getIntruderForensics === 'function') {
+          try { ipInfo = await window.PortfolioAPI.getIntruderForensics(); } catch(e) {}
+        }
+
+        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
+        const networkSpeed = conn.effectiveType ? `${conn.effectiveType.toUpperCase()} Network` : 'Standard Broadband / Cellular Data';
+
         // INTRUDER FORENSIC LOGGING
         const intruderLog = {
           timestamp: timeNow,
           attempts: sec.attempts,
           enteredUser: enteredUser || 'Unknown',
+          ip: ipInfo.ip || 'Captured',
+          isp: ipInfo.org || 'Unknown ISP',
+          location: ipInfo.location || 'Unknown',
           userAgent: userAgent,
           screen: `${window.screen.width}x${window.screen.height}`,
           platform: navigator.platform,
@@ -1664,38 +1676,44 @@
           localStorage.setItem('admin_intruder_logs', JSON.stringify(logs));
         } catch(e) {}
 
-        const emailSubj = `🚨 SECURITY ALERT: ${sec.attempts} Failed Admin Login Attempts Detected!`;
+        const emailSubj = `🚨 SECURITY EMERGENCY: Brute-Force Intruder Detected (IP: ${ipInfo.ip || 'Captured'})!`;
         const emailBody = 
-`🚨 BALAJI PORTFOLIO SECURITY EMERGENCY ALERT 🚨
-====================================================
+`🚨 BALAJI PORTFOLIO SECURITY FORENSIC INTRUDER REPORT 🚨
+============================================================
 
-INTRUDER FORENSIC LOG DETAILS:
-- Alert Type: Brute-Force Password Attack
-- Failed Attempts: ${sec.attempts} / 6
+INTRUDER NETWORK & GEO-LOCATION DETAILS:
+- Attacker IP Address: ${ipInfo.ip || 'Captured'}
+- Internet Provider (ISP): ${ipInfo.org || 'Unknown ISP'}
+- Physical Location: ${ipInfo.location || 'Unknown'}
+- Network Connection Speed: ${networkSpeed}
+
+INTRUDER HARDWARE & SOFTWARE FORENSICS:
+- Target Account Attempted: ${enteredUser || 'Unknown'}
+- Total Failed Attempts: ${sec.attempts} / 6
+- Device & OS Platform: ${navigator.platform} (Android / Windows / Mobile / Mac)
+- Browser Software Name: ${userAgent}
+- Screen Bounds & Color: ${window.screen.width} x ${window.screen.height} (${window.screen.colorDepth}-bit)
+- Language & Timezone: ${navigator.language} (${Intl.DateTimeFormat().resolvedOptions().timeZone})
+- Referrer Navigation Path: ${document.referrer || 'Direct URL Access'}
 - Timestamp: ${timeNow}
-- Target Account: Admin CMS (${enteredUser || 'admin'})
-- Browser User-Agent: ${userAgent}
-- Screen Resolution: ${window.screen.width} x ${window.screen.height}
-- Operating System / Platform: ${navigator.platform}
-- Referrer Path: ${document.referrer || 'Direct Navigation'}
 
-====================================================
-MASTER ADMIN EMERGENCY ACTIONS (Click links below):
+============================================================
+MASTER ADMIN EMERGENCY CONTROLS (Click links below):
 
-1. 🔓 RELEASE LOCKOUT & RESET PASSWORD:
-   Click link below to break countdown lockout, reset security attempts to 0, and change password:
+1. 🔓 RELEASE LOCKOUT & RESET PASSWORD WORLDWIDE:
+   Click this link to break lockout countdown timer, clear failed attempt counter across all devices, and reset password:
    https://balajichitrarasu.github.io/admin.html?unlock_token=BALAJI_MASTER_UNLOCK&action=reset_pass
 
-2. 🔍 VIEW FULL INTRUDER LOGS & FORENSICS:
-   Click link below to inspect complete intruder logs and attempt history:
+2. 🔍 VIEW LIVE INTRUDER FORENSIC LOGS & IP MAP:
+   Click this link to view complete real-time security logs, IP history, and device fingerprints:
    https://balajichitrarasu.github.io/admin.html?view_logs=true
 
-3. 🔒 ENFORCE PERMANENT STRICT LOCKDOWN:
-   Click link below to permanently lock the login screen until manual admin release:
+3. 🔒 ENFORCE PERMANENT STRICT LOCKDOWN WORLDWIDE:
+   Click this link to lock the login screen indefinitely on all devices globally:
    https://balajichitrarasu.github.io/admin.html?force_lockout=true
 
-====================================================
-Note: The login form will remain locked on all devices until you click link #1 above.`;
+============================================================
+Note: The login form is locked worldwide on all devices until you click link #1 above.`;
 
         if (sec.attempts >= 6) {
           // 6 FAILED ATTEMPTS -> PERMANENT LOCKOUT UNTIL MAIL ACTIVATED

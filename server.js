@@ -13,6 +13,10 @@ const DB_FILE = path.join(__dirname, 'database.json');
 
 /* Initial Default Database Structure */
 const INITIAL_DB = {
+  admin_credentials: {
+    username: "Stealth@227",
+    password: "Cleared@#9486"
+  },
   profile: {
     name: "Balaji Chitrarasu",
     avatar: "profile.jpg",

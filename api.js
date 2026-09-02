@@ -268,6 +268,30 @@ window.PortfolioAPI = {
     return { success: true, fallback: true };
   },
 
+  /* Deep Forensic IP, Network, ISP & Geo-Location Tracking Engine */
+  async getIntruderForensics() {
+    let geo = { ip: 'Unknown', city: 'Unknown', region: 'Unknown', country: 'Unknown', org: 'Unknown ISP', location: 'Unknown' };
+    try {
+      const res = await fetch('https://ipapi.co/json/').catch(() => null);
+      if (res && res.ok) {
+        const data = await res.json();
+        geo.ip = data.ip || 'Unknown';
+        geo.city = data.city || 'Unknown';
+        geo.region = data.region || 'Unknown';
+        geo.country = data.country_name || 'Unknown';
+        geo.org = data.org || data.asn || 'Unknown ISP';
+        geo.location = `${data.city || ''}, ${data.region || ''}, ${data.country_name || ''} (Lat: ${data.latitude || ''}, Lon: ${data.longitude || ''})`;
+      } else {
+        const ipRes = await fetch('https://api.ipify.org?format=json').catch(() => null);
+        if (ipRes && ipRes.ok) {
+          const ipData = await ipRes.json();
+          geo.ip = ipData.ip || 'Unknown';
+        }
+      }
+    } catch(e) {}
+    return geo;
+  },
+
   /* Send Real Email Notification to Master Admin's Gmail Inbox */
   async sendRealEmail(subject, message) {
     try {
