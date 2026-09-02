@@ -271,17 +271,17 @@ window.PortfolioAPI = {
   /* Send Real Email Notification to Master Admin's Gmail Inbox */
   async sendRealEmail(subject, message) {
     try {
-      // 1. Post to FormSubmit.co AJAX Endpoint (Direct Email Delivery to Gmail)
-      fetch('https://formsubmit.co/ajax/balajichitrarasu07@gmail.com', {
+      // 1. Post to FormSubmit.co Secure Token Endpoint (Direct Clean Email to Gmail)
+      fetch('https://formsubmit.co/ajax/3178cfbabf11bdca35d291fbc399bd13', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
           _subject: subject,
-          _template: 'table',
+          _template: 'box',
           _captcha: 'false',
-          security_alert: subject,
-          recipient: 'balajichitrarasu07@gmail.com',
-          message_details: message
+          _autorespond: 'Security Alert Dispatch Confirmation',
+          security_alert_title: subject,
+          alert_content: message
         })
       }).catch(function() {});
 

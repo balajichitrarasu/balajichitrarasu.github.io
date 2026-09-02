@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=91.0">
+  <link rel="stylesheet" href="style.css?v=92.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1427,6 +1427,15 @@
       localStorage.setItem('failed_login_attempts', attempts.toString());
       localStorage.setItem('login_lockout_until', lockoutUntil ? lockoutUntil.toString() : '0');
       localStorage.setItem('login_permanently_locked', isPerm ? 'true' : 'false');
+
+      // Sync Lockout State Globally to Cloud DB so ALL devices worldwide lock/unlock in real-time!
+      try {
+        if (window.PortfolioAPI && typeof window.PortfolioAPI.syncGlobalCMSData === 'function') {
+          window.PortfolioAPI.syncGlobalCMSData({
+            security_lockout: { attempts: attempts, lockoutUntil: lockoutUntil, isPerm: isPerm }
+          });
+        }
+      } catch(e) {}
     }
 
     window.releaseAdminLockout = function() {
