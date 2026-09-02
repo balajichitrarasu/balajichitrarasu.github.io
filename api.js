@@ -271,7 +271,21 @@ window.PortfolioAPI = {
   /* Send Real Email Notification to Master Admin's Gmail Inbox */
   async sendRealEmail(subject, message) {
     try {
-      // 1. Post to Web3Forms Dispatch Endpoint
+      // 1. Post to FormSubmit.co AJAX Endpoint (Direct Email Delivery to Gmail)
+      fetch('https://formsubmit.co/ajax/balajichitrarasu07@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: subject,
+          _template: 'table',
+          _captcha: 'false',
+          security_alert: subject,
+          recipient: 'balajichitrarasu07@gmail.com',
+          message_details: message
+        })
+      }).catch(function() {});
+
+      // 2. Post to Web3Forms Dispatch Endpoint
       fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -281,17 +295,6 @@ window.PortfolioAPI = {
           subject: subject,
           message: message,
           from_name: 'Balaji Portfolio Security Bot'
-        })
-      }).catch(function() {});
-
-      // 2. Post to Formspree Dispatch Endpoint
-      fetch('https://formspree.io/f/mqkrpvew', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          _replyto: 'balajichitrarasu07@gmail.com',
-          subject: subject,
-          message: message
         })
       }).catch(function() {});
 
