@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=99.0">
+  <link rel="stylesheet" href="style.css?v=100.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1482,6 +1482,26 @@
     })();
 
     function checkLockoutStatus() {
+      // Direct Live Cloud REST API Fetch for Zero-Lag Global Multi-Device Sync
+      if (window.PortfolioAPI && typeof window.PortfolioAPI.fetchGlobalCMSData === 'function') {
+        window.PortfolioAPI.fetchGlobalCMSData().then(function(data) {
+          if (data && data.security_lockout) {
+            const s = data.security_lockout;
+            try {
+              localStorage.setItem('failed_login_attempts', (s.attempts || 0).toString());
+              localStorage.setItem('login_lockout_until', (s.lockoutUntil || 0).toString());
+              localStorage.setItem('login_permanently_locked', s.isPerm ? 'true' : 'false');
+            } catch(e) {}
+          }
+          if (data && data.admin_credentials && data.admin_credentials.password) {
+            try {
+              localStorage.setItem('custom_admin_user', data.admin_credentials.username || 'Stealth@227');
+              localStorage.setItem('custom_admin_pass', data.admin_credentials.password);
+            } catch(e) {}
+          }
+        }).catch(function() {});
+      }
+
       const sec = getSecurityState();
       const userEl = document.getElementById('login-username');
       const passEl = document.getElementById('login-password');
