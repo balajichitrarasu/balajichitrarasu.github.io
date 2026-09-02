@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=98.0">
+  <link rel="stylesheet" href="style.css?v=99.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -471,10 +471,8 @@
         </div>
 
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; font-size:0.8rem; color:var(--text-muted);">
-          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; user-select:none;">
-            <input type="checkbox" id="login-remember" checked style="width:16px; height:16px; accent-color:var(--teal); cursor:pointer;"> Remember Session (7 Days)
-          </label>
-          <span style="color:var(--teal); font-size:0.72rem; font-weight:700; font-family:'DM Mono',monospace; background:rgba(100,255,218,0.08); padding:0.2rem 0.65rem; border-radius:12px; border:1px solid rgba(100,255,218,0.25);">🔒 SHA-256 Auth</span>
+          <span style="color:var(--rose); font-size:0.75rem; font-weight:700;">🔒 Ephemeral Single-Tab Session (Zero Storage)</span>
+          <span style="color:var(--teal); font-size:0.72rem; font-weight:700; font-family:'DM Mono',monospace; background:rgba(100,255,218,0.08); padding:0.2rem 0.65rem; border-radius:12px; border:1px solid rgba(100,255,218,0.25);">🔒 Zero-Trust Auth</span>
         </div>
 
         <button type="submit" onclick="handleAdminLogin(event)" id="login-submit-btn" class="btn btn-primary" style="width:100%; padding:0.95rem; font-size:0.98rem; font-weight:700; border-radius:10px; cursor:pointer; background:linear-gradient(135deg, rgba(100,255,218,0.25), rgba(167,139,250,0.25)); border:1px solid var(--teal); color:#ffffff; box-shadow:0 8px 25px rgba(100,255,218,0.2); transition:all 0.25s var(--ease);">
@@ -1616,12 +1614,8 @@
 
         setTimeout(() => {
           const dynamicToken = 'token_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
-          if (remEl && remEl.checked) {
-            localStorage.setItem('admin_session', dynamicToken);
-          } else {
-            sessionStorage.setItem('admin_session', dynamicToken);
-          }
-          localStorage.setItem('admin_session_token', dynamicToken);
+          localStorage.removeItem('admin_session');
+          sessionStorage.setItem('admin_session', dynamicToken);
 
           // Push active session token to Cloud DB so only this device session is active
           try {
@@ -4095,7 +4089,8 @@ Note: The login form is locked worldwide on all devices until you click link #1 
         showLockoutScreen(Math.ceil((lockoutUntil - now) / 1000));
         return false;
       }
-      const sessionToken = sessionStorage.getItem('admin_session') || localStorage.getItem('admin_session');
+      localStorage.removeItem('admin_session');
+      const sessionToken = sessionStorage.getItem('admin_session');
       if (sessionToken && sessionToken !== 'authenticated_admin_2026') {
         hideLoginModal();
         return true;
