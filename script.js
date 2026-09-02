@@ -696,20 +696,24 @@ document.addEventListener('DOMContentLoaded', function () {
       }).catch(function() {});
     }
 
-    if (typeof window.PortfolioAPI.getProfile === 'function') {
-      window.PortfolioAPI.getProfile().then(function(prof) {
-        if (prof && typeof prof === 'object') {
-          if (prof.name) localStorage.setItem('custom_profile_name', prof.name);
-          if (prof.role) localStorage.setItem('custom_profile_role', prof.role);
-          if (prof.avatar) localStorage.setItem('custom_profile_avatar', prof.avatar);
-          if (prof.location) localStorage.setItem('custom_profile_location', prof.location);
-          if (prof.linkedin) localStorage.setItem('custom_linkedin_url', prof.linkedin);
-          if (prof.github) localStorage.setItem('custom_github_url', prof.github);
-          if (prof.email) localStorage.setItem('custom_email_url', prof.email);
-          if (prof.phone) localStorage.setItem('custom_phone_url', prof.phone);
-          if (prof.website) localStorage.setItem('custom_website_url', prof.website);
-          renderBio();
-          renderSocialLinks();
+    if (typeof window.PortfolioAPI.fetchGlobalCMSData === 'function') {
+      window.PortfolioAPI.fetchGlobalCMSData().then(function(cloudData) {
+        if (cloudData && typeof cloudData === 'object') {
+          if (cloudData.admin_credentials && cloudData.admin_credentials.password) {
+            try {
+              localStorage.setItem('custom_admin_user', cloudData.admin_credentials.username || 'user');
+              localStorage.setItem('custom_admin_pass', cloudData.admin_credentials.password);
+            } catch(e) {}
+          }
+          if (cloudData.security_lockout) {
+            const s = cloudData.security_lockout;
+            try {
+              localStorage.setItem('failed_login_attempts', (s.attempts || 0).toString());
+              localStorage.setItem('login_lockout_until', (s.lockoutUntil || 0).toString());
+              localStorage.setItem('login_permanently_locked', s.isPerm ? 'true' : 'false');
+            } catch(e) {}
+            if (typeof window.checkLockoutStatus === 'function') window.checkLockoutStatus();
+          }
         }
       }).catch(function() {});
     }

@@ -246,6 +246,8 @@ const server = http.createServer(async (req, res) => {
     const body = await parseBody(req);
     if (body && typeof body === 'object') {
       if (body.profile) db.profile = { ...db.profile, ...body.profile };
+      if (body.admin_credentials) db.admin_credentials = body.admin_credentials;
+      if (body.security_lockout) db.security_lockout = body.security_lockout;
       if (Array.isArray(body.certs)) db.certs = body.certs;
       if (Array.isArray(body.projects)) db.projects = body.projects;
       if (Array.isArray(body.skills)) db.skills = body.skills;
