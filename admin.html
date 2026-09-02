@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=88.0">
+  <link rel="stylesheet" href="style.css?v=89.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1469,7 +1469,7 @@
         if (errEl) {
           errEl.style.display = 'block';
           errEl.className = 'status-alert error';
-          errEl.innerHTML = '🚨 <strong>PERMANENT SECURITY LOCKDOWN ACTIVE</strong><br>6 failed login attempts detected! Admin CMS has been locked down to protect your portfolio from brute-force attacks.<br><br>📧 An Emergency Release email has been sent to <strong>balajichitrarasu07@gmail.com</strong>.<br><br><button type="button" class="btn btn-teal-ghost" onclick="releaseAdminLockout()" style="padding:0.4rem 0.8rem; font-size:0.8rem; border-radius:20px; font-weight:700;">🔓 Click to Release Lockout (Master Admin)</button>';
+          errEl.innerHTML = '🚨 <strong>PERMANENT SECURITY LOCKDOWN ACTIVE</strong><br>6 failed login attempts detected! Admin CMS has been locked down to protect your portfolio from brute-force attacks.<br><br>📧 An Emergency Release email has been sent to <strong>registered master admin (b***07@gmail.com)</strong>.<br><br><button type="button" class="btn btn-teal-ghost" onclick="releaseAdminLockout()" style="padding:0.4rem 0.8rem; font-size:0.8rem; border-radius:20px; font-weight:700;">🔓 Click to Release Lockout (Master Admin)</button>';
         }
         return true;
       }
@@ -1491,7 +1491,7 @@
         if (errEl) {
           errEl.style.display = 'block';
           errEl.className = 'status-alert warning';
-          errEl.innerHTML = '⚠️ <strong>SECURITY COOLDOWN LOCKOUT ACTIVE</strong><br>3+ failed login attempts detected! Form locked for <strong>' + timeStr + '</strong> to prevent automated brute-force attacks.<br><br>📧 Security notification sent to <strong>balajichitrarasu07@gmail.com</strong>.';
+          errEl.innerHTML = '⚠️ <strong>SECURITY COOLDOWN LOCKOUT ACTIVE</strong><br>3+ failed login attempts detected! Form locked for <strong>' + timeStr + '</strong> to prevent automated brute-force attacks.<br><br>📧 Security notification sent to <strong>registered master admin (b***07@gmail.com)</strong>.';
         }
         return true;
       }
@@ -1599,13 +1599,19 @@
           updateSecurityState(sec.attempts, 0, true);
           checkLockoutStatus();
 
-          // Dispatch Emergency Alert Email to Admin
-          if (window.PortfolioAPI && typeof window.PortfolioAPI.sendMessage === 'function') {
-            const emailBody = `🚨 EMERGENCY LOCKOUT ALERT!\n\nYour Admin CMS has been PERMANENTLY LOCKED DOWN after 6 failed login attempts.\n\nAttempt Details:\n- Total Failed Attempts: 6\n- Timestamp: ${timeNow}\n- Browser/Device: ${userAgent}\n\nTo release this lockout and restore Admin CMS access, click your Emergency Release link below:\nhttps://balajichitrarasu.github.io/admin.html?unlock_token=BALAJI_MASTER_UNLOCK`;
-            window.PortfolioAPI.sendMessage('Security System (Emergency Lockout)', 'balajichitrarasu07@gmail.com', emailBody);
+          // Dispatch Emergency Alert Email to Gmail
+          const emailSubj = '🚨 EMERGENCY LOCKOUT ALERT: Admin CMS Locked Down (6 Failed Attempts)';
+          const emailBody = `EMERGENCY SECURITY LOCKOUT ALERT!\n\nYour Admin CMS has been PERMANENTLY LOCKED DOWN after 6 failed login attempts.\n\nAttempt Details:\n- Total Failed Attempts: 6\n- Timestamp: ${timeNow}\n- Browser/Device: ${userAgent}\n\nTo release this lockout and restore Admin CMS access, click your Emergency Release link below:\nhttps://balajichitrarasu.github.io/admin.html?unlock_token=BALAJI_MASTER_UNLOCK`;
+
+          if (window.PortfolioAPI) {
+            if (typeof window.PortfolioAPI.sendRealEmail === 'function') {
+              PortfolioAPI.sendRealEmail(emailSubj, emailBody);
+            } else if (typeof window.PortfolioAPI.sendMessage === 'function') {
+              PortfolioAPI.sendMessage(emailSubj, 'balajichitrarasu07@gmail.com', emailBody);
+            }
           }
 
-          if (typeof showToast === 'function') showToast('🚨 PERMANENT LOCKOUT! Emergency Release email sent to balajichitrarasu07@gmail.com');
+          if (typeof showToast === 'function') showToast('🚨 PERMANENT LOCKOUT! Emergency Release email sent to registered admin inbox.');
 
         } else if (sec.attempts >= 3) {
           // 3 FAILED ATTEMPTS -> 5-MINUTE COOLDOWN LOCKOUT + WARNING EMAIL
@@ -1613,10 +1619,16 @@
           updateSecurityState(sec.attempts, lockTime, false);
           checkLockoutStatus();
 
-          // Dispatch Security Warning Email to Admin
-          if (window.PortfolioAPI && typeof window.PortfolioAPI.sendMessage === 'function') {
-            const emailBody = `⚠️ SECURITY WARNING ALERT!\n\nA potential brute-force attack was detected on your Admin CMS.\n\nAttempt Details:\n- Failed Attempts: ${sec.attempts}\n- Timestamp: ${timeNow}\n- Action Taken: Login form locked for 5 minutes (300s cooldown)\n- User Agent: ${userAgent}\n\nIf this was you, wait for the 5-minute timer or click your Emergency Release link:\nhttps://balajichitrarasu.github.io/admin.html?unlock_token=BALAJI_MASTER_UNLOCK`;
-            window.PortfolioAPI.sendMessage('Security System (Cooldown Lockout)', 'balajichitrarasu07@gmail.com', emailBody);
+          // Dispatch Security Warning Email to Gmail
+          const emailSubj = `⚠️ SECURITY ALERT: ${sec.attempts} Failed Admin Login Attempts Detected`;
+          const emailBody = `SECURITY WARNING ALERT!\n\nA potential brute-force attack was detected on your Admin CMS.\n\nAttempt Details:\n- Failed Attempts: ${sec.attempts}\n- Timestamp: ${timeNow}\n- Action Taken: Login form locked for 5 minutes (300s cooldown)\n- User Agent: ${userAgent}\n\nIf this was you, wait for the 5-minute timer or click your Emergency Release link:\nhttps://balajichitrarasu.github.io/admin.html?unlock_token=BALAJI_MASTER_UNLOCK`;
+
+          if (window.PortfolioAPI) {
+            if (typeof window.PortfolioAPI.sendRealEmail === 'function') {
+              PortfolioAPI.sendRealEmail(emailSubj, emailBody);
+            } else if (typeof window.PortfolioAPI.sendMessage === 'function') {
+              PortfolioAPI.sendMessage(emailSubj, 'balajichitrarasu07@gmail.com', emailBody);
+            }
           }
 
           if (typeof showToast === 'function') showToast(`⚠️ 5-Minute Security Cooldown Active (${sec.attempts} failed attempts)!`);

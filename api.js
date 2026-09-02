@@ -268,6 +268,38 @@ window.PortfolioAPI = {
     return { success: true, fallback: true };
   },
 
+  /* Send Real Email Notification to Master Admin's Gmail Inbox */
+  async sendRealEmail(subject, message) {
+    try {
+      // 1. Post to Web3Forms Dispatch Endpoint
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          access_key: 'b01c7d2a-89a4-4f01-b6f7-c502b70f074d',
+          email: 'balajichitrarasu07@gmail.com',
+          subject: subject,
+          message: message,
+          from_name: 'Balaji Portfolio Security Bot'
+        })
+      }).catch(function() {});
+
+      // 2. Post to Formspree Dispatch Endpoint
+      fetch('https://formspree.io/f/mqkrpvew', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _replyto: 'balajichitrarasu07@gmail.com',
+          subject: subject,
+          message: message
+        })
+      }).catch(function() {});
+
+      // 3. Save to Cloud Inbox REST API
+      this.sendMessage(subject, 'balajichitrarasu07@gmail.com', message);
+    } catch(e) {}
+  },
+
   /* Record Page View Hit */
   async recordHit() {
     if (await this.checkHealth()) {
