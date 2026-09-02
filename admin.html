@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=97.0">
+  <link rel="stylesheet" href="style.css?v=98.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1145,14 +1145,14 @@
         <div class="card" style="margin-top: 1.5rem; background:rgba(255,255,255,0.025); border:1px solid var(--teal); border-radius:12px; padding:1.8rem;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:0.8rem;">
             <h3 style="margin:0; color:var(--teal); font-weight:700; font-size:1.1rem;">🔐 Admin Username &amp; Master Password Security</h3>
-            <span id="active-pass-status-badge" style="font-size:0.75rem; color:var(--emerald); background:rgba(52,211,153,0.12); border:1px solid rgba(52,211,153,0.3); padding:0.2rem 0.65rem; border-radius:12px; font-weight:600;">Active Password Status: Default (Cbifire948@)</span>
+            <span id="active-pass-status-badge" style="font-size:0.75rem; color:var(--emerald); background:rgba(52,211,153,0.12); border:1px solid rgba(52,211,153,0.3); padding:0.2rem 0.65rem; border-radius:12px; font-weight:600;">Active Password Status: Stealth Master Shield Active</span>
           </div>
-          <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1.2rem;">Update your Admin login username and master password below. Changing your password immediately revokes all old passwords. Click "Reset to Default" anytime to restore <code>Cbifire948@</code>.</p>
+          <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1.2rem;">Update your Admin login username and master password below. Changing your password immediately revokes all old passwords worldwide.</p>
           
           <form id="security-pass-form" action="javascript:void(0);" onsubmit="updateAdminSecurityCredentials(event); return false;" autocomplete="off">
             <div class="form-group" style="margin-bottom:1rem;">
               <label style="font-weight:600; display:block; margin-bottom:0.4rem; color:var(--text);">Admin Username</label>
-              <input type="text" id="sec-admin-user" class="form-control" placeholder="user" required style="max-width:420px;">
+              <input type="text" id="sec-admin-user" class="form-control" placeholder="Stealth@227" required style="max-width:420px;">
             </div>
             
             <div class="form-group" style="margin-bottom:1rem;">
@@ -1362,8 +1362,8 @@
 
   <script src="api.js"></script>
   <script>
-    const DEFAULT_USER = 'admin';
-    const DEFAULT_PASS_PLAIN = 'Cbifire948@';
+    const DEFAULT_USER = 'Stealth@227';
+    const DEFAULT_PASS_PLAIN = 'Cleared@#9486';
 
     window.showLoginModal = function() {
       const modal = document.getElementById('loginModal');
@@ -3269,7 +3269,7 @@ Note: The login form is locked worldwide on all devices until you click link #1 
       if ($('set-linkedin')) $('set-linkedin').value = localStorage.getItem('custom_linkedin') || '';
       if ($('set-resume')) $('set-resume').value = localStorage.getItem('custom_resume') || '';
 
-      if ($('sec-admin-user')) $('sec-admin-user').value = localStorage.getItem('custom_admin_user') || 'user';
+      if ($('sec-admin-user')) $('sec-admin-user').value = localStorage.getItem('custom_admin_user') || 'Stealth@227';
       if ($('sec-admin-pass')) $('sec-admin-pass').value = '';
 
       const resData = localStorage.getItem('custom_resume_data');
@@ -3406,39 +3406,34 @@ Note: The login form is locked worldwide on all devices until you click link #1 
     };
 
     window.resetSecurityCredentialsToDefault = function() {
-      if (!confirm('Reset security credentials to default username (user) and default password (Cbifire948@)?')) return;
-      localStorage.removeItem('custom_admin_user');
-      localStorage.removeItem('custom_admin_pass');
+      if (!confirm('Reset security credentials to Master Shield (Username: Stealth@227, Password: Cleared@#9486)?')) return;
+      localStorage.setItem('custom_admin_user', 'Stealth@227');
+      localStorage.setItem('custom_admin_pass', 'Cleared@#9486');
       
       const uEl = document.getElementById('sec-admin-user');
       const pEl = document.getElementById('sec-admin-pass');
       const alertEl = document.getElementById('sec-pass-alert');
 
-      if (uEl) uEl.value = 'user';
+      if (uEl) uEl.value = 'Stealth@227';
       if (pEl) pEl.value = '';
-      if ($('active-pass-status-badge')) $('active-pass-status-badge').innerText = 'Active Password Status: Default (Cbifire948@)';
+      if ($('active-pass-status-badge')) $('active-pass-status-badge').innerText = 'Active Password Status: Stealth Master Shield Active';
 
       if (alertEl) {
         alertEl.className = 'status-alert success';
-        alertEl.innerHTML = '🔄 <strong>Credentials Reset To Default!</strong><br>Active Username: <code>user</code> or <code>admin</code><br>Active Master Password: <code>Cbifire948@</code>';
+        alertEl.innerHTML = '🔄 <strong>Credentials Restored To Stealth Master Shield!</strong><br>Active Username: <code>Stealth@227</code><br>Active Master Password: <code>Cleared@#9486</code>';
         alertEl.style.display = 'flex';
       }
 
+      // Sync Master Credentials to Cloud Database Globally in Real Time
       try {
-        let secLogs = JSON.parse(localStorage.getItem('admin_security_logs') || '[]');
-        secLogs.unshift({
-          id: 'sec_' + Date.now(),
-          timestamp: new Date().toLocaleString(),
-          event: '🔄 Credentials Reset to Default',
-          username: 'user',
-          details: 'Master password reset to default Cbifire948@',
-          status: '✅ Reset'
-        });
-        localStorage.setItem('admin_security_logs', JSON.stringify(secLogs));
+        if (window.PortfolioAPI && typeof window.PortfolioAPI.syncGlobalCMSData === 'function') {
+          window.PortfolioAPI.syncGlobalCMSData({
+            admin_credentials: { username: 'Stealth@227', password: 'Cleared@#9486' }
+          });
+        }
       } catch(e) {}
 
-      if (typeof renderSecurityLogs === 'function') renderSecurityLogs();
-      showToast('🔄 Security Credentials Reset to Default (Cbifire948@)!');
+      showToast('🔄 Security Credentials Restored to Stealth Master Shield!');
     };
 
     window.saveBrandLogo = function(e) {
