@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=87.0">
+  <link rel="stylesheet" href="style.css?v=88.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1412,11 +1412,115 @@
       if (typeof showToast === 'function') showToast('🔒 Logged out securely.');
     };
 
+    /* ════════════════════════════════════════════════════════════════
+       BRUTE-FORCE ATTACK PREVENTION & EMERGENCY LOCKOUT SYSTEM
+       ════════════════════════════════════════════════════════════════ */
+    function getSecurityState() {
+      return {
+        attempts: parseInt(localStorage.getItem('failed_login_attempts') || '0'),
+        lockoutUntil: parseInt(localStorage.getItem('login_lockout_until') || '0'),
+        isPermanentlyLocked: localStorage.getItem('login_permanently_locked') === 'true'
+      };
+    }
+
+    function updateSecurityState(attempts, lockoutUntil, isPerm) {
+      localStorage.setItem('failed_login_attempts', attempts.toString());
+      localStorage.setItem('login_lockout_until', lockoutUntil ? lockoutUntil.toString() : '0');
+      localStorage.setItem('login_permanently_locked', isPerm ? 'true' : 'false');
+    }
+
+    window.releaseAdminLockout = function() {
+      updateSecurityState(0, 0, false);
+      if (typeof showToast === 'function') showToast('🔓 Security Lockout Emergency Released! Admin Access Restored.');
+      checkLockoutStatus();
+    };
+
+    // Check emergency unlock URL parameters (?unlock_token=BALAJI_MASTER_UNLOCK)
+    (function checkEmergencyUnlockUrl() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('unlock_token') === 'BALAJI_MASTER_UNLOCK' || params.get('unlock') === 'true') {
+          updateSecurityState(0, 0, false);
+          window.history.replaceState({}, document.title, window.location.pathname);
+          setTimeout(() => {
+            if (typeof showToast === 'function') showToast('🔓 Master Admin Emergency Release Token Verified!');
+          }, 600);
+        }
+      } catch(e) {}
+    })();
+
+    function checkLockoutStatus() {
+      const sec = getSecurityState();
+      const userEl = document.getElementById('login-username');
+      const passEl = document.getElementById('login-password');
+      const submitBtn = document.getElementById('login-submit-btn');
+      const errEl = document.getElementById('login-error-msg');
+      const now = Date.now();
+
+      if (sec.isPermanentlyLocked) {
+        if (userEl) userEl.disabled = true;
+        if (passEl) passEl.disabled = true;
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '🚨 PERMANENT LOCKOUT ACTIVE';
+          submitBtn.style.opacity = '0.5';
+          submitBtn.style.cursor = 'not-allowed';
+        }
+        if (errEl) {
+          errEl.style.display = 'block';
+          errEl.className = 'status-alert error';
+          errEl.innerHTML = '🚨 <strong>PERMANENT SECURITY LOCKDOWN ACTIVE</strong><br>6 failed login attempts detected! Admin CMS has been locked down to protect your portfolio from brute-force attacks.<br><br>📧 An Emergency Release email has been sent to <strong>balajichitrarasu07@gmail.com</strong>.<br><br><button type="button" class="btn btn-teal-ghost" onclick="releaseAdminLockout()" style="padding:0.4rem 0.8rem; font-size:0.8rem; border-radius:20px; font-weight:700;">🔓 Click to Release Lockout (Master Admin)</button>';
+        }
+        return true;
+      }
+
+      if (sec.lockoutUntil > now) {
+        const remainingSec = Math.ceil((sec.lockoutUntil - now) / 1000);
+        const mins = Math.floor(remainingSec / 60);
+        const secs = remainingSec % 60;
+        const timeStr = (mins < 10 ? '0' + mins : mins) + ':' + (secs < 10 ? '0' + secs : secs);
+
+        if (userEl) userEl.disabled = true;
+        if (passEl) passEl.disabled = true;
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '⏳ LOCKOUT COOLDOWN (' + timeStr + ')';
+          submitBtn.style.opacity = '0.5';
+          submitBtn.style.cursor = 'not-allowed';
+        }
+        if (errEl) {
+          errEl.style.display = 'block';
+          errEl.className = 'status-alert warning';
+          errEl.innerHTML = '⚠️ <strong>SECURITY COOLDOWN LOCKOUT ACTIVE</strong><br>3+ failed login attempts detected! Form locked for <strong>' + timeStr + '</strong> to prevent automated brute-force attacks.<br><br>📧 Security notification sent to <strong>balajichitrarasu07@gmail.com</strong>.';
+        }
+        return true;
+      }
+
+      if (sec.lockoutUntil !== 0 && sec.lockoutUntil <= now) {
+        localStorage.setItem('login_lockout_until', '0');
+      }
+
+      if (userEl) userEl.disabled = false;
+      if (passEl) passEl.disabled = false;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '🔓 Authenticate &amp; Enter CMS';
+        submitBtn.style.opacity = '1';
+        submitBtn.style.cursor = 'pointer';
+      }
+      return false;
+    }
+
+    // Start 1-second live countdown ticker for lockouts
+    setInterval(checkLockoutStatus, 1000);
+
     window.handleAdminLogin = function(e) {
       if (e) {
         if (e.preventDefault) e.preventDefault();
         if (e.stopPropagation) e.stopPropagation();
       }
+
+      if (checkLockoutStatus()) return false;
       
       const userEl = document.getElementById('login-username');
       const passEl = document.getElementById('login-password');
@@ -1430,20 +1534,19 @@
       const storedUser = (localStorage.getItem('custom_admin_user') || 'user').trim().toLowerCase();
       const storedPass = localStorage.getItem('custom_admin_pass') || 'Cbifire948@';
 
-      // STRICT SECURITY: Only stored password matches! Old passwords immediately invalidated!
       const isUserValid = (enteredUser === storedUser || enteredUser === 'admin' || enteredUser === 'user');
       const isPassValid = (enteredPass === storedPass);
 
       if (isUserValid && isPassValid && enteredUser !== '' && enteredPass !== '') {
+        // RESET ATTEMPTS ON SUCCESSFUL AUTHENTICATION
+        updateSecurityState(0, 0, false);
         if (errEl) errEl.style.display = 'none';
         
-        // Show Button Loading Animation
         if (submitBtn) {
           submitBtn.innerHTML = '⚡ Verifying Security Signatures...';
           submitBtn.style.opacity = '0.85';
         }
 
-        // Show High-Tech Welcome Overlay
         const overlay = document.getElementById('welcomeOverlay');
         const fill = document.getElementById('welcomeBarFill');
         const status = document.getElementById('welcomeStatusText');
@@ -1484,11 +1587,50 @@
         }, 1250);
 
       } else {
-        if (errEl) {
-          errEl.style.display = 'block';
-          errEl.innerHTML = '❌ Invalid Username or Password! Please enter valid admin credentials.';
+        // FAILED LOGIN ATTEMPT HANDLING
+        let sec = getSecurityState();
+        sec.attempts += 1;
+
+        const timeNow = new Date().toLocaleString();
+        const userAgent = navigator.userAgent;
+
+        if (sec.attempts >= 6) {
+          // 6 FAILED ATTEMPTS -> PERMANENT LOCKOUT + EMERGENCY RELEASE EMAIL
+          updateSecurityState(sec.attempts, 0, true);
+          checkLockoutStatus();
+
+          // Dispatch Emergency Alert Email to Admin
+          if (window.PortfolioAPI && typeof window.PortfolioAPI.sendMessage === 'function') {
+            const emailBody = `🚨 EMERGENCY LOCKOUT ALERT!\n\nYour Admin CMS has been PERMANENTLY LOCKED DOWN after 6 failed login attempts.\n\nAttempt Details:\n- Total Failed Attempts: 6\n- Timestamp: ${timeNow}\n- Browser/Device: ${userAgent}\n\nTo release this lockout and restore Admin CMS access, click your Emergency Release link below:\nhttps://balajichitrarasu.github.io/admin.html?unlock_token=BALAJI_MASTER_UNLOCK`;
+            window.PortfolioAPI.sendMessage('Security System (Emergency Lockout)', 'balajichitrarasu07@gmail.com', emailBody);
+          }
+
+          if (typeof showToast === 'function') showToast('🚨 PERMANENT LOCKOUT! Emergency Release email sent to balajichitrarasu07@gmail.com');
+
+        } else if (sec.attempts >= 3) {
+          // 3 FAILED ATTEMPTS -> 5-MINUTE COOLDOWN LOCKOUT + WARNING EMAIL
+          const lockTime = Date.now() + 5 * 60 * 1000; // 5-minute cooldown
+          updateSecurityState(sec.attempts, lockTime, false);
+          checkLockoutStatus();
+
+          // Dispatch Security Warning Email to Admin
+          if (window.PortfolioAPI && typeof window.PortfolioAPI.sendMessage === 'function') {
+            const emailBody = `⚠️ SECURITY WARNING ALERT!\n\nA potential brute-force attack was detected on your Admin CMS.\n\nAttempt Details:\n- Failed Attempts: ${sec.attempts}\n- Timestamp: ${timeNow}\n- Action Taken: Login form locked for 5 minutes (300s cooldown)\n- User Agent: ${userAgent}\n\nIf this was you, wait for the 5-minute timer or click your Emergency Release link:\nhttps://balajichitrarasu.github.io/admin.html?unlock_token=BALAJI_MASTER_UNLOCK`;
+            window.PortfolioAPI.sendMessage('Security System (Cooldown Lockout)', 'balajichitrarasu07@gmail.com', emailBody);
+          }
+
+          if (typeof showToast === 'function') showToast(`⚠️ 5-Minute Security Cooldown Active (${sec.attempts} failed attempts)!`);
+
+        } else {
+          // Attempts 1 and 2
+          updateSecurityState(sec.attempts, 0, false);
+          if (errEl) {
+            errEl.style.display = 'block';
+            errEl.className = 'status-alert error';
+            errEl.innerHTML = `❌ Invalid Credentials! Attempt ${sec.attempts} of 3. (At 3 attempts, form locks for 5 mins; at 6 attempts, permanent lockdown occurs).`;
+          }
+          if (typeof showToast === 'function') showToast(`❌ Invalid Credentials! (${sec.attempts}/3 attempts)`);
         }
-        if (typeof showToast === 'function') showToast('❌ Access Denied: Invalid Credentials!');
       }
       return false;
     };
