@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=95.0">
+  <link rel="stylesheet" href="style.css?v=96.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -3449,6 +3449,20 @@ Note: The login form is locked worldwide on all devices until you click link #1 
 
       setTimeout(() => {
         localStorage.setItem('custom_brand_logo', logoVal);
+        localStorage.setItem('custom_profile_logo', logoVal);
+
+        try {
+          if (window.PortfolioAPI && typeof window.PortfolioAPI.syncGlobalCMSData === 'function') {
+            window.PortfolioAPI.syncGlobalCMSData({
+              profile: {
+                name: localStorage.getItem('custom_profile_name') || 'Balaji Chitrarasu',
+                role: localStorage.getItem('custom_profile_role') || 'AWS Cloud Engineer Intern & B.E. ECE Student',
+                avatar: localStorage.getItem('custom_profile_avatar') || 'profile.jpg',
+                logo: logoVal
+              }
+            });
+          }
+        } catch(e) {}
 
         document.querySelectorAll('#navBrandLogoImg, #loginLogoImg, #welcomeLogoImg, #preview-logo-nav, #preview-logo-login').forEach(img => {
           if (img) img.src = logoVal + '?v=' + Date.now();

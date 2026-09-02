@@ -15,11 +15,13 @@ const DB_FILE = path.join(__dirname, 'database.json');
 const INITIAL_DB = {
   admin_credentials: {
     username: "Stealth@227",
-    password: "Cleared@#9486"
+    password: "Cleared@#9486",
+    session_version: 1001
   },
   profile: {
     name: "Balaji Chitrarasu",
     avatar: "profile.jpg",
+    logo: "logo.png",
     role: "AWS Cloud Engineer Intern",
     location: "Coimbatore, Tamil Nadu"
   },
