@@ -119,11 +119,35 @@ const INITIAL_DB = {
   }
 };
 
-/* Database File Helper */
+const crypto = require('crypto');
+const DB_BACKUP_FILE = path.join(__dirname, 'database_backup.json');
+
+/* Active Server-Sent Events (SSE) Client Connections Array */
+let sseClients = [];
+
+function broadcastSSE(event, data = {}) {
+  const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+  sseClients = sseClients.filter(res => {
+    try {
+      res.write(payload);
+      return true;
+    } catch(e) {
+      return false;
+    }
+  });
+}
+
+function hashPassword(pwd) {
+  if (!pwd) return '';
+  return crypto.createHash('sha256').update(pwd).digest('hex');
+}
+
+/* Database File Helper with Atomic Writes & Backup */
 function getDB() {
   try {
     if (!fs.existsSync(DB_FILE)) {
       fs.writeFileSync(DB_FILE, JSON.stringify(INITIAL_DB, null, 2));
+      fs.writeFileSync(DB_BACKUP_FILE, JSON.stringify(INITIAL_DB, null, 2));
       return INITIAL_DB;
     }
     const data = fs.readFileSync(DB_FILE, 'utf8');
@@ -135,10 +159,20 @@ function getDB() {
 
 function saveDB(data) {
   try {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+    const tmpFile = DB_FILE + '.tmp';
+    fs.writeFileSync(tmpFile, JSON.stringify(data, null, 2));
+    fs.renameSync(tmpFile, DB_FILE);
+    fs.writeFileSync(DB_BACKUP_FILE, JSON.stringify(data, null, 2));
+    broadcastSSE('db_updated', { timestamp: new Date().toISOString() });
     return true;
   } catch (e) {
-    return false;
+    try {
+      fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+      broadcastSSE('db_updated', { timestamp: new Date().toISOString() });
+      return true;
+    } catch(err) {
+      return false;
+    }
   }
 }
 
@@ -175,6 +209,31 @@ const server = http.createServer(async (req, res) => {
   const db = getDB();
 
   /* ──────────────── REST API ROUTER ──────────────── */
+
+  // Real-Time Server-Sent Events (SSE) Push Stream Endpoint
+  if (url === '/api/events' && req.method === 'GET') {
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache, no-transform',
+      'Connection': 'keep-alive',
+      'Access-Control-Allow-Origin': '*'
+    });
+    res.write(`event: connected\ndata: ${JSON.stringify({ status: 'active', time: new Date().toISOString() })}\n\n`);
+    sseClients.push(res);
+    req.on('close', () => {
+      sseClients = sseClients.filter(client => client !== res);
+    });
+    return;
+  }
+
+  // Database Export Endpoint
+  if (url === '/api/db/export' && req.method === 'GET') {
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Content-Disposition': 'attachment; filename="database_backup.json"'
+    });
+    return res.end(JSON.stringify(db, null, 2));
+  }
 
   // Health Check
   if (url === '/api/health' && req.method === 'GET') {

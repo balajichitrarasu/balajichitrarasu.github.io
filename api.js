@@ -426,5 +426,40 @@ window.PortfolioAPI = {
       if (saved) return JSON.parse(saved);
     } catch (e) {}
     return null;
+  },
+
+  /* Real-Time Server-Sent Events (SSE) Listener for Zero-Lag Instant Push Sync */
+  connectRealtimeEvents(onEventCallback) {
+    if (typeof window.EventSource === 'undefined') return false;
+    try {
+      if (this.eventSource) this.eventSource.close();
+      const sseUrl = `${API_BASE}/api/events`;
+      this.eventSource = new EventSource(sseUrl);
+
+      this.eventSource.addEventListener('connected', () => {
+        this.sseConnected = true;
+        const sseBadge = document.getElementById('sse-status-badge');
+        if (sseBadge) {
+          sseBadge.style.display = 'inline-flex';
+          sseBadge.innerHTML = '🟢 Live SSE Push Active';
+        }
+      });
+
+      this.eventSource.addEventListener('db_updated', () => {
+        this.sseConnected = true;
+        if (typeof onEventCallback === 'function') onEventCallback('db_updated');
+        if (typeof window.syncAllDataFromCloud === 'function') window.syncAllDataFromCloud();
+        if (typeof window.checkLockoutStatus === 'function') window.checkLockoutStatus();
+      });
+
+      this.eventSource.onerror = () => {
+        this.sseConnected = false;
+        const sseBadge = document.getElementById('sse-status-badge');
+        if (sseBadge) sseBadge.innerHTML = '🟡 Polling Fallback Active';
+      };
+      return true;
+    } catch(e) {
+      return false;
+    }
   }
 };

@@ -719,8 +719,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Initial sync & periodic 2.5-second polling loop for real-time reflection everywhere
-  setTimeout(syncAllDataFromCloud, 300);
+  // Initial sync, SSE event connection & periodic 2.5-second polling loop for real-time reflection everywhere
+  setTimeout(function() {
+    syncAllDataFromCloud();
+    if (window.PortfolioAPI && typeof window.PortfolioAPI.connectRealtimeEvents === 'function') {
+      window.PortfolioAPI.connectRealtimeEvents();
+    }
+  }, 300);
   setInterval(syncAllDataFromCloud, 2500);
 
   /* KEEP-ALIVE ENGINE TO PREVENT RENDER CLOUD BACKEND COLD STARTS */
