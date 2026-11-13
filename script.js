@@ -699,10 +699,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (typeof window.PortfolioAPI.fetchGlobalCMSData === 'function') {
       window.PortfolioAPI.fetchGlobalCMSData().then(function(cloudData) {
         if (cloudData && typeof cloudData === 'object') {
-          if (cloudData.admin_credentials && cloudData.admin_credentials.password) {
+          if (cloudData.admin_credentials) {
             try {
-              localStorage.setItem('custom_admin_user', cloudData.admin_credentials.username || 'user');
-              localStorage.setItem('custom_admin_pass', cloudData.admin_credentials.password);
+              if (cloudData.admin_credentials.username) localStorage.setItem('_cau', cloudData.admin_credentials.username);
+              if (cloudData.admin_credentials.password_hash) localStorage.setItem('_cah', cloudData.admin_credentials.password_hash);
             } catch(e) {}
           }
           if (cloudData.security_lockout) {
