@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=102.0">
+  <link rel="stylesheet" href="style.css?v=103.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -1157,7 +1157,7 @@
           <form id="security-pass-form" action="javascript:void(0);" onsubmit="updateAdminSecurityCredentials(event); return false;" autocomplete="off">
             <div class="form-group" style="margin-bottom:1rem;">
               <label style="font-weight:600; display:block; margin-bottom:0.4rem; color:var(--text);">Admin Username</label>
-              <input type="text" id="sec-admin-user" class="form-control" placeholder="Stealth@227" required style="max-width:420px;">
+              <input type="text" id="sec-admin-user" class="form-control" placeholder="vishu" required style="max-width:420px;">
             </div>
             
             <div class="form-group" style="margin-bottom:1rem;">
@@ -1370,7 +1370,7 @@
 
   <script src="api.js"></script>
   <script>
-    const DEFAULT_USER = 'Stealth@227';
+    const DEFAULT_USER = 'vishu';
     // SHA-256 pure-JS helper (no library needed) — passwords NEVER stored plain-text
     async function sha256(msg) {
       const msgBuffer = new TextEncoder().encode(msg);
@@ -1378,7 +1378,7 @@
       return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
     // Pre-computed SHA-256 hash — raw credentials never appear in source code
-    const DEFAULT_PASS_HASH = 'bbbb5f15ea1fc09b15810583fe891987fd3e523d5e887b7055cf99679e888092';
+    const DEFAULT_PASS_HASH = '97132c17557f7a79af0572f3220ccf24c008ca0426bbcd2840075ac9494ca1ca';
 
     window.showLoginModal = function() {
       const modal = document.getElementById('loginModal');
@@ -1611,7 +1611,7 @@
       if (passEl) passEl.value = '';
 
       // BANNED OLD PASSWORDS PURGE ENGINE (INVALIDATES ALL OLD PASSWORDS PERMANENTLY)
-      const BANNED_PASSWORDS = ['cbifire948@', 'admin', 'user', '123456', 'password'];
+      const BANNED_PASSWORDS = ['cbifire948@', 'admin', 'user', '123456', 'password', 'cleared@#9486', 'stealth@227'];
       if (BANNED_PASSWORDS.includes(enteredPassRaw.toLowerCase())) {
         if (errEl) {
           errEl.style.display = 'block';
@@ -3377,7 +3377,7 @@ Note: The login form is locked worldwide on all devices until you click link #1 
       if ($('set-linkedin')) $('set-linkedin').value = localStorage.getItem('custom_linkedin') || '';
       if ($('set-resume')) $('set-resume').value = localStorage.getItem('custom_resume') || '';
 
-      if ($('sec-admin-user')) $('sec-admin-user').value = localStorage.getItem('_cau') || localStorage.getItem('custom_admin_user') || 'Stealth@227';
+      if ($('sec-admin-user')) $('sec-admin-user').value = localStorage.getItem('_cau') || localStorage.getItem('custom_admin_user') || 'vishu';
       if ($('sec-admin-pass')) $('sec-admin-pass').value = '';
 
       const resData = localStorage.getItem('custom_resume_data');
@@ -3524,7 +3524,7 @@ Note: The login form is locked worldwide on all devices until you click link #1 
     };
 
     window.resetSecurityCredentialsToDefault = async function() {
-      if (!confirm('Reset security credentials to Master Shield (Username: Stealth@227)?')) return;
+      if (!confirm('Reset security credentials to Master Shield (Username: vishu)?')) return;
       const defaultHash = DEFAULT_PASS_HASH;
       localStorage.setItem('_cau', DEFAULT_USER);
       localStorage.setItem('_cah', defaultHash);
@@ -3538,11 +3538,11 @@ Note: The login form is locked worldwide on all devices until you click link #1 
 
       if (uEl) uEl.value = DEFAULT_USER;
       if (pEl) pEl.value = '';
-      if ($('active-pass-status-badge')) $('active-pass-status-badge').innerText = 'Active Password Status: Stealth Master Shield Active';
+      if ($('active-pass-status-badge')) $('active-pass-status-badge').innerText = 'Active Password Status: Master Shield Active (vishu)';
 
       if (alertEl) {
         alertEl.className = 'status-alert success';
-        alertEl.innerHTML = '🔄 <strong>Credentials Restored To Stealth Master Shield!</strong><br>Active Username: <code>Stealth@227</code><br>Password has been reset to master shield (check your records).';
+        alertEl.innerHTML = '🔄 <strong>Credentials Restored To Master Shield!</strong><br>Active Username: <code>vishu</code><br>Password has been reset to master shield.';
         alertEl.style.display = 'flex';
       }
 

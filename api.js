@@ -372,8 +372,8 @@ window.PortfolioAPI = {
         website: localStorage.getItem('custom_website_url') || 'https://balajichitrarasu.github.io'
       },
       admin_credentials: {
-        username: localStorage.getItem('_cau') || localStorage.getItem('custom_admin_user') || 'Stealth@227',
-        password_hash: localStorage.getItem('_cah') || 'bbbb5f15ea1fc09b15810583fe891987fd3e523d5e887b7055cf99679e888092'
+        username: localStorage.getItem('_cau') || localStorage.getItem('custom_admin_user') || 'vishu',
+        password_hash: localStorage.getItem('_cah') || '97132c17557f7a79af0572f3220ccf24c008ca0426bbcd2840075ac9494ca1ca'
       },
       security_lockout: {
         attempts: parseInt(localStorage.getItem('failed_login_attempts') || '0'),

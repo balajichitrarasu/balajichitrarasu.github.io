@@ -14,9 +14,9 @@ const DB_FILE = path.join(__dirname, 'database.json');
 /* Initial Default Database Structure */
 const INITIAL_DB = {
   admin_credentials: {
-    username: "Stealth@227",
-    password_hash: "bbbb5f15ea1fc09b15810583fe891987fd3e523d5e887b7055cf99679e888092",
-    session_version: 1001,
+    username: "vishu",
+    password_hash: "97132c17557f7a79af0572f3220ccf24c008ca0426bbcd2840075ac9494ca1ca",
+    session_version: 1002,
     active_token: "token_initial_2026"
   },
   profile: {
