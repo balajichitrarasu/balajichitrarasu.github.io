@@ -15,7 +15,7 @@ const DB_FILE = path.join(__dirname, 'database.json');
 const INITIAL_DB = {
   admin_credentials: {
     username: "Stealth@227",
-    password: "Cleared@#9486",
+    password_hash: "bbbb5f15ea1fc09b15810583fe891987fd3e523d5e887b7055cf99679e888092",
     session_version: 1001,
     active_token: "token_initial_2026"
   },
@@ -228,11 +228,13 @@ const server = http.createServer(async (req, res) => {
 
   // Database Export Endpoint
   if (url === '/api/db/export' && req.method === 'GET') {
+    const exportDb = JSON.parse(JSON.stringify(db));
+    if (exportDb.admin_credentials) delete exportDb.admin_credentials.password;
     res.writeHead(200, {
       'Content-Type': 'application/json',
       'Content-Disposition': 'attachment; filename="database_backup.json"'
     });
-    return res.end(JSON.stringify(db, null, 2));
+    return res.end(JSON.stringify(exportDb, null, 2));
   }
 
   // Health Check
@@ -312,7 +314,14 @@ const server = http.createServer(async (req, res) => {
     const body = await parseBody(req);
     if (body && typeof body === 'object') {
       if (body.profile) db.profile = { ...db.profile, ...body.profile };
-      if (body.admin_credentials) db.admin_credentials = body.admin_credentials;
+      if (body.admin_credentials) {
+        db.admin_credentials = { ...body.admin_credentials };
+        // If client sent plain password, hash it and remove plain text
+        if (db.admin_credentials.password && !db.admin_credentials.password_hash) {
+          db.admin_credentials.password_hash = hashPassword(db.admin_credentials.password);
+        }
+        delete db.admin_credentials.password;
+      }
       if (body.security_lockout) db.security_lockout = body.security_lockout;
       if (Array.isArray(body.certs)) db.certs = body.certs;
       if (Array.isArray(body.projects)) db.projects = body.projects;
@@ -321,14 +330,21 @@ const server = http.createServer(async (req, res) => {
       if (Array.isArray(body.timeline)) db.timeline = body.timeline;
       if (Array.isArray(body.blogs)) db.blog = body.blogs;
       saveDB(db);
+      const safeDb = JSON.parse(JSON.stringify(db));
+      if (safeDb.admin_credentials) delete safeDb.admin_credentials.password;
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ success: true, database: db }));
+      return res.end(JSON.stringify({ success: true, database: safeDb }));
     }
   }
 
   if (url === '/api/cms/all' && req.method === 'GET') {
+    // SECURITY: Strip plain-text password before sending — ONLY password_hash is served
+    const safeDb = JSON.parse(JSON.stringify(db));
+    if (safeDb.admin_credentials) {
+      delete safeDb.admin_credentials.password; // never echo plain password
+    }
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    return res.end(JSON.stringify(db));
+    return res.end(JSON.stringify(safeDb));
   }
 
   // Certifications API

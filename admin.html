@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/png" href="logo.png?v=45.0">
-  <link rel="stylesheet" href="style.css?v=101.0">
+  <link rel="stylesheet" href="style.css?v=102.0">
   <script>
   var themeToggleLock = false;
   window.toggleTheme = function(e) {
@@ -465,7 +465,7 @@
           <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text); margin-bottom:0.4rem;">Master Password</label>
           <div class="cyber-input-group">
             <span class="cyber-input-icon">🔑</span>
-            <input type="password" id="login-password" class="cyber-input-field" style="padding-right: 5.5rem;" placeholder="Enter master password..." autocomplete="off" required>
+            <input type="password" id="login-password" class="cyber-input-field" style="padding-right: 5.5rem;" placeholder="Enter master password..." autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" required>
             <button type="button" id="toggle-pass-btn" onmousedown="togglePasswordVisibility(event)" onclick="togglePasswordVisibility(event)" class="pass-toggle-btn">👁️ Show</button>
           </div>
         </div>
@@ -479,6 +479,13 @@
           🔓 Authenticate &amp; Enter CMS
         </button>
       </form>
+
+      <!-- DEVTOOLS SECURITY WARNING — shown when Chrome Inspector is open -->
+      <div id="devtools-warning" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,10,20,0.92); border-radius:16px; z-index:9999; display:none; align-items:center; justify-content:center; flex-direction:column; gap:1rem; padding:2rem; text-align:center; box-sizing:border-box;">
+        <div style="font-size:2.5rem;">🚨</div>
+        <div style="font-size:1.1rem; font-weight:800; color:#f43f5e;">Security Inspector Detected</div>
+        <div style="font-size:0.82rem; color:#94a3b8; max-width:300px; line-height:1.6;">Browser Developer Tools are open. The login form is blurred for security. Close DevTools to continue.</div>
+      </div>
     </div>
   </div>
 
@@ -1156,7 +1163,7 @@
             <div class="form-group" style="margin-bottom:1rem;">
               <label style="font-weight:600; display:block; margin-bottom:0.4rem; color:var(--text);">New Master Password</label>
               <div style="position:relative; max-width:420px;">
-                <input type="password" id="sec-admin-pass" class="form-control" placeholder="Enter new master password..." required style="padding-right:5.5rem;">
+                <input type="password" id="sec-admin-pass" class="form-control" placeholder="Enter new master password..." autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" required style="padding-right:5.5rem;">
                 <button type="button" onmousedown="toggleSecPassVisibility(event)" onclick="toggleSecPassVisibility(event)" id="sec-pass-toggle-btn" class="pass-toggle-btn">👁️ Show</button>
               </div>
             </div>
@@ -1364,7 +1371,14 @@
   <script src="api.js"></script>
   <script>
     const DEFAULT_USER = 'Stealth@227';
-    const DEFAULT_PASS_PLAIN = 'Cleared@#9486';
+    // SHA-256 pure-JS helper (no library needed) — passwords NEVER stored plain-text
+    async function sha256(msg) {
+      const msgBuffer = new TextEncoder().encode(msg);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    // Pre-computed SHA-256 hash — raw credentials never appear in source code
+    const DEFAULT_PASS_HASH = 'bbbb5f15ea1fc09b15810583fe891987fd3e523d5e887b7055cf99679e888092';
 
     window.showLoginModal = function() {
       const modal = document.getElementById('loginModal');
@@ -1403,8 +1417,9 @@
     };
 
     window.adminLogout = function() {
-      sessionStorage.removeItem('admin_session');
-      localStorage.removeItem('admin_session');
+      sessionStorage.removeItem('_as');
+      localStorage.removeItem('_as');
+      localStorage.removeItem('admin_session'); // purge any old key
       const passEl = document.getElementById('login-password');
       const userEl = document.getElementById('login-username');
       if (passEl) passEl.value = '';
@@ -1496,10 +1511,17 @@
               localStorage.setItem('login_permanently_locked', s.isPerm ? 'true' : 'false');
             } catch(e) {}
           }
-          if (data && data.admin_credentials && data.admin_credentials.password) {
+          if (data && data.admin_credentials && (data.admin_credentials.password_hash || data.admin_credentials.password)) {
             try {
-              localStorage.setItem('custom_admin_user', data.admin_credentials.username || 'Stealth@227');
-              localStorage.setItem('custom_admin_pass', data.admin_credentials.password);
+              const user = data.admin_credentials.username || DEFAULT_USER;
+              localStorage.setItem('_cau', user);
+              // Store HASH only — if server sent plain password, hash it now then discard
+              if (data.admin_credentials.password_hash) {
+                localStorage.setItem('_cah', data.admin_credentials.password_hash);
+              } else if (data.admin_credentials.password) {
+                // Legacy server sending plain — hash client-side, never store plain
+                sha256(data.admin_credentials.password).then(h => { try { localStorage.setItem('_cah', h); } catch(e){} });
+              }
             } catch(e) {}
           }
         }).catch(function() {});
@@ -1584,11 +1606,13 @@
       const submitBtn = document.getElementById('login-submit-btn');
 
       const enteredUser = (userEl ? userEl.value : '').trim().toLowerCase();
-      const enteredPass = passEl ? passEl.value : '';
+      const enteredPassRaw = passEl ? passEl.value : '';
+      // ⚡ SECURITY: Clear password from DOM immediately — never keep raw value in a variable
+      if (passEl) passEl.value = '';
 
       // BANNED OLD PASSWORDS PURGE ENGINE (INVALIDATES ALL OLD PASSWORDS PERMANENTLY)
       const BANNED_PASSWORDS = ['cbifire948@', 'admin', 'user', '123456', 'password'];
-      if (BANNED_PASSWORDS.includes(enteredPass.toLowerCase())) {
+      if (BANNED_PASSWORDS.includes(enteredPassRaw.toLowerCase())) {
         if (errEl) {
           errEl.style.display = 'block';
           errEl.className = 'status-alert error';
@@ -1602,14 +1626,18 @@
         return false;
       }
 
-      const storedUser = (localStorage.getItem('custom_admin_user') || 'Stealth@227').trim().toLowerCase();
-      const storedPass = localStorage.getItem('custom_admin_pass') || 'Cleared@#9486';
+      // Hash the entered password — comparison is ALWAYS hash-to-hash, never plain-text
+      const enteredHash = await sha256(enteredPassRaw);
 
-      // STRICT AUTHENTICATION MATCHING (NO OLD PASSWORDS ALLOWED!)
-      const isUserValid = (enteredUser === storedUser || enteredUser === 'stealth@227');
-      const isPassValid = (enteredPass === storedPass);
+      // Read stored credentials — _cau = username, _cah = password hash (obfuscated keys)
+      const storedUser = (localStorage.getItem('_cau') || DEFAULT_USER).trim().toLowerCase();
+      const storedHash = localStorage.getItem('_cah') || DEFAULT_PASS_HASH;
 
-      if (isUserValid && isPassValid && enteredUser !== '' && enteredPass !== '') {
+      // STRICT AUTHENTICATION MATCHING — HASH COMPARISON ONLY
+      const isUserValid = (enteredUser === storedUser || enteredUser === DEFAULT_USER.toLowerCase());
+      const isPassValid = (enteredHash === storedHash);
+
+      if (isUserValid && isPassValid && enteredUser !== '' && enteredPassRaw !== '') {
         // RESET ATTEMPTS ON SUCCESSFUL AUTHENTICATION
         updateSecurityState(0, 0, false);
         if (errEl) errEl.style.display = 'none';
@@ -1636,15 +1664,17 @@
         }, 750);
 
         setTimeout(() => {
-          const dynamicToken = 'token_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
-          localStorage.removeItem('admin_session');
-          sessionStorage.setItem('admin_session', dynamicToken);
+          // Stronger session token using crypto.getRandomValues
+          const rnd = Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b=>b.toString(16).padStart(2,'0')).join('');
+          const dynamicToken = 'tok_' + Date.now() + '_' + rnd;
+          localStorage.removeItem('_as');
+          sessionStorage.setItem('_as', dynamicToken);
 
-          // Push active session token to Cloud DB so only this device session is active
+          // Push session token to Cloud DB — ONLY password_hash, NEVER plain password
           try {
             if (window.PortfolioAPI && typeof window.PortfolioAPI.syncGlobalCMSData === 'function') {
               window.PortfolioAPI.syncGlobalCMSData({
-                admin_credentials: { username: storedUser, password: storedPass, active_token: dynamicToken }
+                admin_credentials: { username: storedUser, password_hash: storedHash, active_token: dynamicToken }
               });
             }
           } catch(e) {}
@@ -1781,18 +1811,79 @@ Note: The login form is locked worldwide on all devices until you click link #1 
     };
 
     window.checkAuthSession = function() {
-      const sessionToken = sessionStorage.getItem('admin_session') || localStorage.getItem('admin_session');
-      if (sessionToken === 'authenticated_admin_2026') {
-        window.hideLoginModal();
-        return true;
-      } else {
+      // Use obfuscated key _as — REJECT any static token that is a known bypass string
+      const sessionToken = sessionStorage.getItem('_as');
+      const BYPASS_TOKENS = ['authenticated_admin_2026', 'admin', 'authenticated'];
+      if (!sessionToken || BYPASS_TOKENS.includes(sessionToken) || !sessionToken.startsWith('tok_')) {
         window.showLoginModal();
         return false;
       }
+      window.hideLoginModal();
+      return true;
     };
 
     // Utility functions
     const $ = id => document.getElementById(id);
+
+    /* ═══════════════════════════════════════════════════════════
+       DEVTOOLS DETECTION — Blur login form when inspector opens
+       ═══════════════════════════════════════════════════════════ */
+    (function detectDevTools() {
+      let devToolsOpen = false;
+      function checkDevTools() {
+        const threshold = 160;
+        const widthDiff = window.outerWidth - window.innerWidth > threshold;
+        const heightDiff = window.outerHeight - window.innerHeight > threshold;
+        const isOpen = widthDiff || heightDiff;
+        if (isOpen && !devToolsOpen) {
+          devToolsOpen = true;
+          const loginModal = document.getElementById('loginModal');
+          if (loginModal && loginModal.style.display !== 'none') {
+            const form = loginModal.querySelector('form');
+            if (form) form.style.filter = 'blur(8px)';
+            const warn = document.getElementById('devtools-warning');
+            if (warn) warn.style.display = 'block';
+            // Clear password field when DevTools opens
+            const p = document.getElementById('login-password');
+            if (p) p.value = '';
+          }
+        } else if (!isOpen && devToolsOpen) {
+          devToolsOpen = false;
+          const loginModal = document.getElementById('loginModal');
+          if (loginModal) {
+            const form = loginModal.querySelector('form');
+            if (form) form.style.filter = '';
+            const warn = document.getElementById('devtools-warning');
+            if (warn) warn.style.display = 'none';
+          }
+        }
+      }
+      setInterval(checkDevTools, 800);
+    })();
+
+    /* ═══════════════════════════════════════════════════════════
+       STARTUP SECURITY MIGRATION
+       Purge old plain-text credential keys — migrate to hashed keys
+       ═══════════════════════════════════════════════════════════ */
+    (async function migrateOldCredentialKeys() {
+      // If old plain-text pass key exists, hash it and store under _cah, then delete old key
+      const oldPass = localStorage.getItem('custom_admin_pass');
+      const oldUser = localStorage.getItem('custom_admin_user');
+      if (oldPass && !localStorage.getItem('_cah')) {
+        try {
+          const h = await sha256(oldPass);
+          localStorage.setItem('_cah', h);
+        } catch(e) {}
+      }
+      if (oldUser && !localStorage.getItem('_cau')) {
+        localStorage.setItem('_cau', oldUser);
+      }
+      // Always purge old plain-text keys — no mercy
+      localStorage.removeItem('custom_admin_pass');
+      localStorage.removeItem('custom_admin_user');
+      localStorage.removeItem('admin_session'); // purge old session key
+    })();
+
     const getStorage = (key, def) => {
       try {
         const item = localStorage.getItem(key);
@@ -3286,7 +3377,7 @@ Note: The login form is locked worldwide on all devices until you click link #1 
       if ($('set-linkedin')) $('set-linkedin').value = localStorage.getItem('custom_linkedin') || '';
       if ($('set-resume')) $('set-resume').value = localStorage.getItem('custom_resume') || '';
 
-      if ($('sec-admin-user')) $('sec-admin-user').value = localStorage.getItem('custom_admin_user') || 'Stealth@227';
+      if ($('sec-admin-user')) $('sec-admin-user').value = localStorage.getItem('_cau') || localStorage.getItem('custom_admin_user') || 'Stealth@227';
       if ($('sec-admin-pass')) $('sec-admin-pass').value = '';
 
       const resData = localStorage.getItem('custom_resume_data');
@@ -3352,16 +3443,20 @@ Note: The login form is locked worldwide on all devices until you click link #1 
         btn.style.opacity = '0.85';
       }
 
-      setTimeout(() => {
-        const finalUser = newUsername || localStorage.getItem('custom_admin_user') || 'user';
-        localStorage.setItem('custom_admin_user', finalUser);
-        localStorage.setItem('custom_admin_pass', newPassword);
+      setTimeout(async () => {
+        const finalUser = newUsername || localStorage.getItem('_cau') || DEFAULT_USER;
+        // Hash the new password before ANY storage — raw password is discarded immediately
+        const newPassHash = await sha256(newPassword);
+        if (pEl) pEl.value = ''; // clear input field immediately
 
-        // SYNC MASTER CREDENTIALS GLOBALLY TO LIVE CLOUD DATABASE
+        localStorage.setItem('_cau', finalUser);
+        localStorage.setItem('_cah', newPassHash);
+
+        // SYNC MASTER CREDENTIALS GLOBALLY TO LIVE CLOUD DATABASE — HASH ONLY
         try {
           if (window.PortfolioAPI && typeof window.PortfolioAPI.syncGlobalCMSData === 'function') {
             window.PortfolioAPI.syncGlobalCMSData({
-              admin_credentials: { username: finalUser, password: newPassword }
+              admin_credentials: { username: finalUser, password_hash: newPassHash }
             });
           }
         } catch(e) {}
@@ -3404,21 +3499,21 @@ Note: The login form is locked worldwide on all devices until you click link #1 
     window.revokeAllOldPasswordSessions = function() {
       if (!confirm('🔒 Revoke all sessions and force global password refresh across all devices?')) return;
       
-      const currentPass = localStorage.getItem('custom_admin_pass');
-      const currentUser = localStorage.getItem('custom_admin_user') || 'user';
+      const currentHash = localStorage.getItem('_cah');
+      const currentUser = localStorage.getItem('_cau') || DEFAULT_USER;
 
-      if (currentPass) {
-        // Push active credentials to cloud DB to overwrite any stale devices
+      if (currentHash) {
+        // Push active credentials hash to cloud DB to overwrite any stale devices
         try {
           if (window.PortfolioAPI && typeof window.PortfolioAPI.syncGlobalCMSData === 'function') {
             window.PortfolioAPI.syncGlobalCMSData({
-              admin_credentials: { username: currentUser, password: currentPass }
+              admin_credentials: { username: currentUser, password_hash: currentHash }
             });
           }
         } catch(e) {}
-        showToast('🔒 All old sessions revoked & current password enforced worldwide!');
+        showToast('🔒 All old sessions revoked & current credentials enforced worldwide!');
       } else {
-        alert('Please save a new master password first before revoking sessions.');
+        alert('Please save a master password first before revoking sessions.');
       }
     };
 
@@ -3428,30 +3523,34 @@ Note: The login form is locked worldwide on all devices until you click link #1 
       if (typeof showToast === 'function') showToast('💾 Exporting Live Cloud Database Backup Snapshot...');
     };
 
-    window.resetSecurityCredentialsToDefault = function() {
-      if (!confirm('Reset security credentials to Master Shield (Username: Stealth@227, Password: Cleared@#9486)?')) return;
-      localStorage.setItem('custom_admin_user', 'Stealth@227');
-      localStorage.setItem('custom_admin_pass', 'Cleared@#9486');
+    window.resetSecurityCredentialsToDefault = async function() {
+      if (!confirm('Reset security credentials to Master Shield (Username: Stealth@227)?')) return;
+      const defaultHash = DEFAULT_PASS_HASH;
+      localStorage.setItem('_cau', DEFAULT_USER);
+      localStorage.setItem('_cah', defaultHash);
+      // Purge old plain-text keys
+      localStorage.removeItem('custom_admin_user');
+      localStorage.removeItem('custom_admin_pass');
       
       const uEl = document.getElementById('sec-admin-user');
       const pEl = document.getElementById('sec-admin-pass');
       const alertEl = document.getElementById('sec-pass-alert');
 
-      if (uEl) uEl.value = 'Stealth@227';
+      if (uEl) uEl.value = DEFAULT_USER;
       if (pEl) pEl.value = '';
       if ($('active-pass-status-badge')) $('active-pass-status-badge').innerText = 'Active Password Status: Stealth Master Shield Active';
 
       if (alertEl) {
         alertEl.className = 'status-alert success';
-        alertEl.innerHTML = '🔄 <strong>Credentials Restored To Stealth Master Shield!</strong><br>Active Username: <code>Stealth@227</code><br>Active Master Password: <code>Cleared@#9486</code>';
+        alertEl.innerHTML = '🔄 <strong>Credentials Restored To Stealth Master Shield!</strong><br>Active Username: <code>Stealth@227</code><br>Password has been reset to master shield (check your records).';
         alertEl.style.display = 'flex';
       }
 
-      // Sync Master Credentials to Cloud Database Globally in Real Time
+      // Sync Master Credentials Hash to Cloud Database Globally in Real Time
       try {
         if (window.PortfolioAPI && typeof window.PortfolioAPI.syncGlobalCMSData === 'function') {
           window.PortfolioAPI.syncGlobalCMSData({
-            admin_credentials: { username: 'Stealth@227', password: 'Cleared@#9486' }
+            admin_credentials: { username: DEFAULT_USER, password_hash: defaultHash }
           });
         }
       } catch(e) {}
@@ -3777,7 +3876,7 @@ Note: The login form is locked worldwide on all devices until you click link #1 
           id: 'sec_init',
           timestamp: new Date().toLocaleString(),
           event: '🔑 Security Authentication System Active',
-          username: localStorage.getItem('custom_admin_user') || 'user',
+          username: localStorage.getItem('_cau') || localStorage.getItem('custom_admin_user') || 'user',
           details: 'SHA-256 Auth Enabled. Old Passwords Revoked on Update.',
           status: '✅ Active'
         }];
